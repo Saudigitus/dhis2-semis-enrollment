@@ -1,4 +1,4 @@
-import { formatCamelToTitleCase } from "../../utils/commons/formatCamelCaseToWords";
+import { formatCamelToTitleCase } from "../../utils/common/formatCamelCaseToWords";
 import { useParams } from "./useQueryParams";
 
 const useGetSectionTypeLabel = () => {
