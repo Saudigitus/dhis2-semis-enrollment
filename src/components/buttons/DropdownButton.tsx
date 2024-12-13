@@ -9,7 +9,7 @@ function DropdownButtonComponent(props: DropdownButtonComponentProps): React.Rea
   return (
     <SplitButton
       disabled={disabled}
-      icon={icon}
+      icon={icon as unknown as any}
       component={<FlyoutMenuComponent options={options} />}
     >
       {name}

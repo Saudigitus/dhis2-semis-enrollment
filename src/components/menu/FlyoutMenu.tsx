@@ -5,14 +5,17 @@ import { FlyoutComponentProps } from "../../types/buttons/FlyoutOptionsProps";
 
 function FlyoutMenuComponent(props: FlyoutComponentProps): React.ReactElement {
   const { options } = props;
+
   return (
     <FlyoutMenu>
-      {options.map((option: any, i: any) => (
-        <>
-          <MenuItem key={i} {...option}/>
-          {option.divider === true && <Divider />}
-        </>
-      ))}
+      <div style={{ display: "flex", flexDirection: "column", background: "#fff" }} >
+        {options.map((option: any, i: any) => (
+          <>
+            {option.label}
+            {option.divider === true && <Divider />}
+          </>
+        ))}
+      </div>
     </FlyoutMenu>
   );
 }

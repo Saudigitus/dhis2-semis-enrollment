@@ -3,9 +3,8 @@ interface FlyoutComponentProps {
 }
 
 interface FlyoutOptionsProps {
-    label: string
+    label: any
     divider: boolean
-    onClick: () => void
     disabled: boolean
 }
 
