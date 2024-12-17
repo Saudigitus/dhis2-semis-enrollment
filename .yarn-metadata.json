@@ -59,9 +59,9 @@
   "remote": {
     "type": "copy",
     "registry": "npm",
-    "hash": "a00a1e41-00ee-42bb-8e94-0950603fb2a6-1734331425179",
-    "reference": "C:\\Users\\LENOVO\\Desktop\\Eddy\\sd-projects\\SEMIS-V2\\dhis2-semis-core\\node_modules\\dhis2-semis-enrollment"
+    "hash": "a17b6d40-7cd4-410a-a8b3-68d40acc39c8-1734092201631",
+    "reference": "C:\\AXerinda\\Saudigitus\\SEMIS New Enviroment\\Core\\dhis2-semis-core\\node_modules\\dhis2-semis-enrollment"
   },
   "registry": "npm",
-  "hash": "a00a1e41-00ee-42bb-8e94-0950603fb2a6-1734331425179"
+  "hash": "a17b6d40-7cd4-410a-a8b3-68d40acc39c8-1734092201631"
 }
