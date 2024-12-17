@@ -12,7 +12,7 @@ import styles from './enrollmentActionsButtons.module.css'
 import useGetSectionTypeLabel from '../../hooks/common/useGetSectionTypeLabel';
 import { useParams } from '../../hooks/common/useQueryParams';
 import DropdownButtonComponent from '../buttons/DropdownButton';
-import { ModalComponent, GroupForm, useProgramsKeys, ProgramConfig, useDataStoreKey } from 'dhis2-semis-components'
+import { ModalComponent, useProgramsKeys, ProgramConfig, useDataStoreKey } from 'dhis2-semis-components'
 import { DataExporter } from 'dhis2-semis-functions'
 
 function EnrollmentActionsButtons() {

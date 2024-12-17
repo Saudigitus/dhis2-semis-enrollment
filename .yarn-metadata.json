@@ -59,9 +59,9 @@
   "remote": {
     "type": "copy",
     "registry": "npm",
-    "hash": "9eaff0b2-33fd-4cee-b5de-fed790f59f0a-1734014221161",
+    "hash": "a00a1e41-00ee-42bb-8e94-0950603fb2a6-1734331425179",
     "reference": "C:\\Users\\LENOVO\\Desktop\\Eddy\\sd-projects\\SEMIS-V2\\dhis2-semis-core\\node_modules\\dhis2-semis-enrollment"
   },
   "registry": "npm",
-  "hash": "9eaff0b2-33fd-4cee-b5de-fed790f59f0a-1734014221161"
+  "hash": "a00a1e41-00ee-42bb-8e94-0950603fb2a6-1734331425179"
 }
