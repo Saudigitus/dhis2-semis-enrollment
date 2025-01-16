@@ -4,24 +4,23 @@ import { headerColumns, rowsData } from "../../utils/constants/table/tableConsta
 import { RowActionsType } from "dhis2-semis-components/dist/declarations/types/table/TableRowActionsProps";
 import { IconCheckmarkCircle24, IconDelete24, IconEdit24 } from "@dhis2/ui";
 import EnrollmentActionsButtons from "../../components/enrollmentButtons/EnrollmentActionsButtons";
-import { modules, useHeader, useTableData, useUrlParams  } from "dhis2-semis-functions";
+import { modules, useHeader, useTableData, useUrlParams } from "dhis2-semis-functions";
 
 export default function EnrollmentsPage() {
-    const { dataStoreValues } = useDataStoreKey();
+    const dataStoreData = useDataStoreKey({ sectionType: "student" });
     const { programsValues } = useProgramsKeys();
-    const dataStoreData = dataStoreValues[0]
     const programData = programsValues[0]
 
     const { getData, tableData, loading } = useTableData({ module: modules.enrollment })
-    const { columns } = useHeader({ dataStoreData, programConfigData: programData as ProgramConfig[0], tableColumns: [], module: modules.enrollment })
-  
+    const { columns } = useHeader({ dataStoreData, programConfigData: programData as unknown as ProgramConfig, tableColumns: [], module: modules.enrollment })
+
     const rowsActions: RowActionsType[] = [
         { icon: <IconEdit24 />, color: '#277314', label: `Edition`, disabled: true, loading: false, onClick: () => { alert("Edition") } },
         { icon: <IconDelete24 />, color: '#d64d4d', label: `Delete`, disabled: false, loading: false, onClick: () => { alert("Delete") } },
         { icon: <IconCheckmarkCircle24 />, color: '#147cd7', disabled: false, loading: false, label: 'Complete', onClick: () => { alert("Complete") } }
     ];
 
-    useEffect(() => { 
+    useEffect(() => {
         void getData({ page: 1, pageSize: 10, program: programData.id as string, orgUnit: "Shc3qNhrPAz", baseProgramStage: dataStoreData?.registration?.programStage as string, attributeFilters: [], dataElementFilters: [`${dataStoreData?.registration?.academicYear}:in:2024`] })
     }, [])
 

@@ -1,7 +1,4 @@
-import { RowActionsType } from "dhis2-semis-components/dist/declarations/types/table/TableRowActionsProps";
-import { Attribute } from "../../../types/generated";
-import { CustomAttributeProps, VariablesTypes } from "../../../types/variables/AttributeColumns";
-import { IconCheckmarkCircle24, IconDelete24, IconEdit24 } from "@dhis2/ui";
+import { CustomAttributeProps, VariablesTypes } from "dhis2-semis-components";
 
 export const rowsData = [
     { fistid1: 'First Name', fistid2: 'Second Name', fistid3: 'Therd Name', fistid4: 'Fourth Name' },
