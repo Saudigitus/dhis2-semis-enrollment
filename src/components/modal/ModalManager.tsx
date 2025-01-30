@@ -7,6 +7,7 @@ import { trackerPostBody } from '../../utils/tei/formatTrackerPostBody';
 import useGetSectionTypeLabel from '../../hooks/common/useGetSectionTypeLabel';
 import { ModalComponent, useDataStoreKey, useProgramsKeys } from 'dhis2-semis-components';
 import { modules, removeFalseKeys, useBuildForm, useGetAttributes, useGetPatternCode, useGetUsedPProgramStages, useSaveTei } from 'dhis2-semis-functions';
+import { Form } from 'react-router-dom';
 
 interface ModalManagerInterface {
     open: boolean,
@@ -65,7 +66,12 @@ function ModalManager(props: ModalManagerInterface) {
 
 
     function onSubmit(e: Record<string, any>): void {
-        const data = saveMode == "CREATE" ?
+        const data = () => { if(0==0){
+            return
+        }
+    }
+        
+        saveMode == "CREATE" ?
             trackerPostBody({
                 orgUnitId: school!,
                 programStagesToSave,
@@ -80,7 +86,7 @@ function ModalManager(props: ModalManagerInterface) {
             handleComplete: handleCloseModal,
             messages: {
                 error: `Could not ${saveMode.toLowerCase()} enrollment.`,
-                sucess: `Enrollment ${saveMode.toLowerCase()}d sucessfully`
+                sucess: `Enrollment ${saveMode.toLowerCase()}d sucessfully.`
             },
         })
     }
@@ -92,12 +98,15 @@ function ModalManager(props: ModalManagerInterface) {
             handleClose={handleCloseModal}
             title={`${sectionName} enrollment`}
         >
+        {/* <Form> */}
+
             <ModalContent
                 onChange={onChange}
                 onSubmit={onSubmit}
                 initialValues={{ ...initialValues, ...generatedVariables }}
                 formFields={formFields({ formFieldsData: formData, sectionName })}
             />
+        {/* </Form> */}
         </ModalComponent>
     )
 }

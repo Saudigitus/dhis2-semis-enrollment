@@ -2,34 +2,32 @@ import { format } from "date-fns";
 import { reducer } from "../common/formatDistinctValue";
 
 interface trackerUpdateBodyInterface {
-    enrollmentData: any[],
-    orgUnitId: string,
-    trackedEntityType: string,
-    trackedEntity: string,
-    formValues: any,
-    enrollmentDate: string,
     programId: string,
+    orgUnitId: string,
+    enrollmentDate: string,
+    trackedEntityId: string,
+    trackedEntityType: string,
+    formValues: Record<string, any>,
     enrollmentId: string,
-    events: any[]
+    events: any[],
+    formVariablesFields: any[],
 }
 
-export const trackerUpdateBody = ({ enrollmentData, enrollmentId, enrollmentDate, trackedEntity, trackedEntityType, orgUnitId, programId, formValues, events }: trackerUpdateBodyInterface): any => {
+export const trackerUpdateBody = ({ formVariablesFields, enrollmentId, enrollmentDate, trackedEntityId, trackedEntityType, orgUnitId, programId, formValues, events }: trackerUpdateBodyInterface): any => {
     const form: { attributes: any[], events: any[] } = {
         attributes: [],
         events: []
     }
 
-    for (const data of enrollmentData) {
-        if (data.length && data[0].type === "attribute") {
+    for (const data of formVariablesFields) {
+        if (data[0].type === "attribute") {
             data.forEach((attribute: any) => {
-                if (attribute.assignedValue !== undefined && attribute.assignedValue !== false && formValues.hasOwnProperty(attribute.id))
-                    form.attributes.push({ attribute: attribute.id, value: attribute.assignedValue })
-                else
-                    form.attributes.push({ attribute: attribute.id, value: undefined })
+                const value = Boolean(attribute.assignedValue) && formValues.hasOwnProperty(attribute.id) ? attribute.assignedValue : undefined
+                form.attributes.push({ attribute: attribute.id, value });
             });
         }
-        if (enrollmentData.length && enrollmentData[0].type === "dataElement") {
-            for (const [key, value] of Object.entries(reducer(enrollmentData))) {
+        else if (data[0].type === "dataElement") {
+            for (const [key, value] of Object.entries(reducer(data))) {
                 const event = events?.find((event: any) => event.programStage === key)
                 if (event && Object.keys(event).length > 4)
                     form.events.push({
@@ -37,7 +35,7 @@ export const trackerUpdateBody = ({ enrollmentData, enrollmentId, enrollmentDate
                         occurredAt: enrollmentDate,
                         scheduledAt: enrollmentDate,
                         createdAt: enrollmentDate,
-                        dataValues: returnEventDataValues(enrollmentData, formValues)
+                        dataValues: returnEventDataValues(data, formValues)
                     })
                 else
                     form.events.push({
@@ -46,12 +44,12 @@ export const trackerUpdateBody = ({ enrollmentData, enrollmentId, enrollmentDate
                         status: "COMPLETED",
                         programStage: key,
                         program: programId,
-                        trackedEntity: trackedEntity,
                         enrollment: event?.enrollment,
+                        trackedEntity: trackedEntityId,
+                        dataValues: returnEventDataValues(data, formValues),
                         occurredAt: format(new Date(enrollmentDate), "yyyy-MM-dd'T'HH:mm:ss.SSS"),
                         scheduledAt: format(new Date(enrollmentDate), "yyyy-MM-dd'T'HH:mm:ss.SSS"),
                         createdAt: format(new Date(enrollmentDate), "yyyy-MM-dd'T'HH:mm:ss.SSS"),
-                        dataValues: returnEventDataValues(enrollmentData, formValues)
                     })
             }
         }
@@ -73,7 +71,7 @@ export const trackerUpdateBody = ({ enrollmentData, enrollmentId, enrollmentDate
                         }
                     ],
                     orgUnitId,
-                    trackedEntity,
+                    trackedEntityId,
                     trackedEntityType,
                 }
             ]
@@ -81,12 +79,10 @@ export const trackerUpdateBody = ({ enrollmentData, enrollmentId, enrollmentDate
     }
 }
 
-const returnEventDataValues = (enrollmentData: any[], formValues: any) => {
-    return enrollmentData?.map((dataValue: any) => {
-        if (dataValue.assignedValue !== undefined && dataValue.assignedValue !== false && formValues.hasOwnProperty(dataValue.id))
-            return { dataElement: dataValue.id, value: dataValue.assignedValue }
 
-        else
-            return { dataElement: dataValue.id, value: undefined }
-    })
-}
+const returnEventDataValues = (formVariablesFields: { id: string; assignedValue: string | boolean }[], formValues: Record<string, any>) => {
+    return formVariablesFields?.map(({ id, assignedValue }) => ({
+        dataElement: id,
+        value: Boolean(assignedValue) && formValues.hasOwnProperty(id) ? assignedValue : undefined
+    }));
+};
