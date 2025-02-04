@@ -82,7 +82,7 @@ function EnrollmentActionsButtons({ programData, selectedDataStoreKey }: { progr
                     sectionName="student"
                     setOpen={setOpenSearchEnrollment}
                     Form={Form}
-                    setOpenNewEnrollmentModal={() => { }}
+                    setOpenNewEnrollmentModal={() => setOpenSaveModal(true)}
                     setFormInitialValues={(values: any) => console.log(values)}
                 />
             }

@@ -1,9 +1,8 @@
-import { Table, useProgramsKeys, } from "dhis2-semis-components";
+import { Table, useProgramsKeys, useDataStoreKey } from "dhis2-semis-components";
 import React, { useEffect, useState } from "react";
 import { IconDelete24, IconEdit24 } from "@dhis2/ui";
 import EnrollmentActionsButtons from "../../components/enrollmentButtons/EnrollmentActionsButtons";
 import { modules, useGetSectionTypeLabel, useHeader, useTableData } from "dhis2-semis-functions";
-import { useDataStoreKey } from 'dhis2-semis-components'
 import { ProgramConfig } from 'dhis2-semis-types'
 
 export default function EnrollmentsPage() {

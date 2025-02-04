@@ -1,6 +1,6 @@
 import React from 'react'
 import { CustomForm, WithBorder, WithPadding } from 'dhis2-semis-components';
-
+import { Form } from 'react-final-form';
 interface ModalContentInterface {
     formFields: any
     onSubmit: (arg: any) => void
@@ -21,6 +21,7 @@ function ModalContent(props: ModalContentInterface) {
                     initialValues={initialValues}
                     onFormSubtmit={(e) => { onSubmit(e) }}
                     onInputChange={(e) => { onChange(e) }}
+                    Form={Form}
                 />
             </WithBorder>
         </WithPadding>

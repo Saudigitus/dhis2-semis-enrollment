@@ -1,13 +1,12 @@
 import { format } from 'date-fns'
 import ModalContent from './ModalContent';
 import React, { useState, useEffect } from 'react'
-import { useParams } from '../../hooks/common/useQueryParams';
 import { formFields } from '../../utils/constants/form/enrollmentForm';
 import { trackerPostBody } from '../../utils/tei/formatTrackerPostBody';
 import useGetSectionTypeLabel from '../../hooks/common/useGetSectionTypeLabel';
-import { ModalComponent, useDataStoreKey, useProgramsKeys } from 'dhis2-semis-components';
-import { modules, removeFalseKeys, useBuildForm, useGetAttributes, useGetPatternCode, useGetUsedPProgramStages, useSaveTei } from 'dhis2-semis-functions';
-import { Form } from 'react-router-dom';
+import { ModalComponent, useDataStoreKey, useProgramsKeys, useGetUsedProgramStages } from 'dhis2-semis-components';
+import { modules, useBuildForm, useGetAttributes, useGetPatternCode, useSaveTei } from 'dhis2-semis-functions';
+import { useUrlParams } from 'dhis2-semis-functions';
 
 interface ModalManagerInterface {
     open: boolean,
@@ -19,9 +18,9 @@ interface ModalManagerInterface {
 function ModalManager(props: ModalManagerInterface) {
     const { open, setOpen, saveMode } = props;
     const { saveTei } = useSaveTei()
-    const { urlParamiters } = useParams();
-    const { school, schoolName } = urlParamiters()
-    const { programsValues } = useProgramsKeys();
+    const { urlParameters } = useUrlParams();
+    const { school, schoolName } = urlParameters()
+    const programsValues = useProgramsKeys();
     const dataStoreData = useDataStoreKey({ sectionType: "student" });
     const programData = programsValues[0]
     const { sectionName } = useGetSectionTypeLabel();
@@ -34,7 +33,7 @@ function ModalManager(props: ModalManagerInterface) {
         registerschoolstaticform: schoolName,
         enrollment_date: format(new Date(), "yyyy-MM-dd"),
     })
-    const programStagesToSave = useGetUsedPProgramStages({ sectionType: "student" })
+    const programStagesToSave = useGetUsedProgramStages({ sectionType: "student" })
 
     useEffect(() => {
         if (saveMode == "CREATE")
@@ -66,11 +65,12 @@ function ModalManager(props: ModalManagerInterface) {
 
 
     function onSubmit(e: Record<string, any>): void {
-        const data = () => { if(0==0){
-            return
+        const data = () => {
+            if (0 == 0) {
+                return
+            }
         }
-    }
-        
+
         saveMode == "CREATE" ?
             trackerPostBody({
                 orgUnitId: school!,
@@ -98,15 +98,12 @@ function ModalManager(props: ModalManagerInterface) {
             handleClose={handleCloseModal}
             title={`${sectionName} enrollment`}
         >
-        {/* <Form> */}
-
             <ModalContent
                 onChange={onChange}
                 onSubmit={onSubmit}
                 initialValues={{ ...initialValues, ...generatedVariables }}
                 formFields={formFields({ formFieldsData: formData, sectionName })}
             />
-        {/* </Form> */}
         </ModalComponent>
     )
 }
