@@ -1,43 +1,45 @@
 import React, { useState } from 'react'
 import { IconAddCircle24, Button, ButtonStrip, IconUserGroup16, IconSearch24 } from "@dhis2/ui";
 import Tooltip from '@material-ui/core/Tooltip';
-import { FlyoutOptionsProps } from "../../types/buttons/FlyoutOptionsProps";
 import styles from './enrollmentActionsButtons.module.css'
-import useGetSectionTypeLabel from '../../hooks/common/useGetSectionTypeLabel';
-import { useParams } from '../../hooks/common/useQueryParams';
 import DropdownButtonComponent from '../buttons/DropdownButton';
+import { useGetSectionTypeLabel, useUrlParams } from 'dhis2-semis-functions';
+import { Form } from "react-final-form";
+import { ProgramConfig, selectedDataStoreKey } from 'dhis2-semis-types'
+import { ModalSearchEnrollmentContent, DataExporter, DataImporter } from 'dhis2-semis-components';
 import ModalManager from '../modal/ModalManager';
 
-function EnrollmentActionsButtons() {
-    const { useQuery } = useParams();
-    const orgUnit = useQuery().get("school")
+function EnrollmentActionsButtons({ programData, selectedDataStoreKey }: { programData: ProgramConfig, selectedDataStoreKey: selectedDataStoreKey }) {
+    const { urlParameters } = useUrlParams();
+    const { school: orgUnit } = urlParameters();
     const { sectionName } = useGetSectionTypeLabel();
     const [openSaveModal, setOpenSaveModal] = useState<boolean>(false)
+    const [openSearchEnrollment, setOpenSearchEnrollment] = useState<boolean>(false);
 
-    const enrollmentOptions: FlyoutOptionsProps[] = [
+    const enrollmentOptions = [
         {
-            label: `Enroll new ${sectionName}s`,
+            label: "Update",
             divider: true,
             disabled: false,
-            onClick: () => { }
+            onClick: () => { { } }
         },
         {
             label: `Update existing ${sectionName}s`,
             divider: true,
             disabled: false,
-            onClick: () => { }
+            onClick: () => { { } }
         },
         {
             label: "Export empty template",
             divider: false,
             disabled: false,
-            onClick: () => { }
+            onClick: () => { { } }
         },
         {
             label: "Export existing students",
             divider: false,
             disabled: false,
-            onClick: async () => { }
+            onClick: async () => { { } }
         }
     ];
 
@@ -46,7 +48,9 @@ function EnrollmentActionsButtons() {
             <ButtonStrip className={styles.work_buttons}>
                 <Tooltip title={orgUnit === null ? "Please select an organisation unit before" : ""}>
                     <span>
-                        <Button icon={<IconSearch24 />}>
+                        <Button onClick={() => {
+                            setOpenSearchEnrollment(true);
+                        }} icon={<IconSearch24 />}>
                             <span className={styles.work_buttons_text}>Search {sectionName?.toLowerCase()}</span>
                         </Button>
                     </span>
@@ -70,6 +74,19 @@ function EnrollmentActionsButtons() {
                     options={enrollmentOptions}
                 />
             </ButtonStrip>
+
+            {openSearchEnrollment &&
+                <ModalSearchEnrollmentContent
+                    open={openSearchEnrollment}
+                    programConfig={programData}
+                    sectionName="student"
+                    setOpen={setOpenSearchEnrollment}
+                    Form={Form}
+                    setOpenNewEnrollmentModal={() => { }}
+                    setFormInitialValues={(values: any) => console.log(values)}
+                />
+            }
+
         </div>
     )
 }

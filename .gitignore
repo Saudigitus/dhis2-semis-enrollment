@@ -3,3 +3,7 @@ node_modules
 .d2
 src/locales
 build
+.codegpt
+.yalc
+package-lock.json
+yarn.lock

@@ -1,9 +1,9 @@
+import { useUrlParams } from "dhis2-semis-functions";
 import { formatCamelToTitleCase } from "../../utils/common/formatCamelCaseToWords";
-import { useParams } from "./useQueryParams";
 
 const useGetSectionTypeLabel = () => {
-    const { urlParamiters } = useParams()
-    const sectionType = urlParamiters().sectionType ?? 'Student';
+    const { urlParameters } = useUrlParams()
+    const sectionType = urlParameters().sectionType ?? 'student';
 
     return { sectionName: formatCamelToTitleCase(sectionType as unknown as string) };
 }
