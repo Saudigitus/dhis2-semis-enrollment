@@ -4,11 +4,11 @@ import { Router } from '../components/routes'
 import { AppWrapper } from 'dhis2-semis-components'
 
 const MyApp = () => {
-
+    console.log("My App")
     return (
-        <AppWrapper dataStoreKey='semis/values'>
-            <Router />
-        </AppWrapper>
+        // <AppWrapper dataStoreKey='semis/values'>
+        <Router />
+        // </AppWrapper>
     )
 }
 

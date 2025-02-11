@@ -1,25 +1,15 @@
 import React from 'react';
-import { HashRouter, Route, Routes } from 'react-router-dom';
-import { RouteList } from '.';
+import { Routes, Route } from 'react-router-dom';
+import { EnrollmentsPage } from '../../pages';
+import { FullLayout } from '../../layout';
 
 export default function Router() {
+    console.log("Router")
     return (
-        <HashRouter>
-            <Routes>
-                {
-                    RouteList().map((route, index) => (
-                        <Route
-                            key={index}
-                            path={route.path}
-                            element={
-                                <route.layout>
-                                    {route.component()}
-                                </route.layout>
-                            }
-                        />
-                    ))
-                }
-            </Routes>
-        </HashRouter>
-    )
+        <Routes>
+            <Route path='/' element={<FullLayout />}>
+                <Route key={'enrollments'} path={'/'} element={<EnrollmentsPage />} />
+            </Route>
+        </Routes>
+    );
 }

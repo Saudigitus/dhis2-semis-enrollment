@@ -23,7 +23,7 @@ function EnrollmentActionsButtons({ programData, selectedDataStoreKey, filetrSta
                 importMode='COMMIT'
                 label={'Enroll new ' + sectionName}
                 module='enrollment'
-                onError={() => { }}
+                onError={(e: any) => { console.log(e) }}
                 programConfig={programData}
                 sectionType={sectionName}
                 selectedSectionDataStore={selectedDataStoreKey}
@@ -33,10 +33,19 @@ function EnrollmentActionsButtons({ programData, selectedDataStoreKey, filetrSta
             disabled: false,
         },
         {
-            label: `Update existing ${sectionName}s`,
+            label: <DataImporter
+                baseURL='http://localhost:8080'
+                importMode='COMMIT'
+                label={`Update existing ${sectionName}s`}
+                module='enrollment'
+                onError={(e: any) => { console.log(e) }}
+                programConfig={programData}
+                sectionType={sectionName}
+                selectedSectionDataStore={selectedDataStoreKey}
+                updating={true}
+            />,
             divider: true,
             disabled: false,
-            onClick: () => { { } }
         },
         {
             label: <DataExporter
@@ -46,7 +55,7 @@ function EnrollmentActionsButtons({ programData, selectedDataStoreKey, filetrSta
                 fileName='teste'
                 label='Export Empty Template'
                 module='enrollment'
-                onError={(e) => console.log(e)}
+                onError={(e: any) => console.log(e)}
                 programConfig={programData}
                 sectionType={sectionName}
                 selectedSectionDataStore={selectedDataStoreKey}
@@ -63,8 +72,8 @@ function EnrollmentActionsButtons({ programData, selectedDataStoreKey, filetrSta
                 eventFilters={filetrState.dataElements}
                 fileName='teste'
                 label='Export Existing Students'
-                module='enrollment'
-                onError={(e) => console.log(e)}
+                module='attendance'
+                onError={(e: any) => console.log(e)}
                 programConfig={programData}
                 sectionType={sectionName}
                 selectedSectionDataStore={selectedDataStoreKey}

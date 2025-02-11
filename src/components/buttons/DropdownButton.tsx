@@ -1,6 +1,6 @@
 import { SplitButton } from "@dhis2/ui";
 import React from "react";
-import { DropdownButtonComponentProps } from "src/types/buttons/DropdownButtonProps";
+import { DropdownButtonComponentProps } from "../../types/buttons/DropdownButtonProps";
 import FlyoutMenuComponent from "../menu/FlyoutMenu";
 
 function DropdownButtonComponent(props: DropdownButtonComponentProps): React.ReactElement {

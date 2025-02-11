@@ -1,5 +1,5 @@
 .LayoutContainer {
-    width: 100vw;
+    width: 100%;
     height: inherit;
     display: flex;
     flex-direction: row;
@@ -9,18 +9,10 @@
     background-color: #F9F9FA;
 }
 
-.HeadBarLayoutContainer {
-    width: 100vw;
-    height: inherit;
-    display: flex;
-    flex-direction: column;
-    background-color: inherit;
-}
-
 .MainContentContainer {
     flex: 1;
     overflow-y: auto;
-    padding: 10px 30px;
+    padding: 10px 20px 10px 0px;
 }
 
 .FullLayoutContainer {

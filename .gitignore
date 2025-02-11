@@ -7,3 +7,5 @@ build
 .yalc
 package-lock.json
 yarn.lock
+dist
+tsconfig.tsbuildinfo
