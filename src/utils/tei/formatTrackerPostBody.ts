@@ -7,10 +7,11 @@ interface trackerPostBodyInterface {
     trackedEntityId?: string,
     trackedEntityType: string,
     formVariablesFields: any[],
+    values: Record<string, any>,
     programStagesToSave: (string | undefined)[],
 }
 
-export const trackerPostBody = ({ formVariablesFields, programId, orgUnitId, enrollmentDate, programStagesToSave, trackedEntityType, trackedEntityId }: trackerPostBodyInterface) => {
+export const trackerPostBody = ({ formVariablesFields, programId, orgUnitId, enrollmentDate, programStagesToSave, trackedEntityType, trackedEntityId, values }: trackerPostBodyInterface) => {
     const form: { attributes: any[], events: any[] } = {
         attributes: [],
         events: []
@@ -18,16 +19,16 @@ export const trackerPostBody = ({ formVariablesFields, programId, orgUnitId, enr
 
     for (const enrollmentData of formVariablesFields) {
         if (enrollmentData?.[0]?.type === "attribute") {
-            enrollmentData.forEach((attribute: { id: string, assignedValue: string | boolean }) => {
-                if (attribute.assignedValue !== undefined && attribute.assignedValue !== false) {
-                    form.attributes.push({ attribute: attribute.id, value: attribute.assignedValue })
+            enrollmentData.forEach((attribute: { id: string }) => {
+                if (values[attribute.id]) {
+                    form.attributes.push({ attribute: attribute.id, value: values[attribute.id] })
                 }
             });
         } else if (enrollmentData?.[0]?.type === "dataElement") {
-            for (const [key, value] of Object.entries(reducer(enrollmentData))) {
+            for (const [key, value] of Object.entries(reducer(enrollmentData, values))) {
                 form.events.push({
                     notes: [],
-                    orgUnitId,
+                    orgUnit: orgUnitId,
                     status: "ACTIVE",
                     program: programId,
                     programStage: key,
@@ -41,7 +42,7 @@ export const trackerPostBody = ({ formVariablesFields, programId, orgUnitId, enr
 
     programStagesToSave.forEach(programStageToSave => {
         form.events.push({
-            orgUnitId,
+            orgUnit: orgUnitId,
             notes: [],
             status: "ACTIVE",
             program: programId,
@@ -56,7 +57,7 @@ export const trackerPostBody = ({ formVariablesFields, programId, orgUnitId, enr
             {
                 enrollments: [
                     {
-                        orgUnitId,
+                        orgUnit: orgUnitId,
                         program: programId,
                         status: "COMPLETED",
                         events: form.events,
@@ -65,7 +66,7 @@ export const trackerPostBody = ({ formVariablesFields, programId, orgUnitId, enr
                         enrolledAt: enrollmentDate,
                     }
                 ],
-                orgUnitId,
+                orgUnit: orgUnitId,
                 trackedEntityType,
                 ...(trackedEntityId ? { trackedEntity: trackedEntityId } : {})
             }

@@ -22,12 +22,12 @@ export const trackerUpdateBody = ({ formVariablesFields, enrollmentId, enrollmen
     for (const data of formVariablesFields) {
         if (data[0].type === "attribute") {
             data.forEach((attribute: any) => {
-                const value = Boolean(attribute.assignedValue) && formValues.hasOwnProperty(attribute.id) ? attribute.assignedValue : undefined
+                const value = Boolean(formValues[attribute.id]) && formValues.hasOwnProperty(attribute.id) ? formValues[attribute.id] : undefined
                 form.attributes.push({ attribute: attribute.id, value });
             });
         }
         else if (data[0].type === "dataElement") {
-            for (const [key, value] of Object.entries(reducer(data))) {
+            for (const [key, value] of Object.entries(reducer(data, formValues))) {
                 const event = events?.find((event: any) => event.programStage === key)
                 if (event && Object.keys(event).length > 4)
                     form.events.push({
@@ -59,7 +59,7 @@ export const trackerUpdateBody = ({ formVariablesFields, enrollmentId, enrollmen
                 {
                     enrollments: [
                         {
-                            orgUnitId,
+                            orgUnit: orgUnitId,
                             program: programId,
                             status: "COMPLETED",
                             enrollment: enrollmentId,
@@ -70,8 +70,8 @@ export const trackerUpdateBody = ({ formVariablesFields, enrollmentId, enrollmen
                             events: form.events
                         }
                     ],
-                    orgUnitId,
-                    trackedEntityId,
+                    orgUnit: orgUnitId,
+                    trackedEntity: trackedEntityId,
                     trackedEntityType,
                 }
             ]

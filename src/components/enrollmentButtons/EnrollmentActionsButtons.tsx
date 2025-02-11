@@ -1,3 +1,4 @@
+import { format } from "date-fns";
 import React, { useState } from 'react'
 import { IconAddCircle24, Button, ButtonStrip, IconUserGroup16, IconSearch24 } from "@dhis2/ui";
 import Tooltip from '@material-ui/core/Tooltip';
@@ -11,10 +12,14 @@ import ModalManager from '../modal/ModalManager';
 
 function EnrollmentActionsButtons({ programData, selectedDataStoreKey, filetrState }: { filetrState: any, programData: ProgramConfig, selectedDataStoreKey: selectedDataStoreKey }) {
     const { urlParameters } = useUrlParams();
-    const { school: orgUnit } = urlParameters();
+    const { school: orgUnit, schoolName } = urlParameters();
     const { sectionName } = useGetSectionTypeLabel();
     const [openSaveModal, setOpenSaveModal] = useState<boolean>(false)
     const [openSearchEnrollment, setOpenSearchEnrollment] = useState<boolean>(false);
+    const [initialValues] = useState<object>({
+        registerschoolstaticform: schoolName,
+        enrollment_date: format(new Date(), "yyyy-MM-dd"),
+    });
 
     const enrollmentOptions: any = [
         {
@@ -107,7 +112,7 @@ function EnrollmentActionsButtons({ programData, selectedDataStoreKey, filetrSta
                     </span>
                 </Tooltip>
 
-                <ModalManager open={openSaveModal} setOpen={setOpenSaveModal} saveMode='CREATE' />
+                <ModalManager open={openSaveModal} setOpen={setOpenSaveModal} saveMode='CREATE' initialValues={initialValues}/>
                 
                 <DropdownButtonComponent
                     name={<span className={styles.work_buttons_text}>Bulk enrollment</span> as unknown as string}

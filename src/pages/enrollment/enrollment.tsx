@@ -1,26 +1,34 @@
-import { Table, useProgramsKeys, useHeaderKey,stateEmitter } from "dhis2-semis-components";
+import { Table, useProgramsKeys, useHeaderKey, stateEmitter } from "dhis2-semis-components";
 import React, { useEffect, useState } from "react";
 import { IconDelete24, IconEdit24 } from "@dhis2/ui";
 import EnrollmentActionsButtons from "../../components/enrollmentButtons/EnrollmentActionsButtons";
 import { modules, useGetSectionTypeLabel, useHeader, useTableData, useUrlParams } from "dhis2-semis-functions";
 import { useDataStoreKey } from 'dhis2-semis-components'
 import { ProgramConfig } from 'dhis2-semis-types'
+import ModalManager from "../../components/modal/ModalManager";
 
 export default function EnrollmentsPage() {
     const { sectionName } = useGetSectionTypeLabel();
     const dataStoreData = useDataStoreKey({ sectionType: sectionName });
     const programsValues = useProgramsKeys();
-    const {headerValues} = useHeaderKey()
+    const { headerValues } = useHeaderKey()
     const programData = programsValues[0]
     const { urlParameters } = useUrlParams()
     const { academicYear, grade, class: section } = urlParameters()
+    const [openEditModal, setOpenEditModal] = useState<boolean>(false)
     const { getData, tableData, loading } = useTableData({ module: modules.enrollment })
     const { columns } = useHeader({ dataStoreData, programConfigData: programData as unknown as ProgramConfig, tableColumns: [], module: modules.enrollment })
     const [filetrState, setFilterState] = useState<{ dataElements: any[], attributes: any[] }>({ attributes: [], dataElements: [] })
+    const [initialValues, setInitialValues] = useState<object>({});
+
+    const handleOpenEditModal = (e: Record<string, any>) => {
+        console.log(e)
+        setInitialValues(e)
+    }
 
     const rowsActions = [
-        { icon: <IconEdit24 />, color: '#277314', label: `Edition`, disabled: true, loading: false, onClick: () => { alert("Edition") } },
-        { icon: <IconDelete24 />, color: '#d64d4d', label: `Delete`, disabled: false, loading: false, onClick: () => { alert("Delete") } },
+        { icon: <IconEdit24 />, color: '#277314', label: `Edition`, disabled: false, loading: false, onClick: handleOpenEditModal },
+        { icon: <IconDelete24 />, color: '#d64d4d', label: `Delete`, disabled: false, loading: false, onClick: (e: any) => { console.log(e) } },
     ];
 
     useEffect(() => {
@@ -37,7 +45,7 @@ export default function EnrollmentsPage() {
     }, [academicYear, grade, section])
 
     return (
-        <div style={{ height: "80vh" }} >
+        <div style={{ height: "85vh" }} >
             <Table
                 programConfig={programData}
                 title="Enrollments"
@@ -53,6 +61,8 @@ export default function EnrollmentsPage() {
                 rightElements={<EnrollmentActionsButtons filetrState={filetrState} selectedDataStoreKey={dataStoreData} programData={programData as unknown as ProgramConfig} />}
                 setFilterState={setFilterState}
             />
+
+            <ModalManager initialValues={initialValues} open={openEditModal} setOpen={setOpenEditModal} saveMode="UPDATE" />
         </div>
     )
 }

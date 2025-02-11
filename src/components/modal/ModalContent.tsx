@@ -1,8 +1,9 @@
 import React from 'react'
-import { CustomForm, WithBorder, WithPadding } from 'dhis2-semis-components';
 import { Form } from 'react-final-form';
+import { CustomForm, WithBorder, WithPadding } from 'dhis2-semis-components';
 interface ModalContentInterface {
     formFields: any
+    loading: boolean
     onSubmit: (arg: any) => void
     onChange: (arg: any) => void
     initialValues?: Record<string, any>
@@ -10,18 +11,19 @@ interface ModalContentInterface {
 
 
 function ModalContent(props: ModalContentInterface) {
-    const { formFields, onChange, onSubmit, initialValues } = props;
+    const { formFields, onChange, onSubmit, initialValues, loading } = props;
 
     return (
         <WithPadding>
             <WithBorder type='all'>
                 <CustomForm
+                    Form={Form}
+                    loading={loading}
                     withButtons={true}
                     formFields={formFields}
                     initialValues={initialValues}
                     onFormSubtmit={(e) => { onSubmit(e) }}
                     onInputChange={(e) => { onChange(e) }}
-                    Form={Form}
                 />
             </WithBorder>
         </WithPadding>
