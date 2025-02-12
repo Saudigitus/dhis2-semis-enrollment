@@ -21,10 +21,12 @@ export const trackerUpdateBody = ({ formVariablesFields, enrollmentId, enrollmen
 
     for (const data of formVariablesFields) {
         if (data[0].type === "attribute") {
-            data.forEach((attribute: any) => {
-                const value = Boolean(formValues[attribute.id]) && formValues.hasOwnProperty(attribute.id) ? formValues[attribute.id] : undefined
-                form.attributes.push({ attribute: attribute.id, value });
-            });
+            data.forEach((attribute: { id: string }) => {
+                const value = formValues[attribute.id];
+                if (value !== null && value !== undefined) {
+                    form.attributes.push({ attribute: attribute.id, value });
+                }
+            })
         }
         else if (data[0].type === "dataElement") {
             for (const [key, value] of Object.entries(reducer(data, formValues))) {
@@ -35,7 +37,7 @@ export const trackerUpdateBody = ({ formVariablesFields, enrollmentId, enrollmen
                         occurredAt: enrollmentDate,
                         scheduledAt: enrollmentDate,
                         createdAt: enrollmentDate,
-                        dataValues: returnEventDataValues(data, formValues)
+                        dataValues: returnEventDataValues(value as Record<string, any>[])
                     })
                 else
                     form.events.push({
@@ -46,7 +48,7 @@ export const trackerUpdateBody = ({ formVariablesFields, enrollmentId, enrollmen
                         program: programId,
                         enrollment: event?.enrollment,
                         trackedEntity: trackedEntityId,
-                        dataValues: returnEventDataValues(data, formValues),
+                        dataValues: returnEventDataValues(value as Record<string, any>[]),
                         occurredAt: format(new Date(enrollmentDate), "yyyy-MM-dd'T'HH:mm:ss.SSS"),
                         scheduledAt: format(new Date(enrollmentDate), "yyyy-MM-dd'T'HH:mm:ss.SSS"),
                         createdAt: format(new Date(enrollmentDate), "yyyy-MM-dd'T'HH:mm:ss.SSS"),
@@ -54,35 +56,36 @@ export const trackerUpdateBody = ({ formVariablesFields, enrollmentId, enrollmen
             }
         }
 
-        return {
-            trackedEntities: [
-                {
-                    enrollments: [
-                        {
-                            orgUnit: orgUnitId,
-                            program: programId,
-                            status: "COMPLETED",
-                            enrollment: enrollmentId,
-                            attributes: form.attributes,
-                            createdAt: enrollmentDate,
-                            occurredAt: enrollmentDate,
-                            enrolledAt: enrollmentDate,
-                            events: form.events
-                        }
-                    ],
-                    orgUnit: orgUnitId,
-                    trackedEntity: trackedEntityId,
-                    trackedEntityType,
-                }
-            ]
-        }
+    }
+
+    return {
+        trackedEntities: [
+            {
+                enrollments: [
+                    {
+                        orgUnit: orgUnitId,
+                        program: programId,
+                        status: "COMPLETED",
+                        enrollment: enrollmentId,
+                        attributes: form.attributes,
+                        createdAt: enrollmentDate,
+                        occurredAt: enrollmentDate,
+                        enrolledAt: enrollmentDate,
+                        events: form.events
+                    }
+                ],
+                orgUnit: orgUnitId,
+                trackedEntity: trackedEntityId,
+                trackedEntityType,
+            }
+        ]
     }
 }
 
 
-const returnEventDataValues = (formVariablesFields: { id: string; assignedValue: string | boolean }[], formValues: Record<string, any>) => {
-    return formVariablesFields?.map(({ id, assignedValue }) => ({
-        dataElement: id,
-        value: Boolean(assignedValue) && formValues.hasOwnProperty(id) ? assignedValue : undefined
+const returnEventDataValues = (dataValues: Record<string, any>[]) => {
+    return dataValues.map(({ dataElement, value }) => ({
+        dataElement,
+        ...(value !== null && value !== undefined ? { value } : {})
     }));
 };

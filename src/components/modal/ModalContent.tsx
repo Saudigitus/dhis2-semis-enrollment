@@ -6,12 +6,13 @@ interface ModalContentInterface {
     loading: boolean
     onSubmit: (arg: any) => void
     onChange: (arg: any) => void
+    onCancel: (arg: any) => void
     initialValues?: Record<string, any>
 }
 
 
 function ModalContent(props: ModalContentInterface) {
-    const { formFields, onChange, onSubmit, initialValues, loading } = props;
+    const { formFields, onChange, onSubmit, onCancel, initialValues, loading } = props;
 
     return (
         <WithPadding>
@@ -22,6 +23,7 @@ function ModalContent(props: ModalContentInterface) {
                     withButtons={true}
                     formFields={formFields}
                     initialValues={initialValues}
+                    onCancel={() => { onCancel() }}
                     onFormSubtmit={(e) => { onSubmit(e) }}
                     onInputChange={(e) => { onChange(e) }}
                 />

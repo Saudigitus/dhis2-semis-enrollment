@@ -1,11 +1,11 @@
-import { Table, useProgramsKeys, useHeaderKey, stateEmitter } from "dhis2-semis-components";
+import { ProgramConfig } from 'dhis2-semis-types'
 import React, { useEffect, useState } from "react";
 import { IconDelete24, IconEdit24 } from "@dhis2/ui";
+import { useDataStoreKey } from 'dhis2-semis-components'
+import ModalManager from "../../components/modal/ModalManager";
+import { Table, useProgramsKeys, useHeaderKey, stateEmitter } from "dhis2-semis-components";
 import EnrollmentActionsButtons from "../../components/enrollmentButtons/EnrollmentActionsButtons";
 import { modules, useGetSectionTypeLabel, useHeader, useTableData, useUrlParams } from "dhis2-semis-functions";
-import { useDataStoreKey } from 'dhis2-semis-components'
-import { ProgramConfig } from 'dhis2-semis-types'
-import ModalManager from "../../components/modal/ModalManager";
 
 export default function EnrollmentsPage() {
     const { sectionName } = useGetSectionTypeLabel();
@@ -13,21 +13,28 @@ export default function EnrollmentsPage() {
     const programsValues = useProgramsKeys();
     const { headerValues } = useHeaderKey()
     const programData = programsValues[0]
-    const { urlParameters } = useUrlParams()
-    const { academicYear, grade, class: section } = urlParameters()
+    const { urlParameters, add, remove } = useUrlParams()
+    const { academicYear, grade, class: section, schoolName } = urlParameters()
     const [openEditModal, setOpenEditModal] = useState<boolean>(false)
     const { getData, tableData, loading } = useTableData({ module: modules.enrollment })
     const { columns } = useHeader({ dataStoreData, programConfigData: programData as unknown as ProgramConfig, tableColumns: [], module: modules.enrollment })
     const [filetrState, setFilterState] = useState<{ dataElements: any[], attributes: any[] }>({ attributes: [], dataElements: [] })
-    const [initialValues, setInitialValues] = useState<object>({});
 
     const handleOpenEditModal = (e: Record<string, any>) => {
-        console.log(e)
-        setInitialValues(e)
+        add("trackedEntity", e?.row?.trackedEntity)
+        add("enrollment", e?.row?.enrollmentId)
+        setOpenEditModal(true)
     }
 
+    useEffect(() => {
+        if (!openEditModal) {
+            remove("trackedEntity")
+            remove("enrollment")
+        }
+    }, [openEditModal])
+
     const rowsActions = [
-        { icon: <IconEdit24 />, color: '#277314', label: `Edition`, disabled: false, loading: false, onClick: handleOpenEditModal },
+        { icon: <IconEdit24 />, color: '#277314', label: `Edition`, disabled: false, loading: false, onClick: (e: any) => handleOpenEditModal(e) },
         { icon: <IconDelete24 />, color: '#d64d4d', label: `Delete`, disabled: false, loading: false, onClick: (e: any) => { console.log(e) } },
     ];
 
@@ -62,7 +69,7 @@ export default function EnrollmentsPage() {
                 setFilterState={setFilterState}
             />
 
-            <ModalManager initialValues={initialValues} open={openEditModal} setOpen={setOpenEditModal} saveMode="UPDATE" />
+            {openEditModal && <ModalManager open={openEditModal} setOpen={setOpenEditModal} saveMode="UPDATE" />}
         </div>
     )
 }
