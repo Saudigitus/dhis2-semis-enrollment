@@ -1,11 +1,5 @@
-import React, { useRef, useState } from 'react'
-import {
-    IconAddCircle24,
-    Button,
-    ButtonStrip,
-    IconUserGroup16,
-    IconSearch24,
-} from "@dhis2/ui";
+import React, { useState } from 'react'
+import { IconAddCircle24, Button, ButtonStrip, IconUserGroup16, IconSearch24 } from "@dhis2/ui";
 import Tooltip from '@material-ui/core/Tooltip';
 import styles from './enrollmentActionsButtons.module.css'
 import DropdownButtonComponent from '../buttons/DropdownButton';
@@ -13,11 +7,13 @@ import { useGetSectionTypeLabel, useUrlParams } from 'dhis2-semis-functions';
 import { Form } from "react-final-form";
 import { ProgramConfig, selectedDataStoreKey } from 'dhis2-semis-types'
 import { ModalSearchEnrollmentContent, DataExporter, DataImporter } from 'dhis2-semis-components';
+import ModalManager from '../modal/ModalManager';
 
 function EnrollmentActionsButtons({ programData, selectedDataStoreKey, filetrState }: { filetrState: any, programData: ProgramConfig, selectedDataStoreKey: selectedDataStoreKey }) {
     const { urlParameters } = useUrlParams();
     const { school: orgUnit } = urlParameters();
     const { sectionName } = useGetSectionTypeLabel();
+    const [openSaveModal, setOpenSaveModal] = useState<boolean>(false)
     const [openSearchEnrollment, setOpenSearchEnrollment] = useState<boolean>(false);
 
     const enrollmentOptions: any = [
@@ -101,13 +97,18 @@ function EnrollmentActionsButtons({ programData, selectedDataStoreKey, filetrSta
                         </Button>
                     </span>
                 </Tooltip>
-                <Tooltip title={orgUnit === null ? "Please select an organisation unit before" : ""}>
+                <Tooltip title={orgUnit === null ? "Please select an organisation unit before" : ""}
+                    onClick={() => setOpenSaveModal(true)}
+                >
                     <span>
                         <Button icon={<IconAddCircle24 />}>
                             <span className={styles.work_buttons_text}>Enroll {sectionName.toLocaleLowerCase()}</span>
                         </Button>
                     </span>
                 </Tooltip>
+
+                {openSaveModal && <ModalManager open={openSaveModal} setOpen={setOpenSaveModal} saveMode='CREATE' />}
+
                 <DropdownButtonComponent
                     name={<span className={styles.work_buttons_text}>Bulk enrollment</span> as unknown as string}
                     disabled={false}
@@ -123,7 +124,7 @@ function EnrollmentActionsButtons({ programData, selectedDataStoreKey, filetrSta
                     sectionName="student"
                     setOpen={setOpenSearchEnrollment}
                     Form={Form}
-                    setOpenNewEnrollmentModal={() => { }}
+                    setOpenNewEnrollmentModal={() => setOpenSaveModal(true)}
                     setFormInitialValues={(values: any) => console.log(values)}
                 />
             }
