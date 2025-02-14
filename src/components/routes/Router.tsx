@@ -4,7 +4,6 @@ import { EnrollmentsPage } from '../../pages';
 import { FullLayout } from '../../layout';
 
 export default function Router() {
-    console.log("Router")
     return (
         <HashRouter>
             <Routes>

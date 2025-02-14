@@ -1,5 +1,7 @@
+import { useRecoilState } from 'recoil';
 import { ProgramConfig } from 'dhis2-semis-types'
 import React, { useEffect, useState } from "react";
+import { TableDataRefetch } from "dhis2-semis-types" 
 import { IconDelete24, IconEdit24 } from "@dhis2/ui";
 import { useDataStoreKey } from 'dhis2-semis-components'
 import ModalManager from "../../components/modal/ModalManager";
@@ -16,9 +18,10 @@ export default function EnrollmentsPage() {
     const { urlParameters, add, remove } = useUrlParams()
     const { academicYear, grade, class: section, schoolName } = urlParameters()
     const [openEditModal, setOpenEditModal] = useState<boolean>(false)
-    const { getData, tableData, loading } = useTableData({ module: modules.enrollment })
+    const { getData, tableData, loading } = useTableData({ module: modules.enrollment, selectedDataStore: dataStoreData })
     const { columns } = useHeader({ dataStoreData, programConfigData: programData as unknown as ProgramConfig, tableColumns: [], module: modules.enrollment })
     const [filetrState, setFilterState] = useState<{ dataElements: any[], attributes: any[] }>({ attributes: [], dataElements: [] })
+    const [refetch, ] = useRecoilState(TableDataRefetch);
 
     const handleOpenEditModal = (e: Record<string, any>) => {
         add("trackedEntity", e?.row?.trackedEntity)
@@ -40,7 +43,7 @@ export default function EnrollmentsPage() {
 
     useEffect(() => {
         void getData({ page: 1, pageSize: 10, program: programData.id as string, orgUnit: "Shc3qNhrPAz", baseProgramStage: dataStoreData?.registration?.programStage as string, attributeFilters: filetrState.attributes, dataElementFilters: [`${dataStoreData?.registration?.academicYear}:in:2023`] })
-    }, [filetrState])
+    }, [filetrState, refetch])
 
     useEffect(() => {
         const filters = [

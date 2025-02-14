@@ -1,6 +1,8 @@
 import { format } from "date-fns";
+import { useRecoilState } from "recoil";
 import ModalContent from "./ModalContent";
 import React, { useEffect, useState } from "react";
+import { TableDataRefetch } from "dhis2-semis-types"
 import { trackerPostBody, trackerUpdateBody } from "../../utils/tei";
 import { formFields } from "../../utils/constants/form/enrollmentForm";
 import useGetSectionTypeLabel from "../../hooks/common/useGetSectionTypeLabel";
@@ -24,17 +26,14 @@ function ModalManager(props: ModalManagerInterface) {
     const { sectionName } = useGetSectionTypeLabel();
     const enrollment = useQuery().get("enrollment") as string
     const { attributes = [] } = useGetAttributes({ programData });
+    const [refetch, setRefetch] = useRecoilState(TableDataRefetch);
     const trackedEntity = useQuery().get("trackedEntity") as string
     const dataStoreData = useDataStoreKey({ sectionType: "student" });
     const programStagesToSave = useGetUsedProgramStages({ sectionType: "student" });
     const { returnPattern, loadingCodes, generatedVariables } = useGetPatternCode();
     const { formData } = useBuildForm({ dataStoreData, programData, module: modules.enrollment });
+    const [initialValues] = useState<object>({ registerschoolstaticform: schoolName, enrollment_date: format(new Date(), "yyyy-MM-dd") });
     const { getInitialValues, initialValues: updateInitialValues, loading: initialValuesLoading, enrollmentEvents } = useGetEnrollmentUpdateInitialValues()
-
-    const [initialValues] = useState<object>({
-        registerschoolstaticform: schoolName,
-        enrollment_date: format(new Date(), "yyyy-MM-dd"),
-    });
 
     useEffect(() => {
         if (saveMode == "CREATE") void returnPattern(attributes);
@@ -76,11 +75,12 @@ function ModalManager(props: ModalManagerInterface) {
         };
 
         saveTei({
-            data: data(), handleComplete: handleCloseModal,
+            data: data(),
             messages: {
                 error: `Could not ${saveMode.toLowerCase()} enrollment.`,
                 sucess: `Enrollment ${saveMode.toLowerCase()}d sucessfully.`,
             },
+            handleComplete: () => { handleCloseModal(); setRefetch(!refetch) },
         });
     }
 
@@ -88,8 +88,8 @@ function ModalManager(props: ModalManagerInterface) {
         <ModalComponent
             open={open}
             handleClose={handleCloseModal}
-            title={`${sectionName} enrollment`}
             loading={loadingCodes || initialValuesLoading}
+            title={`Single ${sectionName} Enrollment ${saveMode == "UPDATE" ? "Update" : ""}`}
         >
             <ModalContent
                 loading={saving!}
