@@ -1,15 +1,7 @@
 import React from 'react'
 import { Form } from 'react-final-form';
+import { ModalContentInterface } from 'src/types/modal/ModalProps';
 import { CustomForm, WithBorder, WithPadding } from 'dhis2-semis-components';
-interface ModalContentInterface {
-    formFields: any
-    loading: boolean
-    onCancel: () => void
-    onSubmit: (arg: any) => void
-    onChange: (arg: any) => void
-    initialValues?: Record<string, any>
-}
-
 
 function ModalContent(props: ModalContentInterface) {
     const { formFields, onChange, onSubmit, onCancel, initialValues, loading } = props;

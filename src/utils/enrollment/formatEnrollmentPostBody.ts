@@ -1,6 +1,6 @@
 import { reducer } from "../common/formatDistinctValue";
 
-interface trackerPostBodyInterface {
+interface enrollmentPostBodyInterface {
     programId: string,
     orgUnitId: string,
     enrollmentDate: string
@@ -11,7 +11,7 @@ interface trackerPostBodyInterface {
     programStagesToSave: (string | undefined)[],
 }
 
-export const trackerPostBody = ({ formVariablesFields, programId, orgUnitId, enrollmentDate, programStagesToSave, trackedEntityType, trackedEntityId, values }: trackerPostBodyInterface) => {
+export const enrollmentPostBody = ({ formVariablesFields, programId, orgUnitId, enrollmentDate, programStagesToSave, trackedEntityType, trackedEntityId, values }: enrollmentPostBodyInterface) => {
     const form: { attributes: any[], events: any[] } = {
         attributes: [],
         events: []

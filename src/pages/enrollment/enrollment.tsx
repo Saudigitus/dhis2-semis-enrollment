@@ -5,7 +5,7 @@ import { TableDataRefetch } from "dhis2-semis-types"
 import { IconDelete24, IconEdit24 } from "@dhis2/ui";
 import { useDataStoreKey } from 'dhis2-semis-components'
 import ModalManager from "../../components/modal/ModalManager";
-import { Table, useProgramsKeys, useHeaderKey, stateEmitter } from "dhis2-semis-components";
+import { Table, useProgramsKeys } from "dhis2-semis-components";
 import EnrollmentActionsButtons from "../../components/enrollmentButtons/EnrollmentActionsButtons";
 import { modules, useGetSectionTypeLabel, useHeader, useTableData, useUrlParams } from "dhis2-semis-functions";
 
@@ -13,7 +13,6 @@ export default function EnrollmentsPage() {
     const { sectionName } = useGetSectionTypeLabel();
     const dataStoreData = useDataStoreKey({ sectionType: sectionName });
     const programsValues = useProgramsKeys();
-    const { headerValues } = useHeaderKey()
     const programData = programsValues[0]
     const { urlParameters, add, remove } = useUrlParams()
     const { academicYear, grade, class: section, schoolName } = urlParameters()
