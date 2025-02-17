@@ -1,27 +1,27 @@
 import { useRecoilState } from 'recoil';
 import { ProgramConfig } from 'dhis2-semis-types'
 import React, { useEffect, useState } from "react";
-import { TableDataRefetch } from "dhis2-semis-types" 
+import { TableDataRefetch } from "dhis2-semis-types"
 import { IconDelete24, IconEdit24 } from "@dhis2/ui";
 import { useDataStoreKey } from 'dhis2-semis-components'
 import ModalManager from "../../components/modal/ModalManager";
-import { Table, useProgramsKeys, useHeaderKey, stateEmitter } from "dhis2-semis-components";
+import { Table, useProgramsKeys } from "dhis2-semis-components";
 import EnrollmentActionsButtons from "../../components/enrollmentButtons/EnrollmentActionsButtons";
-import { modules, useGetSectionTypeLabel, useHeader, useTableData, useUrlParams } from "dhis2-semis-functions";
+import { modules, useGetSectionTypeLabel, useHeader, useTableData, useUrlParams, useViewPortWidth } from "dhis2-semis-functions";
 
 export default function EnrollmentsPage() {
     const { sectionName } = useGetSectionTypeLabel();
     const dataStoreData = useDataStoreKey({ sectionType: sectionName });
     const programsValues = useProgramsKeys();
-    const { headerValues } = useHeaderKey()
     const programData = programsValues[0]
+    const { viewPortWidth } = useViewPortWidth()
     const { urlParameters, add, remove } = useUrlParams()
     const { academicYear, grade, class: section, schoolName } = urlParameters()
     const [openEditModal, setOpenEditModal] = useState<boolean>(false)
     const { getData, tableData, loading } = useTableData({ module: modules.enrollment, selectedDataStore: dataStoreData })
     const { columns } = useHeader({ dataStoreData, programConfigData: programData as unknown as ProgramConfig, tableColumns: [], module: modules.enrollment })
     const [filetrState, setFilterState] = useState<{ dataElements: any[], attributes: any[] }>({ attributes: [], dataElements: [] })
-    const [refetch, ] = useRecoilState(TableDataRefetch);
+    const [refetch,] = useRecoilState(TableDataRefetch);
 
     const handleOpenEditModal = (e: Record<string, any>) => {
         add("trackedEntity", e?.row?.trackedEntity)
@@ -54,12 +54,13 @@ export default function EnrollmentsPage() {
         setFilterState({ dataElements: filters, attributes: [] })
     }, [academicYear, grade, section])
 
+
     return (
         <div style={{ height: "85vh" }} >
             <Table
                 programConfig={programData}
                 title="Enrollments"
-                viewPortWidth={1040}
+                viewPortWidth={viewPortWidth}
                 columns={columns}
                 totalElements={4}
                 tableData={tableData}

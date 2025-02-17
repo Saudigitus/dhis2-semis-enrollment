@@ -1,5 +1,5 @@
 import { format } from "date-fns";
-import { VariablesTypes } from "../../../types/variables/AttributeColumns";
+import { VariablesTypes } from "dhis2-semis-types";
 
 const staticForm = () => {
   return {

@@ -3,18 +3,13 @@ import { useRecoilState } from "recoil";
 import ModalContent from "./ModalContent";
 import React, { useEffect, useState } from "react";
 import { TableDataRefetch } from "dhis2-semis-types"
-import { trackerPostBody, trackerUpdateBody } from "../../utils/tei";
+import { ModalManagerInterface } from "src/types/modal/ModalProps";
+import { enrollmentPostBody, enrollmentUpdateBody } from "../../utils/enrollment";
 import { formFields } from "../../utils/constants/form/enrollmentForm";
 import useGetSectionTypeLabel from "../../hooks/common/useGetSectionTypeLabel";
 import useGetEnrollmentUpdateInitialValues from "../../hooks/form/useGetEnrollmentUpdateInitialValues";
 import { ModalComponent, useDataStoreKey, useProgramsKeys, useGetUsedProgramStages, } from "dhis2-semis-components";
 import { modules, useBuildForm, useGetAttributes, useGetPatternCode, useSaveTei, useUrlParams, removeFalseKeys } from "dhis2-semis-functions";
-
-interface ModalManagerInterface {
-    open: boolean;
-    saveMode: "CREATE" | "UPDATE";
-    setOpen: (arg: boolean) => void;
-}
 
 function ModalManager(props: ModalManagerInterface) {
     const { open, setOpen, saveMode } = props;
@@ -48,7 +43,7 @@ function ModalManager(props: ModalManagerInterface) {
     function onSubmit(e: Record<string, any>): void {
         const data = () => {
             if (saveMode === "CREATE") {
-                return trackerPostBody({
+                return enrollmentPostBody({
                     values: e,
                     orgUnitId: school!,
                     programStagesToSave,
@@ -60,7 +55,7 @@ function ModalManager(props: ModalManagerInterface) {
             }
 
             if (saveMode === "UPDATE") {
-                return trackerUpdateBody({
+                return enrollmentUpdateBody({
                     formVariablesFields: formData,
                     enrollmentId: e?.enrollment,
                     enrollmentDate: e?.enrollment_date,

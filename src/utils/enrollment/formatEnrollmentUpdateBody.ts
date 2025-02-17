@@ -1,7 +1,7 @@
 import { format } from "date-fns";
 import { reducer } from "../common/formatDistinctValue";
 
-interface trackerUpdateBodyInterface {
+interface enrollmentUpdateBodyInterface {
     programId: string,
     orgUnitId: string,
     enrollmentDate: string,
@@ -13,7 +13,7 @@ interface trackerUpdateBodyInterface {
     formVariablesFields: any[],
 }
 
-export const trackerUpdateBody = ({ formVariablesFields, enrollmentId, enrollmentDate, trackedEntityId, trackedEntityType, orgUnitId, programId, formValues, events }: trackerUpdateBodyInterface): any => {
+export const enrollmentUpdateBody = ({ formVariablesFields, enrollmentId, enrollmentDate, trackedEntityId, trackedEntityType, orgUnitId, programId, formValues, events }: enrollmentUpdateBodyInterface): any => {
     const form: { attributes: any[], events: any[] } = {
         attributes: [],
         events: []

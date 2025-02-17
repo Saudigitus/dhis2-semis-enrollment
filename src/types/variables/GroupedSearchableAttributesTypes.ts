@@ -1,4 +1,5 @@
-import { CustomAttributeProps } from "dhis2-semis-components"
+import { CustomAttributeProps } from "dhis2-semis-types"
+
 
 interface GroupedSearchableAttributesTypes {
     id: string

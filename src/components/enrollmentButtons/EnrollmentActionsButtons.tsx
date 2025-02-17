@@ -2,11 +2,10 @@ import React, { useState } from 'react'
 import { IconAddCircle24, Button, ButtonStrip, IconUserGroup16, IconSearch24 } from "@dhis2/ui";
 import Tooltip from '@material-ui/core/Tooltip';
 import styles from './enrollmentActionsButtons.module.css'
-import DropdownButtonComponent from '../buttons/DropdownButton';
 import { useGetSectionTypeLabel, useUrlParams } from 'dhis2-semis-functions';
 import { Form } from "react-final-form";
 import { ProgramConfig, selectedDataStoreKey } from 'dhis2-semis-types'
-import { ModalSearchEnrollmentContent, DataExporter, DataImporter } from 'dhis2-semis-components';
+import { ModalSearchEnrollmentContent, DataExporter, DataImporter, CustomDropdown as DropdownButton } from 'dhis2-semis-components';
 import ModalManager from '../modal/ModalManager';
 
 function EnrollmentActionsButtons({ programData, selectedDataStoreKey, filetrState }: { filetrState: any, programData: ProgramConfig, selectedDataStoreKey: selectedDataStoreKey }) {
@@ -109,7 +108,7 @@ function EnrollmentActionsButtons({ programData, selectedDataStoreKey, filetrSta
 
                 {openSaveModal && <ModalManager open={openSaveModal} setOpen={setOpenSaveModal} saveMode='CREATE' />}
 
-                <DropdownButtonComponent
+                < DropdownButton
                     name={<span className={styles.work_buttons_text}>Bulk enrollment</span> as unknown as string}
                     disabled={false}
                     icon={<IconUserGroup16 />}
