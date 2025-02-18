@@ -6,10 +6,9 @@ import { TableDataRefetch } from "dhis2-semis-types"
 import { ModalManagerInterface } from "src/types/modal/ModalProps";
 import { enrollmentPostBody, enrollmentUpdateBody } from "../../utils/enrollment";
 import { formFields } from "../../utils/constants/form/enrollmentForm";
-import useGetSectionTypeLabel from "../../hooks/common/useGetSectionTypeLabel";
 import useGetEnrollmentUpdateInitialValues from "../../hooks/form/useGetEnrollmentUpdateInitialValues";
 import { ModalComponent, useDataStoreKey, useProgramsKeys, useGetUsedProgramStages, } from "dhis2-semis-components";
-import { modules, useBuildForm, useGetAttributes, useGetPatternCode, useSaveTei, useUrlParams, removeFalseKeys } from "dhis2-semis-functions";
+import { modules, useBuildForm, useGetAttributes, useGetPatternCode, useSaveTei, useUrlParams, useGetSectionTypeLabel } from "dhis2-semis-functions";
 
 function ModalManager(props: ModalManagerInterface) {
     const { open, setOpen, saveMode } = props;
