@@ -1,4 +1,4 @@
-import { Table, useProgramsKeys, useHeaderKey,stateEmitter } from "dhis2-semis-components";
+import { Table, useProgramsKeys, useHeaderKey, stateEmitter, ModalComponent } from "dhis2-semis-components";
 import React, { useEffect, useState } from "react";
 import { IconDelete24, IconEdit24 } from "@dhis2/ui";
 import EnrollmentActionsButtons from "../../components/enrollmentButtons/EnrollmentActionsButtons";
@@ -10,7 +10,8 @@ export default function EnrollmentsPage() {
     const { sectionName } = useGetSectionTypeLabel();
     const dataStoreData = useDataStoreKey({ sectionType: sectionName });
     const programsValues = useProgramsKeys();
-    const {headerValues} = useHeaderKey()
+    const [openDelete, setOpenDelete] = useState<boolean>(false)
+    const { headerValues } = useHeaderKey()
     const programData = programsValues[0]
     const { urlParameters } = useUrlParams()
     const { academicYear, grade, class: section } = urlParameters()
@@ -20,8 +21,10 @@ export default function EnrollmentsPage() {
 
     const rowsActions = [
         { icon: <IconEdit24 />, color: '#277314', label: `Edition`, disabled: true, loading: false, onClick: () => { alert("Edition") } },
-        { icon: <IconDelete24 />, color: '#d64d4d', label: `Delete`, disabled: false, loading: false, onClick: () => { alert("Delete") } },
+        { icon: <IconDelete24 />, color: '#d64d4d', label: `Delete`, disabled: false, loading: false, onClick: () => { setOpenDelete(true) } },
     ];
+
+    const onDeletionClose = () => setOpenDelete(false)
 
     useEffect(() => {
         void getData({ page: 1, pageSize: 10, program: programData.id as string, orgUnit: "Shc3qNhrPAz", baseProgramStage: dataStoreData?.registration?.programStage as string, attributeFilters: filetrState.attributes, dataElementFilters: [`${dataStoreData?.registration?.academicYear}:in:2023`] })
@@ -53,6 +56,9 @@ export default function EnrollmentsPage() {
                 rightElements={<EnrollmentActionsButtons filetrState={filetrState} selectedDataStoreKey={dataStoreData} programData={programData as unknown as ProgramConfig} />}
                 setFilterState={setFilterState}
             />
+            <ModalComponent open={openDelete} handleClose={onDeletionClose} title="Enrollment deletion" >
+                <span></span>
+            </ModalComponent>
         </div>
     )
 }
