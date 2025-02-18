@@ -27,6 +27,7 @@ function EnrollmentActionsButtons({ programData, selectedDataStoreKey, filetrSta
                 sectionType={sectionName}
                 selectedSectionDataStore={selectedDataStoreKey}
                 updating={false}
+                title={"Bulk Enrollment"}
             />,
             divider: true,
             disabled: false,
@@ -42,6 +43,7 @@ function EnrollmentActionsButtons({ programData, selectedDataStoreKey, filetrSta
                 sectionType={sectionName}
                 selectedSectionDataStore={selectedDataStoreKey}
                 updating={true}
+                title={"Bulk Enrollment Update"}
             />,
             divider: true,
             disabled: false,
