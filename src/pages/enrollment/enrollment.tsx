@@ -1,13 +1,14 @@
 import { useRecoilState } from 'recoil';
 import { ProgramConfig } from 'dhis2-semis-types'
 import React, { useEffect, useState } from "react";
-import { TableDataRefetch, Modules } from "dhis2-semis-types"
+import { TableDataRefetch, Modules  } from "dhis2-semis-types"
 import { IconDelete24, IconEdit24 } from "@dhis2/ui";
 import { InfoPage, useDataStoreKey } from 'dhis2-semis-components'
 import ModalManager from "../../components/modal/ModalManager";
 import { Table, useProgramsKeys } from "dhis2-semis-components";
 import EnrollmentActionsButtons from "../../components/enrollmentButtons/EnrollmentActionsButtons";
 import { useGetSectionTypeLabel, useHeader, useTableData, useUrlParams, useViewPortWidth } from "dhis2-semis-functions";
+import ModalManagerEnrollmentDelete from '../../components/modal/deleteEnrollment/ModalManager';
 
 export default function EnrollmentsPage() {
     const { sectionName } = useGetSectionTypeLabel();
@@ -18,6 +19,7 @@ export default function EnrollmentsPage() {
     const { urlParameters, add, remove } = useUrlParams();
     const { academicYear, grade, class: section, schoolName, school } = urlParameters();
     const [openEditModal, setOpenEditModal] = useState<boolean>(false);
+    const [openDeleteModal, setOpenDeleteModal] = useState<boolean>(false)
     const { getData, tableData, loading } = useTableData({ module: Modules.Enrollment, selectedDataStore: dataStoreData });
     const { columns } = useHeader({ dataStoreData, programConfigData: programData as unknown as ProgramConfig, tableColumns: [], module: Modules.Enrollment });
     const [filetrState, setFilterState] = useState<{ dataElements: any[], attributes: any[] }>({ attributes: [], dataElements: [] });
@@ -29,6 +31,12 @@ export default function EnrollmentsPage() {
         setOpenEditModal(true);
     };
 
+    const handleOpenDeleteModal = (e: Record<string, any>) => {
+        add("trackedEntity", e?.row?.trackedEntity)
+        add("enrollment", e?.row?.enrollmentId)
+        setOpenDeleteModal(true)
+    }
+
     useEffect(() => {
         if (!openEditModal) {
             remove("trackedEntity");
@@ -36,9 +44,16 @@ export default function EnrollmentsPage() {
         }
     }, [openEditModal]);
 
+    useEffect(() => {
+        if (!openDeleteModal) {
+            remove("trackedEntity")
+            remove("enrollment")
+        }
+    }, [openDeleteModal])
+
     const rowsActions = [
         { icon: <IconEdit24 />, color: '#277314', label: `Edition`, disabled: false, loading: false, onClick: (e: any) => handleOpenEditModal(e) },
-        { icon: <IconDelete24 />, color: '#d64d4d', label: `Delete`, disabled: false, loading: false, onClick: (e: any) => { console.log(e) } },
+        { icon: <IconDelete24 />, color: '#d64d4d', label: `Delete`, disabled: false, loading: false, onClick: (e: any) => handleOpenDeleteModal(e) },
     ];
 
     useEffect(() => {
@@ -89,6 +104,7 @@ export default function EnrollmentsPage() {
                             setFilterState={setFilterState}
                         />
                         {openEditModal && <ModalManager open={openEditModal} setOpen={setOpenEditModal} saveMode="UPDATE" />}
+            {openDeleteModal && <ModalManagerEnrollmentDelete open={openDeleteModal} setOpen={setOpenDeleteModal} saveMode="UPDATE" />}
                     </>
             }
         </div>

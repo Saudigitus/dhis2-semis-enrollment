@@ -1,11 +1,12 @@
 import React from 'react';
 import { EnrollmentsPage } from '../../pages';
-import { Routes, Route, Outlet } from 'react-router-dom';
+import { Routes, Route, Outlet, HashRouter } from 'react-router-dom';
 import { HeaderBarLayout, SemisHeader } from 'dhis2-semis-components';
 
 export default function Router() {
     return (
-        <Routes>
+        <HashRouter>
+<Routes>
             <Route path='/'
                 element={
                     <HeaderBarLayout
@@ -97,5 +98,6 @@ export default function Router() {
                 <Route key={'enrollments'} path={'/'} element={<EnrollmentsPage />} />
             </Route>
         </Routes>
+        </HashRouter>
     );
 }
