@@ -1,9 +1,9 @@
 import { useRecoilState } from 'recoil';
 import { ProgramConfig } from 'dhis2-semis-types'
 import React, { useEffect, useState } from "react";
-import { TableDataRefetch, Modules} from "dhis2-semis-types"
+import { TableDataRefetch, Modules } from "dhis2-semis-types"
 import { IconDelete24, IconEdit24 } from "@dhis2/ui";
-import { useDataStoreKey } from 'dhis2-semis-components'
+import { InfoPage, useDataStoreKey } from 'dhis2-semis-components'
 import ModalManager from "../../components/modal/ModalManager";
 import { Table, useProgramsKeys } from "dhis2-semis-components";
 import EnrollmentActionsButtons from "../../components/enrollmentButtons/EnrollmentActionsButtons";
@@ -13,28 +13,28 @@ export default function EnrollmentsPage() {
     const { sectionName } = useGetSectionTypeLabel();
     const dataStoreData = useDataStoreKey({ sectionType: sectionName });
     const programsValues = useProgramsKeys();
-    const programData = programsValues[0]
-    const { viewPortWidth } = useViewPortWidth()
-    const { urlParameters, add, remove } = useUrlParams()
-    const { academicYear, grade, class: section, schoolName } = urlParameters()
-    const [openEditModal, setOpenEditModal] = useState<boolean>(false)
-    const { getData, tableData, loading } = useTableData({ module: Modules.Enrollment, selectedDataStore: dataStoreData })
-    const { columns } = useHeader({ dataStoreData, programConfigData: programData as unknown as ProgramConfig, tableColumns: [], module: Modules.Enrollment })
-    const [filetrState, setFilterState] = useState<{ dataElements: any[], attributes: any[] }>({ attributes: [], dataElements: [] })
+    const programData = programsValues[0];
+    const { viewPortWidth } = useViewPortWidth();
+    const { urlParameters, add, remove } = useUrlParams();
+    const { academicYear, grade, class: section, schoolName, school } = urlParameters();
+    const [openEditModal, setOpenEditModal] = useState<boolean>(false);
+    const { getData, tableData, loading } = useTableData({ module: Modules.Enrollment, selectedDataStore: dataStoreData });
+    const { columns } = useHeader({ dataStoreData, programConfigData: programData as unknown as ProgramConfig, tableColumns: [], module: Modules.Enrollment });
+    const [filetrState, setFilterState] = useState<{ dataElements: any[], attributes: any[] }>({ attributes: [], dataElements: [] });
     const [refetch,] = useRecoilState(TableDataRefetch);
 
     const handleOpenEditModal = (e: Record<string, any>) => {
-        add("trackedEntity", e?.row?.trackedEntity)
-        add("enrollment", e?.row?.enrollmentId)
-        setOpenEditModal(true)
-    }
+        add("trackedEntity", e?.row?.trackedEntity);
+        add("enrollment", e?.row?.enrollmentId);
+        setOpenEditModal(true);
+    };
 
     useEffect(() => {
         if (!openEditModal) {
-            remove("trackedEntity")
-            remove("enrollment")
+            remove("trackedEntity");
+            remove("enrollment");
         }
-    }, [openEditModal])
+    }, [openEditModal]);
 
     const rowsActions = [
         { icon: <IconEdit24 />, color: '#277314', label: `Edition`, disabled: false, loading: false, onClick: (e: any) => handleOpenEditModal(e) },
@@ -56,24 +56,41 @@ export default function EnrollmentsPage() {
 
 
     return (
-        <div style={{ height: "85vh" }} >
-            <Table
-                programConfig={programData}
-                title="Enrollments"
-                viewPortWidth={viewPortWidth}
-                columns={columns}
-                totalElements={4}
-                tableData={tableData}
-                rowAction={rowsActions}
-                defaultFilterNumber={3}
-                showRowActions
-                filterState={{ attributes: [], dataElements: [] }}
-                loading={loading}
-                rightElements={<EnrollmentActionsButtons filetrState={filetrState} selectedDataStoreKey={dataStoreData} programData={programData as unknown as ProgramConfig} />}
-                setFilterState={setFilterState}
-            />
-
-            {openEditModal && <ModalManager open={openEditModal} setOpen={setOpenEditModal} saveMode="UPDATE" />}
+        <div style={{ height: "85vh" }}>
+            {
+                !(Boolean(schoolName) && Boolean(school)) ?
+                    <InfoPage
+                        title="SEMIS-Enrollment"
+                        sections={[
+                            {
+                                sectionTitle: "Follow the instructions to proceed:",
+                                instructions: [
+                                    "Select the Organization unit you want to view data",
+                                    "Use global filters(Class, Grade and Academic Year)"
+                                ]
+                            }
+                        ]}
+                    />
+                    :
+                    <>
+                        <Table
+                            programConfig={programData}
+                            title="Enrollments"
+                            viewPortWidth={viewPortWidth}
+                            columns={columns}
+                            totalElements={4}
+                            tableData={tableData}
+                            rowAction={rowsActions}
+                            defaultFilterNumber={3}
+                            showRowActions
+                            filterState={{ attributes: [], dataElements: [] }}
+                            loading={loading}
+                            rightElements={<EnrollmentActionsButtons filetrState={filetrState} selectedDataStoreKey={dataStoreData} programData={programData as unknown as ProgramConfig} />}
+                            setFilterState={setFilterState}
+                        />
+                        {openEditModal && <ModalManager open={openEditModal} setOpen={setOpenEditModal} saveMode="UPDATE" />}
+                    </>
+            }
         </div>
     )
 }
