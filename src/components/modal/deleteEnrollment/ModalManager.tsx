@@ -1,5 +1,5 @@
 import { ModalComponent, useDataStoreKey, useProgramsKeys } from 'dhis2-semis-components'
-import { useBuildForm, useGetPatternCode, useGetSectionTypeLabel, useSaveTei, useUrlParams } from 'dhis2-semis-functions';
+import { useBuildForm, useGetSectionTypeLabel, useUrlParams } from 'dhis2-semis-functions';
 import React, { useEffect, useState } from 'react'
 import { ModalManagerInterface } from '../../../types/modal/ModalProps'
 import ModalContent from './ModalContent';
@@ -11,16 +11,20 @@ import { useDeleteEnrollment } from '../../../hooks/enrollment/useDeleteEnrollme
 import { useRecoilState } from 'recoil';
 
 const ModalManagerEnrollmentDelete = (props: ModalManagerInterface) => {
-    const { loadingCodes, generatedVariables } = useGetPatternCode();
     const [loadingDelete, setLoadingDelete] = useState(false)
+    const { urlParameters, useQuery } = useUrlParams();
     const { deleteEnrollment } = useDeleteEnrollment()
+    const sectionTypeParam = useQuery().get("sectionType");
+    const sectionType: "student" | "staff" =
+        sectionTypeParam === "student" || sectionTypeParam === "staff"
+            ? sectionTypeParam
+            : "student"; // Fallback para 'student' se for null ou inválido
     const { sectionName } = useGetSectionTypeLabel();
     const [refetch, setRefetch] = useRecoilState(TableDataRefetch);
     const programsValues = useProgramsKeys();
     const programData = programsValues[0];
     const { open, setOpen } = props;
-    const dataStoreData = useDataStoreKey({ sectionType: "student" });
-    const { urlParameters, useQuery } = useUrlParams();
+    const dataStoreData = useDataStoreKey({ sectionType: sectionType });
     const { schoolName } = urlParameters();
     const { formData } = useBuildForm({ dataStoreData, programData, module: Modules.Enrollment });
     const [initialValues] = useState<object>({ registerschoolstaticform: schoolName, enrollment_date: format(new Date(), "yyyy-MM-dd") });
@@ -54,7 +58,7 @@ const ModalManagerEnrollmentDelete = (props: ModalManagerInterface) => {
         <ModalComponent
             open={open}
             handleClose={handleCloseModal}
-            loading={loadingCodes || initialValuesLoading}
+            loading={initialValuesLoading}
             title="Enrollment deletion"
         >
             <ModalContent
@@ -63,7 +67,7 @@ const ModalManagerEnrollmentDelete = (props: ModalManagerInterface) => {
                 onSubmit={onDeleteEnrollment}
                 onCancel={handleCloseModal}
                 formFields={enrollmentDeletionFormField({ formFieldsData: formData, sectionName })}
-                initialValues={{ ...initialValues, ...generatedVariables, ...updateInitialValues }}
+                initialValues={{ ...initialValues, ...updateInitialValues }}
             />
         </ModalComponent>
     )

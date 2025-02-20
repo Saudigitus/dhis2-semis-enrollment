@@ -25,35 +25,27 @@ export default function EnrollmentsPage() {
     const [filterState, setFilterState] = useState<{ dataElements: any, attributes: any }>({ attributes: [], dataElements: [] });
     const [refetch,] = useRecoilState(TableDataRefetch);
 
-    const handleOpenEditModal = (e: Record<string, any>) => {
+    const handleOpenModal = (e: Record<string, any>, type: "edit" | "delete",) => {
         add("trackedEntity", e?.row?.trackedEntity);
         add("enrollment", e?.row?.enrollmentId);
-        setOpenEditModal(true);
+
+        if (type === "delete") {
+            setOpenDeleteModal(true)
+        } else {
+            setOpenEditModal(true)
+        }
     };
 
-    const handleOpenDeleteModal = (e: Record<string, any>) => {
-        add("trackedEntity", e?.row?.trackedEntity)
-        add("enrollment", e?.row?.enrollmentId)
-        setOpenDeleteModal(true)
-    }
-
     useEffect(() => {
-        if (!openEditModal) {
-            remove("trackedEntity");
-            remove("enrollment");
-        }
-    }, [openEditModal]);
-
-    useEffect(() => {
-        if (!openDeleteModal) {
+        if (!openDeleteModal && !openEditModal) {
             remove("trackedEntity")
             remove("enrollment")
         }
-    }, [openDeleteModal])
+    }, [openDeleteModal,openEditModal])
 
     const rowsActions = [
-        { icon: <IconEdit24 />, color: '#277314', label: `Edition`, disabled: false, loading: false, onClick: (e: any) => handleOpenEditModal(e) },
-        { icon: <IconDelete24 />, color: '#d64d4d', label: `Delete`, disabled: false, loading: false, onClick: (e: any) => handleOpenDeleteModal(e) },
+        { icon: <IconEdit24 />, color: '#277314', label: `Edition`, disabled: false, loading: false, onClick: (e: any) => handleOpenModal(e,"edit") },
+        { icon: <IconDelete24 />, color: '#d64d4d', label: `Delete`, disabled: false, loading: false, onClick: (e: any) => handleOpenModal(e,"delete") },
     ];
 
     useEffect(() => {
@@ -75,41 +67,41 @@ export default function EnrollmentsPage() {
 
     return (
         <div style={{ height: "85vh" }}>
-        {
-            !(Boolean(schoolName) && Boolean(school)) ?
-                <InfoPage
-                    title="SEMIS-Enrollment"
-                    sections={[
-                        {
-                            sectionTitle: "Follow the instructions to proceed:",
-                            instructions: [
-                                "Select the Organization unit you want to view data",
-                                "Use global filters(Class, Grade and Academic Year)"
-                            ]
-                        }
-                    ]}
-                />
-                :
-                <>
-                    <Table
-                        programConfig={programData}
-                        title="Enrollments"
-                        viewPortWidth={viewPortWidth}
-                        columns={columns}
-                        totalElements={4}
-                        tableData={tableData}
-                        rowAction={rowsActions}
-                        defaultFilterNumber={3}
-                        showRowActions
-                        filterState={{ attributes: [], dataElements: [] }}
-                        loading={loading}
-                        rightElements={<EnrollmentActionsButtons filetrState={filterState} selectedDataStoreKey={dataStoreData} programData={programData as unknown as ProgramConfig} />}
-                        setFilterState={setFilterState}
+            {
+                !(Boolean(schoolName) && Boolean(school)) ?
+                    <InfoPage
+                        title="SEMIS-Enrollment"
+                        sections={[
+                            {
+                                sectionTitle: "Follow the instructions to proceed:",
+                                instructions: [
+                                    "Select the Organization unit you want to view data",
+                                    "Use global filters(Class, Grade and Academic Year)"
+                                ]
+                            }
+                        ]}
                     />
-                    {openEditModal && <ModalManager open={openEditModal} setOpen={setOpenEditModal} saveMode="UPDATE" />}
-                    {openDeleteModal && <ModalManagerEnrollmentDelete open={openDeleteModal} setOpen={setOpenDeleteModal} saveMode="UPDATE" />}
-                </>
-        }
-    </div>
+                    :
+                    <>
+                        <Table
+                            programConfig={programData}
+                            title="Enrollments"
+                            viewPortWidth={viewPortWidth}
+                            columns={columns}
+                            totalElements={4}
+                            tableData={tableData}
+                            rowAction={rowsActions}
+                            defaultFilterNumber={3}
+                            showRowActions
+                            filterState={{ attributes: [], dataElements: [] }}
+                            loading={loading}
+                            rightElements={<EnrollmentActionsButtons filetrState={filterState} selectedDataStoreKey={dataStoreData} programData={programData as unknown as ProgramConfig} />}
+                            setFilterState={setFilterState}
+                        />
+                        {openEditModal && <ModalManager open={openEditModal} setOpen={setOpenEditModal} saveMode="UPDATE" />}
+                        {openDeleteModal && <ModalManagerEnrollmentDelete open={openDeleteModal} setOpen={setOpenDeleteModal} saveMode="UPDATE" />}
+                    </>
+            }
+        </div>
     )
 }

@@ -24,12 +24,8 @@ const ModalContent = (props: ModalContentInterface) => {
                 <WithPadding>
                     <CustomForm
                         Form={Form}
-                        loading={loading}
                         formFields={[formFields[0]]}
                         initialValues={initialValues}
-                        onCancel={() => { onCancel() }}
-                        onFormSubtmit={(e) => { onSubmit(e) }}
-                        onInputChange={(e) => { onChange(e) }}
                     />
                     <WithPadding p='5px 18px'>
                         <ButtonStrip end>
@@ -41,12 +37,8 @@ const ModalContent = (props: ModalContentInterface) => {
                     <Collapse in={collapse}>
                         <CustomForm
                             Form={Form}
-                            loading={loading}
                             formFields={[formFields[1]]}
                             initialValues={initialValues}
-                            onCancel={() => { onCancel() }}
-                            onFormSubtmit={(e) => { onSubmit(e) }}
-                            onInputChange={(e) => { onChange(e) }}
                         />
                     </Collapse>
                     <WithPadding p='10px 18px'>
@@ -82,14 +74,12 @@ const ModalContent = (props: ModalContentInterface) => {
                         Form={Form}
                         loading={loading}
                         formFields={[]}
-                        initialValues={{}}
                         onCancel={() => { onCancel() }}
                         withButtons={true}
                         deleting={loading ? false : true}
                         destructive={true}
                         submitButtonLabel={loading ? "Deleting" : "Delete"}
                         onFormSubtmit={(e) => { onSubmit(e) }}
-                        onInputChange={(e) => { onChange(e) }}
                     />
                 </WithPadding>
             </WithBorder>
