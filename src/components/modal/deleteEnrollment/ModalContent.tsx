@@ -79,18 +79,18 @@ const ModalContent = (props: ModalContentInterface) => {
 
 
                     <CustomForm
-                            Form={Form}
-                            loading={loading}
-                            formFields={[]}
-                            initialValues={{}}
-                            onCancel={() => { onCancel() }}
-                            withButtons={true}
-                            deleting={true}
-                            destructive={true}
-                            submitButtonLabel='Delete'
-                            onFormSubtmit={(e) => { onSubmit(e) }}
-                            onInputChange={(e) => { onChange(e) }}
-                        />
+                        Form={Form}
+                        loading={loading}
+                        formFields={[]}
+                        initialValues={{}}
+                        onCancel={() => { onCancel() }}
+                        withButtons={true}
+                        deleting={loading ? false : true}
+                        destructive={true}
+                        submitButtonLabel={loading ? "Deleting" : "Delete"}
+                        onFormSubtmit={(e) => { onSubmit(e) }}
+                        onInputChange={(e) => { onChange(e) }}
+                    />
                 </WithPadding>
             </WithBorder>
         </WithPadding>

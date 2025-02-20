@@ -1,7 +1,7 @@
 import { useRecoilState } from 'recoil';
 import { ProgramConfig } from 'dhis2-semis-types'
 import React, { useEffect, useState } from "react";
-import { TableDataRefetch, Modules  } from "dhis2-semis-types"
+import { TableDataRefetch, Modules } from "dhis2-semis-types"
 import { IconDelete24, IconEdit24 } from "@dhis2/ui";
 import { InfoPage, useDataStoreKey } from 'dhis2-semis-components'
 import ModalManager from "../../components/modal/ModalManager";
@@ -14,15 +14,15 @@ export default function EnrollmentsPage() {
     const { sectionName } = useGetSectionTypeLabel();
     const dataStoreData = useDataStoreKey({ sectionType: sectionName });
     const programsValues = useProgramsKeys();
-    const programData = programsValues[0];
-    const { viewPortWidth } = useViewPortWidth();
-    const { urlParameters, add, remove } = useUrlParams();
-    const { academicYear, grade, class: section, schoolName, school } = urlParameters();
-    const [openEditModal, setOpenEditModal] = useState<boolean>(false);
+    const programData = programsValues[0]
+    const { viewPortWidth } = useViewPortWidth()
+    const { urlParameters, add, remove } = useUrlParams()
+    const { academicYear, grade, class: section, school, schoolName } = urlParameters()
+    const [openEditModal, setOpenEditModal] = useState<boolean>(false)
     const [openDeleteModal, setOpenDeleteModal] = useState<boolean>(false)
     const { getData, tableData, loading } = useTableData({ module: Modules.Enrollment, selectedDataStore: dataStoreData });
     const { columns } = useHeader({ dataStoreData, programConfigData: programData as unknown as ProgramConfig, tableColumns: [], module: Modules.Enrollment });
-    const [filetrState, setFilterState] = useState<{ dataElements: any[], attributes: any[] }>({ attributes: [], dataElements: [] });
+    const [filterState, setFilterState] = useState<{ dataElements: any, attributes: any }>({ attributes: [], dataElements: [] });
     const [refetch,] = useRecoilState(TableDataRefetch);
 
     const handleOpenEditModal = (e: Record<string, any>) => {
@@ -57,56 +57,59 @@ export default function EnrollmentsPage() {
     ];
 
     useEffect(() => {
-        void getData({ page: 1, pageSize: 10, program: programData.id as string, orgUnit: "Shc3qNhrPAz", baseProgramStage: dataStoreData?.registration?.programStage as string, attributeFilters: filetrState.attributes, dataElementFilters: [`${dataStoreData?.registration?.academicYear}:in:2023`] })
-    }, [filetrState, refetch])
+        if (school) {
+            void getData({ page: 1, pageSize: 10, program: programData.id as string, orgUnit: school, baseProgramStage: dataStoreData?.registration?.programStage as string, attributeFilters: filterState.attributes, dataElementFilters: [filterState.dataElements] })
+        }
+    }, [filterState, refetch, school])
 
     useEffect(() => {
         const filters = [
-            `${dataStoreData.registration.academicYear}:in:${academicYear}`,
-            `${dataStoreData.registration.grade}:in:${grade}`,
-            `${dataStoreData.registration.section}:in:${section}`,
-        ]
-        setFilterState({ dataElements: filters, attributes: [] })
+            academicYear !== null ? `${dataStoreData.registration.academicYear}:in:${academicYear}` : null,
+            grade !== null ? `${dataStoreData.registration.grade}:in:${grade}` : null,
+            section !== null ? `${dataStoreData.registration.section}:in:${section}` : null,
+        ].filter(Boolean); // Remove valores nulos
+
+        setFilterState({ ...filterState, dataElements: filters.join(",") })
     }, [academicYear, grade, section])
 
 
     return (
         <div style={{ height: "85vh" }}>
-            {
-                !(Boolean(schoolName) && Boolean(school)) ?
-                    <InfoPage
-                        title="SEMIS-Enrollment"
-                        sections={[
-                            {
-                                sectionTitle: "Follow the instructions to proceed:",
-                                instructions: [
-                                    "Select the Organization unit you want to view data",
-                                    "Use global filters(Class, Grade and Academic Year)"
-                                ]
-                            }
-                        ]}
+        {
+            !(Boolean(schoolName) && Boolean(school)) ?
+                <InfoPage
+                    title="SEMIS-Enrollment"
+                    sections={[
+                        {
+                            sectionTitle: "Follow the instructions to proceed:",
+                            instructions: [
+                                "Select the Organization unit you want to view data",
+                                "Use global filters(Class, Grade and Academic Year)"
+                            ]
+                        }
+                    ]}
+                />
+                :
+                <>
+                    <Table
+                        programConfig={programData}
+                        title="Enrollments"
+                        viewPortWidth={viewPortWidth}
+                        columns={columns}
+                        totalElements={4}
+                        tableData={tableData}
+                        rowAction={rowsActions}
+                        defaultFilterNumber={3}
+                        showRowActions
+                        filterState={{ attributes: [], dataElements: [] }}
+                        loading={loading}
+                        rightElements={<EnrollmentActionsButtons filetrState={filterState} selectedDataStoreKey={dataStoreData} programData={programData as unknown as ProgramConfig} />}
+                        setFilterState={setFilterState}
                     />
-                    :
-                    <>
-                        <Table
-                            programConfig={programData}
-                            title="Enrollments"
-                            viewPortWidth={viewPortWidth}
-                            columns={columns}
-                            totalElements={4}
-                            tableData={tableData}
-                            rowAction={rowsActions}
-                            defaultFilterNumber={3}
-                            showRowActions
-                            filterState={{ attributes: [], dataElements: [] }}
-                            loading={loading}
-                            rightElements={<EnrollmentActionsButtons filetrState={filetrState} selectedDataStoreKey={dataStoreData} programData={programData as unknown as ProgramConfig} />}
-                            setFilterState={setFilterState}
-                        />
-                        {openEditModal && <ModalManager open={openEditModal} setOpen={setOpenEditModal} saveMode="UPDATE" />}
-            {openDeleteModal && <ModalManagerEnrollmentDelete open={openDeleteModal} setOpen={setOpenDeleteModal} saveMode="UPDATE" />}
-                    </>
-            }
-        </div>
+                    {openEditModal && <ModalManager open={openEditModal} setOpen={setOpenEditModal} saveMode="UPDATE" />}
+                    {openDeleteModal && <ModalManagerEnrollmentDelete open={openDeleteModal} setOpen={setOpenDeleteModal} saveMode="UPDATE" />}
+                </>
+        }
+    </div>
     )
 }

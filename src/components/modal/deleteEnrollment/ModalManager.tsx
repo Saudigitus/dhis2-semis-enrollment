@@ -37,6 +37,7 @@ const ModalManagerEnrollmentDelete = (props: ModalManagerInterface) => {
     const handleCloseModal = () => setOpen(false);
 
     const onDeleteEnrollment = async () => {
+        setLoadingDelete(true)
         await deleteEnrollment(enrollment)
             .then(() => {
                 setLoadingDelete(false)
