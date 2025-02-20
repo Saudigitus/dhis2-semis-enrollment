@@ -22,7 +22,6 @@ const ModalManagerEnrollmentDelete = (props: ModalManagerInterface) => {
     const dataStoreData = useDataStoreKey({ sectionType: "student" });
     const { urlParameters, useQuery } = useUrlParams();
     const { schoolName } = urlParameters();
-    const { loading: saving } = useSaveTei();
     const { formData } = useBuildForm({ dataStoreData, programData, module: Modules.Enrollment });
     const [initialValues] = useState<object>({ registerschoolstaticform: schoolName, enrollment_date: format(new Date(), "yyyy-MM-dd") });
     const { getInitialValues, initialValues: updateInitialValues, loading: initialValuesLoading } = useGetDeleteEnrollmentInitialValues()
