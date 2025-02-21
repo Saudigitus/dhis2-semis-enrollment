@@ -1,8 +1,7 @@
 import { useState } from 'react';
 import { format } from 'date-fns';
 import { useDataStoreKey, useProgramsKeys } from 'dhis2-semis-components';
-import { useGetSectionTypeLabel, attributes, dataValues } from 'dhis2-semis-functions';
-import { useGetEnrollment } from '../enrollment/useGetEnrollment';
+import { useGetSectionTypeLabel, attributes, dataValues, useGetEnrollment } from 'dhis2-semis-functions';
 
 function useGetDeleteEnrollmentInitialValues() {
     const programsValues = useProgramsKeys();
