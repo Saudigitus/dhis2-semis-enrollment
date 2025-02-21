@@ -8,50 +8,60 @@ import ModalManager from "../../components/modal/ModalManager";
 import { Table, useProgramsKeys } from "dhis2-semis-components";
 import EnrollmentActionsButtons from "../../components/enrollmentButtons/EnrollmentActionsButtons";
 import { useGetSectionTypeLabel, useHeader, useTableData, useUrlParams, useViewPortWidth } from "dhis2-semis-functions";
+import ModalManagerEnrollmentDelete from '../../components/modal/deleteEnrollment/ModalManager';
 
 export default function EnrollmentsPage() {
     const { sectionName } = useGetSectionTypeLabel();
     const dataStoreData = useDataStoreKey({ sectionType: sectionName });
     const programsValues = useProgramsKeys();
-    const programData = programsValues[0];
-    const { viewPortWidth } = useViewPortWidth();
-    const { urlParameters, add, remove } = useUrlParams();
-    const { academicYear, grade, class: section, schoolName, school } = urlParameters();
-    const [openEditModal, setOpenEditModal] = useState<boolean>(false);
+    const programData = programsValues[0]
+    const { viewPortWidth } = useViewPortWidth()
+    const { urlParameters, add, remove } = useUrlParams()
+    const { academicYear, grade, class: section, school, schoolName } = urlParameters()
+    const [openEditModal, setOpenEditModal] = useState<boolean>(false)
+    const [openDeleteModal, setOpenDeleteModal] = useState<boolean>(false)
     const { getData, tableData, loading } = useTableData({ module: Modules.Enrollment, selectedDataStore: dataStoreData });
     const { columns } = useHeader({ dataStoreData, programConfigData: programData as unknown as ProgramConfig, tableColumns: [], module: Modules.Enrollment });
-    const [filetrState, setFilterState] = useState<{ dataElements: any[], attributes: any[] }>({ attributes: [], dataElements: [] });
+    const [filterState, setFilterState] = useState<{ dataElements: any, attributes: any }>({ attributes: [], dataElements: [] });
     const [refetch,] = useRecoilState(TableDataRefetch);
 
-    const handleOpenEditModal = (e: Record<string, any>) => {
+    const handleOpenModal = (e: Record<string, any>, type: "edit" | "delete",) => {
         add("trackedEntity", e?.row?.trackedEntity);
         add("enrollment", e?.row?.enrollmentId);
-        setOpenEditModal(true);
+
+        if (type === "delete") {
+            setOpenDeleteModal(true)
+        } else {
+            setOpenEditModal(true)
+        }
     };
 
     useEffect(() => {
-        if (!openEditModal) {
-            remove("trackedEntity");
-            remove("enrollment");
+        if (!openDeleteModal && !openEditModal) {
+            remove("trackedEntity")
+            remove("enrollment")
         }
-    }, [openEditModal]);
+    }, [openDeleteModal,openEditModal])
 
     const rowsActions = [
-        { icon: <IconEdit24 />, color: '#277314', label: `Edition`, disabled: false, loading: false, onClick: (e: any) => handleOpenEditModal(e) },
-        { icon: <IconDelete24 />, color: '#d64d4d', label: `Delete`, disabled: false, loading: false, onClick: (e: any) => { console.log(e) } },
+        { icon: <IconEdit24 />, color: '#277314', label: `Edition`, disabled: false, loading: false, onClick: (e: any) => handleOpenModal(e,"edit") },
+        { icon: <IconDelete24 />, color: '#d64d4d', label: `Delete`, disabled: false, loading: false, onClick: (e: any) => handleOpenModal(e,"delete") },
     ];
 
     useEffect(() => {
-        void getData({ page: 1, pageSize: 10, program: programData.id as string, orgUnit: "Shc3qNhrPAz", baseProgramStage: dataStoreData?.registration?.programStage as string, attributeFilters: filetrState.attributes, dataElementFilters: [`${dataStoreData?.registration?.academicYear}:in:2023`] })
-    }, [filetrState, refetch])
+        if (school) {
+            void getData({ page: 1, pageSize: 10, program: programData.id as string, orgUnit: school, baseProgramStage: dataStoreData?.registration?.programStage as string, attributeFilters: filterState.attributes, dataElementFilters: [filterState.dataElements] })
+        }
+    }, [filterState, refetch, school])
 
     useEffect(() => {
         const filters = [
-            `${dataStoreData.registration.academicYear}:in:${academicYear}`,
-            `${dataStoreData.registration.grade}:in:${grade}`,
-            `${dataStoreData.registration.section}:in:${section}`,
-        ]
-        setFilterState({ dataElements: filters, attributes: [] })
+            academicYear !== null ? `${dataStoreData.registration.academicYear}:in:${academicYear}` : null,
+            grade !== null ? `${dataStoreData.registration.grade}:in:${grade}` : null,
+            section !== null ? `${dataStoreData.registration.section}:in:${section}` : null,
+        ].filter(Boolean); // Remove valores nulos
+
+        setFilterState({ ...filterState, dataElements: filters.join(",") })
     }, [academicYear, grade, section])
 
 
@@ -85,10 +95,11 @@ export default function EnrollmentsPage() {
                             showRowActions
                             filterState={{ attributes: [], dataElements: [] }}
                             loading={loading}
-                            rightElements={<EnrollmentActionsButtons filetrState={filetrState} selectedDataStoreKey={dataStoreData} programData={programData as unknown as ProgramConfig} />}
+                            rightElements={<EnrollmentActionsButtons filetrState={filterState} selectedDataStoreKey={dataStoreData} programData={programData as unknown as ProgramConfig} />}
                             setFilterState={setFilterState}
                         />
                         {openEditModal && <ModalManager open={openEditModal} setOpen={setOpenEditModal} saveMode="UPDATE" />}
+                        {openDeleteModal && <ModalManagerEnrollmentDelete open={openDeleteModal} setOpen={setOpenDeleteModal} saveMode="UPDATE" />}
                     </>
             }
         </div>
