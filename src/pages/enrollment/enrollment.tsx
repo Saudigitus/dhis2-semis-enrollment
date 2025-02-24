@@ -11,6 +11,8 @@ import { useGetSectionTypeLabel, useHeader, useTableData, useUrlParams, useViewP
 import ModalManagerEnrollmentDelete from '../../components/modal/deleteEnrollment/ModalManager';
 
 export default function EnrollmentsPage() {
+    const [page, setPage] = useState(1)
+    const [pageSize, setPageSize] = useState(10)
     const { sectionName } = useGetSectionTypeLabel();
     const dataStoreData = useDataStoreKey({ sectionType: sectionName });
     const programsValues = useProgramsKeys();
@@ -24,6 +26,15 @@ export default function EnrollmentsPage() {
     const { columns } = useHeader({ dataStoreData, programConfigData: programData as unknown as ProgramConfig, tableColumns: [], module: Modules.Enrollment });
     const [filterState, setFilterState] = useState<{ dataElements: any, attributes: any }>({ attributes: [], dataElements: [] });
     const [refetch,] = useRecoilState(TableDataRefetch);
+
+    const handlePageChange = (newPage: number) => {
+        setPage(newPage);
+    };
+
+    const handlePageSizeChange = (newSize: number) => {
+        setPageSize(newSize);
+        setPage(1);
+    };
 
     const handleOpenModal = (e: Record<string, any>, type: "edit" | "delete",) => {
         add("trackedEntity", e?.row?.trackedEntity);
@@ -44,15 +55,14 @@ export default function EnrollmentsPage() {
     }, [openDeleteModal,openEditModal])
 
     const rowsActions = [
-        { icon: <IconEdit24 />, color: '#277314', label: `Edition`, disabled: false, loading: false, onClick: (e: any) => handleOpenModal(e,"edit") },
-        { icon: <IconDelete24 />, color: '#d64d4d', label: `Delete`, disabled: false, loading: false, onClick: (e: any) => handleOpenModal(e,"delete") },
+        { icon: <IconEdit24 />, color: '#277314', label: `Edition`, disabled: false, disableOnInactive: true, loading: false, onClick: (e: any) => handleOpenEditModal(e) },
+        { icon: <IconDelete24 />, color: '#d64d4d', label: `Delete`, disabled: false, disableOnInactive: false, loading: false, onClick: (e: any) => { console.log(e) } },
     ];
 
     useEffect(() => {
-        if (school) {
-            void getData({ page: 1, pageSize: 10, program: programData.id as string, orgUnit: school, baseProgramStage: dataStoreData?.registration?.programStage as string, attributeFilters: filterState.attributes, dataElementFilters: [filterState.dataElements] })
-        }
-    }, [filterState, refetch, school])
+        void getData({ page: page, pageSize: pageSize, program: programData.id as string, orgUnit: "Shc3qNhrPAz", baseProgramStage: dataStoreData?.registration?.programStage as string, attributeFilters: filetrState.attributes, dataElementFilters: [`${dataStoreData?.registration?.academicYear}:in:2023`] })
+    }, [filetrState, refetch])
+
 
     useEffect(() => {
         const filters = [
@@ -84,11 +94,15 @@ export default function EnrollmentsPage() {
                     :
                     <>
                         <Table
+                            page={page}
+                            pageSize={pageSize}
+                            handlePageChange={handlePageChange}
+                            handlePageSizeChange={handlePageSizeChange}
                             programConfig={programData}
                             title="Enrollments"
                             viewPortWidth={viewPortWidth}
                             columns={columns}
-                            totalElements={4}
+                            totalElements={40}
                             tableData={tableData}
                             rowAction={rowsActions}
                             defaultFilterNumber={3}
