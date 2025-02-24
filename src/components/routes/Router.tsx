@@ -95,7 +95,7 @@ export default function Router() {
                             <Outlet />
                         </HeaderBarLayout>}
                 >
-                    <Route key={'enrollments'} path={'/enrollments'} element={<EnrollmentsPage />} />
+                    <Route key={'enrollments'} path={'/'} element={<EnrollmentsPage />} />
                 </Route>
             </Routes>
         </HashRouter>
