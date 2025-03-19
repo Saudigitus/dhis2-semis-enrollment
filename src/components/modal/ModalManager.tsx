@@ -11,7 +11,7 @@ import { ModalComponent, useDataStoreKey, useProgramsKeys, useGetUsedProgramStag
 import { useBuildForm, useGetAttributes, useGetPatternCode, useSaveTei, useUrlParams, useGetSectionTypeLabel } from "dhis2-semis-functions";
 
 function ModalManager(props: ModalManagerInterface) {
-    const { open, setOpen, saveMode } = props;
+    const { open, setOpen, saveMode, initialValues: initialValuesFromSearch } = props;
     const programsValues = useProgramsKeys();
     const programData = programsValues[0];
     const { urlParameters, useQuery } = useUrlParams();
@@ -26,13 +26,15 @@ function ModalManager(props: ModalManagerInterface) {
     const programStagesToSave = useGetUsedProgramStages({ sectionType: "student" });
     const { returnPattern, loadingCodes, generatedVariables } = useGetPatternCode();
     const { formData } = useBuildForm({ dataStoreData, programData, module: Modules.Enrollment });
-    const [initialValues] = useState<object>({ registerschoolstaticform: schoolName, enrollment_date: format(new Date(), "yyyy-MM-dd") });
+    const [initialValues] = useState<object>({ registerschoolstaticform: schoolName, enrollment_date: format(new Date(), "yyyy-MM-dd"), ...initialValuesFromSearch });
     const { getInitialValues, initialValues: updateInitialValues, loading: initialValuesLoading, enrollmentEvents } = useGetEnrollmentUpdateInitialValues()
 
     useEffect(() => {
-        if (saveMode == "CREATE") void returnPattern(attributes);
+        if (saveMode == "CREATE" && !Object.keys(initialValuesFromSearch!).length)
+            void returnPattern(attributes);
 
-        if (saveMode == "UPDATE") void getInitialValues(trackedEntity, enrollment);
+        if (saveMode == "UPDATE")
+            void getInitialValues(trackedEntity, enrollment);
     }, [open]);
 
     const handleCloseModal = () => setOpen(false);
@@ -50,6 +52,7 @@ function ModalManager(props: ModalManagerInterface) {
                     formVariablesFields: formData,
                     enrollmentDate: e?.enrollment_date,
                     trackedEntityType: programData?.trackedEntityType?.id!,
+                    trackedEntityId: initialValuesFromSearch!["trackedEntity"]
                 });
             }
 

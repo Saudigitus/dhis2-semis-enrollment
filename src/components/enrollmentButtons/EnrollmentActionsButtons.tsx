@@ -12,6 +12,7 @@ function EnrollmentActionsButtons({ programData, selectedDataStoreKey, filetrSta
     const { urlParameters } = useUrlParams();
     const { school: orgUnit } = urlParameters();
     const { sectionName } = useGetSectionTypeLabel();
+    const [formInitialValues, setFormInitialValues] = useState({})
     const [openSaveModal, setOpenSaveModal] = useState<boolean>(false)
     const [openSearchEnrollment, setOpenSearchEnrollment] = useState<boolean>(false);
 
@@ -108,8 +109,6 @@ function EnrollmentActionsButtons({ programData, selectedDataStoreKey, filetrSta
                     </span>
                 </Tooltip>
 
-                {openSaveModal && <ModalManager open={openSaveModal} setOpen={setOpenSaveModal} saveMode='CREATE' />}
-
                 < DropdownButton
                     name={<span className={styles.work_buttons_text}>Bulk enrollment</span> as unknown as string}
                     disabled={false}
@@ -118,18 +117,19 @@ function EnrollmentActionsButtons({ programData, selectedDataStoreKey, filetrSta
                 />
             </ButtonStrip>
 
+            {openSaveModal && <ModalManager open={openSaveModal} setOpen={setOpenSaveModal} saveMode='CREATE' initialValues={formInitialValues} />}
+
             {openSearchEnrollment &&
                 <ModalSearchEnrollmentContent
                     open={openSearchEnrollment}
                     programConfig={programData}
-                    sectionName="student"
+                    sectionName={sectionName}
                     setOpen={setOpenSearchEnrollment}
                     Form={Form}
                     setOpenNewEnrollmentModal={() => setOpenSaveModal(true)}
-                    setFormInitialValues={(values: any) => console.log(values)}
+                    setFormInitialValues={(values: any) => setFormInitialValues(values)}
                 />
             }
-
         </div>
     )
 }

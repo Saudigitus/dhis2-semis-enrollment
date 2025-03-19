@@ -11,6 +11,7 @@ interface ModalManagerInterface {
     open: boolean;
     saveMode: "CREATE" | "UPDATE";
     setOpen: (arg: boolean) => void;
+    initialValues?: Record<string, any>
 }
 
 export type { ModalContentInterface, ModalManagerInterface }
