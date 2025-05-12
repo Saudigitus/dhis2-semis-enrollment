@@ -38,7 +38,7 @@ export default function EnrollmentsPage() {
     };
 
     useEffect(() => {
-        setPagination((prev) => ({ ...prev, totalPages: tableData.pagination.totalPages }))
+        setPagination((prev) => ({ ...prev, totalPages: tableData?.pagination?.totalPages }))
     }, [tableData])
 
     useEffect(() => {
@@ -55,8 +55,8 @@ export default function EnrollmentsPage() {
 
     useEffect(() => {
         void getData({
-            page: pagination.page,
-            pageSize: pagination.pageSize,
+            page: pagination?.page,
+            pageSize: pagination?.pageSize,
             program: programData.id as string,
             orgUnit: school!,
             baseProgramStage: dataStoreData?.registration?.programStage as string,
@@ -90,6 +90,9 @@ export default function EnrollmentsPage() {
                         <Table
                             tableData={tableData.data}
                             programConfig={programData}
+                            pagination={pagination}
+                            setPagination={setPagination}
+                            paginate={!loading}
                             title="Enrollments"
                             viewPortWidth={viewPortWidth}
                             columns={columns}
