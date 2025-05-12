@@ -8,8 +8,6 @@ import { ExpandLess, ExpandMore } from "@material-ui/icons";
 import styles from "./modal.module.css";
 import { Collapse, ListItem, ListItemText } from '@material-ui/core';
 import classNames from 'classnames';
-import { useDeleteEnrollment } from '../../../hooks/enrollment/useDeleteEnrollment';
-
 
 const ModalContent = (props: ModalContentInterface) => {
     const { sectionName } = useGetSectionTypeLabel();
@@ -69,14 +67,12 @@ const ModalContent = (props: ModalContentInterface) => {
                         </NoticeBox>
                     </WithPadding>
 
-
                     <CustomForm
                         Form={Form}
                         loading={loading}
                         formFields={[]}
                         onCancel={() => { onCancel() }}
                         withButtons={true}
-                        deleting={loading ? false : true}
                         destructive={true}
                         submitButtonLabel={loading ? "Deleting" : "Delete"}
                         onFormSubtmit={(e) => { onSubmit(e) }}

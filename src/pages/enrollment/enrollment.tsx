@@ -11,8 +11,6 @@ import { useGetSectionTypeLabel, useHeader, useTableData, useUrlParams, useViewP
 import ModalManagerEnrollmentDelete from '../../components/modal/deleteEnrollment/ModalManager';
 
 export default function EnrollmentsPage() {
-    const [page, setPage] = useState(1)
-    const [pageSize, setPageSize] = useState(10)
     const { sectionName } = useGetSectionTypeLabel();
     const dataStoreData = useDataStoreKey({ sectionType: sectionName });
     const programsValues = useProgramsKeys();
@@ -22,19 +20,11 @@ export default function EnrollmentsPage() {
     const { academicYear, grade, class: section, school, schoolName } = urlParameters()
     const [openEditModal, setOpenEditModal] = useState<boolean>(false)
     const [openDeleteModal, setOpenDeleteModal] = useState<boolean>(false)
-    const { getData, tableData, loading } = useTableData({ module: Modules.Enrollment, selectedDataStore: dataStoreData });
-    const { columns } = useHeader({ dataStoreData, programConfigData: programData as unknown as ProgramConfig, tableColumns: [], module: Modules.Enrollment });
+    const { getData, tableData, loading } = useTableData({ module: Modules.Enrollment });
+    const { columns } = useHeader({ dataStoreData, programConfigData: programData as unknown as ProgramConfig, tableColumns: [], programStage: dataStoreData?.registration?.programStage as string });
     const [filterState, setFilterState] = useState<{ dataElements: any, attributes: any }>({ attributes: [], dataElements: [] });
     const [refetch,] = useRecoilState(TableDataRefetch);
-
-    const handlePageChange = (newPage: number) => {
-        setPage(newPage);
-    };
-
-    const handlePageSizeChange = (newSize: number) => {
-        setPageSize(newSize);
-        setPage(1);
-    };
+    const [pagination, setPagination] = useState({ page: 1, pageSize: 10, totalPages: 0 })
 
     const handleOpenModal = (e: Record<string, any>, type: "edit" | "delete",) => {
         add("trackedEntity", e?.row?.trackedEntity);
@@ -48,11 +38,15 @@ export default function EnrollmentsPage() {
     };
 
     useEffect(() => {
+        setPagination((prev) => ({ ...prev, totalPages: tableData.pagination.totalPages }))
+    }, [tableData])
+
+    useEffect(() => {
         if (!openDeleteModal && !openEditModal) {
             remove("trackedEntity")
             remove("enrollment")
         }
-    }, [openDeleteModal,openEditModal])
+    }, [openDeleteModal, openEditModal])
 
     const rowsActions = [
         { icon: <IconEdit24 />, color: '#277314', label: `Edition`, disabled: false, disableOnInactive: true, loading: false, onClick: (e: any) => handleOpenModal(e, "edit") },
@@ -60,20 +54,20 @@ export default function EnrollmentsPage() {
     ];
 
     useEffect(() => {
-        void getData({ page: page, pageSize: pageSize, program: programData.id as string, orgUnit: "Shc3qNhrPAz", baseProgramStage: dataStoreData?.registration?.programStage as string, attributeFilters: filterState.attributes, dataElementFilters: [`${dataStoreData?.registration?.academicYear}:in:2023`] })
-    }, [filterState, refetch, page, pageSize])
-
-
-    useEffect(() => {
-        const filters = [
-            academicYear !== null ? `${dataStoreData.registration.academicYear}:in:${academicYear}` : null,
-            grade !== null ? `${dataStoreData.registration.grade}:in:${grade}` : null,
-            section !== null ? `${dataStoreData.registration.section}:in:${section}` : null,
-        ].filter(Boolean); // Remove valores nulos
-
-        setFilterState({ ...filterState, dataElements: filters.join(",") })
-    }, [academicYear, grade, section])
-
+        void getData({
+            page: pagination.page,
+            pageSize: pagination.pageSize,
+            program: programData.id as string,
+            orgUnit: school!,
+            baseProgramStage: dataStoreData?.registration?.programStage as string,
+            attributeFilters: filterState.attributes,
+            dataElementFilters: [
+                academicYear !== null ? `${dataStoreData.registration.academicYear}:in:${academicYear}` : null,
+                grade !== null ? `${dataStoreData.registration.grade}:in:${grade}` : null,
+                section !== null ? `${dataStoreData.registration.section}:in:${section}` : null,
+            ].filter((filter): filter is string => filter !== null),
+        })
+    }, [filterState, pagination, refetch, grade, section, school])
 
     return (
         <div style={{ height: "85vh" }}>
@@ -94,20 +88,15 @@ export default function EnrollmentsPage() {
                     :
                     <>
                         <Table
-                            page={page}
-                            pageSize={pageSize}
-                            handlePageChange={handlePageChange}
-                            handlePageSizeChange={handlePageSizeChange}
+                            tableData={tableData.data}
                             programConfig={programData}
                             title="Enrollments"
                             viewPortWidth={viewPortWidth}
                             columns={columns}
-                            totalElements={40}
-                            tableData={tableData}
                             rowAction={rowsActions}
                             defaultFilterNumber={3}
                             showRowActions
-                            filterState={{ attributes: [], dataElements: [] }}
+                            filterState={filterState}
                             loading={loading}
                             rightElements={<EnrollmentActionsButtons filetrState={filterState} selectedDataStoreKey={dataStoreData} programData={programData as unknown as ProgramConfig} />}
                             setFilterState={setFilterState}

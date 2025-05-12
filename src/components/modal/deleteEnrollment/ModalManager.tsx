@@ -43,7 +43,7 @@ const ModalManagerEnrollmentDelete = (props: ModalManagerInterface) => {
     const onDeleteEnrollment = async () => {
         setLoadingDelete(true)
         await getTotalEnrollment(trackedEntity)
-            .then(async (totalEnrollment) => {
+            .then(async (totalEnrollment: any) => {
                 const enrollments: any[] = totalEnrollment?.results?.enrollments;
 
                 const deleteAction = enrollments.length > 1 ? deleteEnrollment(enrollment) : deleteTEI(trackedEntity);
