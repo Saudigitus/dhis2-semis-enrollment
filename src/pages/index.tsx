@@ -1,3 +1,3 @@
-import EnrollmentsPage from "./enrollment/enrollment";
+import Enrollment from "./enrollment/enrollment";
 
-export { EnrollmentsPage }
+export { Enrollment }
