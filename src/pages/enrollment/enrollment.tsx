@@ -26,6 +26,7 @@ export default function EnrollmentsPage() {
     const [refetch,] = useRecoilState(TableDataRefetch);
     const [pagination, setPagination] = useState({ page: 1, pageSize: 10, totalPages: 0 })
 
+    console.log(programData.programTrackedEntityAttributes)
     const handleOpenModal = (e: Record<string, any>, type: "edit" | "delete",) => {
         add("trackedEntity", e?.row?.trackedEntity);
         add("enrollment", e?.row?.enrollmentId);

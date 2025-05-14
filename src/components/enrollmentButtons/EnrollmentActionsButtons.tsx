@@ -10,11 +10,16 @@ import ModalManager from '../modal/ModalManager';
 
 function EnrollmentActionsButtons({ programData, selectedDataStoreKey, filetrState }: { filetrState: any, programData: ProgramConfig, selectedDataStoreKey: selectedDataStoreKey }) {
     const { urlParameters } = useUrlParams();
-    const { school: orgUnit } = urlParameters();
+    const { school: orgUnit, academicYear, grade, class: section } = urlParameters();
     const { sectionName } = useGetSectionTypeLabel();
     const [formInitialValues, setFormInitialValues] = useState({})
     const [openSaveModal, setOpenSaveModal] = useState<boolean>(false)
     const [openSearchEnrollment, setOpenSearchEnrollment] = useState<boolean>(false);
+    const filters = [
+        academicYear !== null ? `${selectedDataStoreKey.registration.academicYear}:in:${academicYear}` : null,
+        grade !== null ? `${selectedDataStoreKey.registration.grade}:in:${grade}` : null,
+        section !== null ? `${selectedDataStoreKey.registration.section}:in:${section}` : null,
+    ].filter((filter): filter is string => filter !== null)
 
     const enrollmentOptions: any = [
         {
@@ -53,7 +58,7 @@ function EnrollmentActionsButtons({ programData, selectedDataStoreKey, filetrSta
             label: <DataExporter
                 Form={Form}
                 baseURL='http://localhost:8080'
-                eventFilters={filetrState.dataElements}
+                eventFilters={filters}
                 fileName='teste'
                 label='Export Empty Template'
                 module='enrollment'
@@ -71,10 +76,10 @@ function EnrollmentActionsButtons({ programData, selectedDataStoreKey, filetrSta
             label: <DataExporter
                 Form={Form}
                 baseURL='http://localhost:8080'
-                eventFilters={filetrState.dataElements}
+                eventFilters={filters}
                 fileName='teste'
                 label='Export Existing Students'
-                module='attendance'
+                module='enrollment'
                 onError={(e: any) => console.log(e)}
                 programConfig={programData}
                 sectionType={sectionName}
