@@ -67,7 +67,7 @@ export default function EnrollmentsPage() {
                 section !== null ? `${dataStoreData.registration.section}:in:${section}` : null,
             ].filter((filter): filter is string => filter !== null),
         })
-    }, [filterState, pagination.page, pagination?.pageSize, refetch, grade, section, school])
+    }, [filterState, pagination.page, pagination?.pageSize, refetch, grade, section, school,academicYear])
 
     return (
         <div style={{ height: "85vh" }}>
