@@ -17,7 +17,7 @@ export default function EnrollmentsPage() {
     const programData = programsValues[0]
     const { viewPortWidth } = useViewPortWidth()
     const { urlParameters, add, remove } = useUrlParams()
-    const { academicYear, grade, class: section, school, schoolName } = urlParameters()
+    const { academicYear, grade, class: section, school, schoolName, sectionType } = urlParameters()
     const [openEditModal, setOpenEditModal] = useState<boolean>(false)
     const [openDeleteModal, setOpenDeleteModal] = useState<boolean>(false)
     const { getData, tableData, loading } = useTableData({ module: Modules.Enrollment });
@@ -67,7 +67,7 @@ export default function EnrollmentsPage() {
                 section !== null ? `${dataStoreData.registration.section}:in:${section}` : null,
             ].filter((filter): filter is string => filter !== null),
         })
-    }, [filterState, pagination.page, pagination?.pageSize, refetch, grade, section, school,academicYear])
+    }, [sectionType, filterState, pagination.page, pagination?.pageSize, refetch, grade, section, school, academicYear])
 
     return (
         <div style={{ height: "85vh" }}>
