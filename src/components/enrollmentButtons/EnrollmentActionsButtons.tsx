@@ -25,7 +25,6 @@ function EnrollmentActionsButtons({ programData, selectedDataStoreKey, filetrSta
         {
             label: <DataImporter
                 baseURL='http://localhost:8080'
-                importMode='COMMIT'
                 label={'Enroll new ' + sectionName}
                 module='enrollment'
                 onError={(e: any) => { console.log(e) }}
@@ -41,7 +40,6 @@ function EnrollmentActionsButtons({ programData, selectedDataStoreKey, filetrSta
         {
             label: <DataImporter
                 baseURL='http://localhost:8080'
-                importMode='COMMIT'
                 label={`Update existing ${sectionName}s`}
                 module='enrollment'
                 onError={(e: any) => { console.log(e) }}
