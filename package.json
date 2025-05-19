@@ -34,7 +34,13 @@
     "eslint-plugin-promise": "^6.6.0",
     "eslint-plugin-react": "^7.32.2",
     "rimraf": "^6.0.1",
-    "typescript": "^5.7.2"
+    "typescript": "^5.7.2",
+    "dhis2-semis-components": "0.6.3-alpha.80",
+    "dhis2-semis-functions": "0.0.5-alpha.87"
+  },
+  "peerDependencies": {
+    "dhis2-semis-components": "^0.6.3-alpha.80",
+    "dhis2-semis-functions": "^0.0.5-alpha.87"
   },
   "dependencies": {
     "@dhis2/app-runtime": "^3.13.0",
