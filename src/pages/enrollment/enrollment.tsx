@@ -17,7 +17,7 @@ export default function EnrollmentsPage() {
     const programData = programsValues[0]
     const { viewPortWidth } = useViewPortWidth()
     const { urlParameters, add, remove } = useUrlParams()
-    const { academicYear, grade, class: section, school, schoolName } = urlParameters()
+    const { academicYear, grade, class: section, school, schoolName, sectionType } = urlParameters()
     const [openEditModal, setOpenEditModal] = useState<boolean>(false)
     const [openDeleteModal, setOpenDeleteModal] = useState<boolean>(false)
     const { getData, tableData, loading } = useTableData({ module: Modules.Enrollment });
@@ -54,22 +54,20 @@ export default function EnrollmentsPage() {
     ];
 
     useEffect(() => {
-        if (school) {
-            void getData({
-                page: pagination?.page,
-                pageSize: pagination?.pageSize,
-                program: programData.id as string,
-                orgUnit: school!,
-                baseProgramStage: dataStoreData?.registration?.programStage as string,
-                attributeFilters: filterState.attributes,
-                dataElementFilters: [
-                    academicYear !== null ? `${dataStoreData.registration.academicYear}:in:${academicYear}` : null,
-                    grade !== null ? `${dataStoreData.registration.grade}:in:${grade}` : null,
-                    section !== null ? `${dataStoreData.registration.section}:in:${section}` : null,
-                ].filter((filter): filter is string => filter !== null),
-            })
-        }
-    }, [filterState, pagination.page, pagination?.pageSize, refetch, grade, section, school, academicYear])
+        void getData({
+            page: pagination?.page,
+            pageSize: pagination?.pageSize,
+            program: programData.id as string,
+            orgUnit: school!,
+            baseProgramStage: dataStoreData?.registration?.programStage as string,
+            attributeFilters: filterState.attributes,
+            dataElementFilters: [
+                academicYear !== null ? `${dataStoreData.registration.academicYear}:in:${academicYear}` : null,
+                grade !== null ? `${dataStoreData.registration.grade}:in:${grade}` : null,
+                section !== null ? `${dataStoreData.registration.section}:in:${section}` : null,
+            ].filter((filter): filter is string => filter !== null),
+        })
+    }, [sectionType, filterState, pagination.page, pagination?.pageSize, refetch, grade, section, school, academicYear])
 
     return (
         <div style={{ height: "85vh" }}>
