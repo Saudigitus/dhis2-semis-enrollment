@@ -35,12 +35,12 @@
     "eslint-plugin-react": "^7.32.2",
     "rimraf": "^6.0.1",
     "typescript": "^5.7.2",
-    "dhis2-semis-components": "0.6.3-alpha.80",
-    "dhis2-semis-functions": "0.0.5-alpha.87"
+    "dhis2-semis-components": "0.6.4-alpha.1",
+    "dhis2-semis-functions": "0.0.5-alpha.88"
   },
   "peerDependencies": {
-    "dhis2-semis-components": "^0.6.3-alpha.80",
-    "dhis2-semis-functions": "^0.0.5-alpha.87"
+    "dhis2-semis-components": "^0.6.4-alpha.1",
+    "dhis2-semis-functions": "^0.0.5-alpha.88"
   },
   "dependencies": {
     "@dhis2/app-runtime": "^3.13.0",
