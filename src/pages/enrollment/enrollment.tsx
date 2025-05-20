@@ -4,7 +4,7 @@ import { IconDelete24, IconEdit24 } from "@dhis2/ui";
 import { Table, InfoPage } from "dhis2-semis-components";
 import ModalManager from "../../components/modal/ModalManager";
 import { TableDataRefetch, Modules, ProgramConfig } from "dhis2-semis-types"
-import useGetSelectedProgram from '../../hooks/program/useGetSelectedProgram';
+import useGetSelectedProgram from '../../hooks/config/useGetSelectedKeys';
 import ModalManagerEnrollmentDelete from '../../components/modal/deleteEnrollment/ModalManager';
 import { useHeader, useTableData, useUrlParams, useViewPortWidth } from "dhis2-semis-functions";
 import EnrollmentActionsButtons from "../../components/enrollmentButtons/EnrollmentActionsButtons";
