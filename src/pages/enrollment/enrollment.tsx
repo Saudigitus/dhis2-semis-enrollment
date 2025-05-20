@@ -1,30 +1,26 @@
 import { useRecoilState } from 'recoil';
-import { ProgramConfig } from 'dhis2-semis-types'
 import React, { useEffect, useState } from "react";
-import { TableDataRefetch, Modules } from "dhis2-semis-types"
 import { IconDelete24, IconEdit24 } from "@dhis2/ui";
-import { InfoPage, useDataStoreKey } from 'dhis2-semis-components'
+import { Table, InfoPage } from "dhis2-semis-components";
 import ModalManager from "../../components/modal/ModalManager";
-import { Table, useProgramsKeys } from "dhis2-semis-components";
-import EnrollmentActionsButtons from "../../components/enrollmentButtons/EnrollmentActionsButtons";
-import { useGetSectionTypeLabel, useHeader, useTableData, useUrlParams, useViewPortWidth } from "dhis2-semis-functions";
+import { TableDataRefetch, Modules, ProgramConfig } from "dhis2-semis-types"
+import useGetSelectedProgram from '../../hooks/program/useGetSelectedProgram';
 import ModalManagerEnrollmentDelete from '../../components/modal/deleteEnrollment/ModalManager';
+import { useHeader, useTableData, useUrlParams, useViewPortWidth } from "dhis2-semis-functions";
+import EnrollmentActionsButtons from "../../components/enrollmentButtons/EnrollmentActionsButtons";
 
 export default function EnrollmentsPage() {
-    const { sectionName } = useGetSectionTypeLabel();
-    const dataStoreData = useDataStoreKey({ sectionType: sectionName });
-    const programsValues = useProgramsKeys();
-    const programData = programsValues[0]
+    const { program, dataStoreData } = useGetSelectedProgram()
     const { viewPortWidth } = useViewPortWidth()
     const { urlParameters, add, remove } = useUrlParams()
     const { academicYear, grade, class: section, school, schoolName, sectionType } = urlParameters()
     const [openEditModal, setOpenEditModal] = useState<boolean>(false)
     const [openDeleteModal, setOpenDeleteModal] = useState<boolean>(false)
     const { getData, tableData, loading } = useTableData({ module: Modules.Enrollment });
-    const { columns } = useHeader({ dataStoreData, programConfigData: programData as unknown as ProgramConfig, tableColumns: [], programStage: dataStoreData?.registration?.programStage as string });
     const [filterState, setFilterState] = useState<{ dataElements: any, attributes: any }>({ attributes: [], dataElements: [] });
     const [refetch,] = useRecoilState(TableDataRefetch);
     const [pagination, setPagination] = useState({ page: 1, pageSize: 10, totalPages: 0 })
+    const { columns } = useHeader({ dataStoreData, programConfigData: program as unknown as ProgramConfig, tableColumns: [] });
 
     const handleOpenModal = (e: Record<string, any>, type: "edit" | "delete",) => {
         add("trackedEntity", e?.row?.trackedEntity);
@@ -57,7 +53,7 @@ export default function EnrollmentsPage() {
         void getData({
             page: pagination?.page,
             pageSize: pagination?.pageSize,
-            program: programData.id as string,
+            program: program!.id as string,
             orgUnit: school!,
             baseProgramStage: dataStoreData?.registration?.programStage as string,
             attributeFilters: filterState.attributes,
@@ -89,7 +85,7 @@ export default function EnrollmentsPage() {
                     <>
                         <Table
                             tableData={tableData.data}
-                            programConfig={programData}
+                            programConfig={program!}
                             pagination={pagination}
                             setPagination={setPagination}
                             paginate={!loading}
@@ -101,7 +97,7 @@ export default function EnrollmentsPage() {
                             showRowActions
                             filterState={filterState}
                             loading={loading}
-                            rightElements={<EnrollmentActionsButtons filetrState={filterState} selectedDataStoreKey={dataStoreData} programData={programData as unknown as ProgramConfig} />}
+                            rightElements={<EnrollmentActionsButtons filetrState={filterState} selectedDataStoreKey={dataStoreData} programData={program as unknown as ProgramConfig} />}
                             setFilterState={setFilterState}
                         />
                         {openEditModal && <ModalManager open={openEditModal} setOpen={setOpenEditModal} saveMode="UPDATE" />}
