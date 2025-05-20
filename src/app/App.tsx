@@ -1,18 +1,12 @@
 import React from 'react'
 import './App.module.css'
 import { Router } from '../components/routes'
-import { AppWrapper } from 'dhis2-semis-components'
-import { HashRouter } from 'react-router-dom'
 
-const MyApp = () => {
+const Enrollment = () => {
 
     return (
-        <AppWrapper dataStoreKey='dataStore/semis/values' >
-            <HashRouter>
-                <Router />
-            </HashRouter>
-        </AppWrapper>
+        <Router />
     )
 }
 
-export default MyApp
+export default Enrollment
