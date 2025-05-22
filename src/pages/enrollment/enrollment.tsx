@@ -19,8 +19,8 @@ export default function EnrollmentsPage() {
     const { getData, tableData, loading } = useTableData({ module: Modules.Enrollment });
     const [filterState, setFilterState] = useState<{ dataElements: any, attributes: any }>({ attributes: [], dataElements: [] });
     const [refetch,] = useRecoilState(TableDataRefetch);
-    const [pagination, setPagination] = useState({ page: 1, pageSize: 10, totalPages: 0 })
-    const { columns } = useHeader({ dataStoreData, programConfigData: program as unknown as ProgramConfig, tableColumns: [] });
+    const [pagination, setPagination] = useState<any>({ page: 1, pageSize: 10, totalPages: 0, totlaElements: 0 })
+    const { columns } = useHeader({ dataStoreData, programConfigData: program as unknown as ProgramConfig, tableColumns: [], programStage: "" });
 
     const handleOpenModal = (e: Record<string, any>, type: "edit" | "delete",) => {
         add("trackedEntity", e?.row?.trackedEntity);
@@ -34,7 +34,7 @@ export default function EnrollmentsPage() {
     };
 
     useEffect(() => {
-        setPagination((prev) => ({ ...prev, totalPages: tableData?.pagination?.totalPages }))
+        setPagination((prev: any) => ({ ...prev, totalPages: tableData?.pagination?.totalPages, totlaElements: tableData?.pagination?.totlaElements }))
     }, [tableData])
 
     useEffect(() => {
