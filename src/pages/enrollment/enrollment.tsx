@@ -19,7 +19,7 @@ export default function EnrollmentsPage() {
     const { getData, tableData, loading } = useTableData({ module: Modules.Enrollment });
     const [filterState, setFilterState] = useState<{ dataElements: any, attributes: any }>({ attributes: [], dataElements: [] });
     const [refetch,] = useRecoilState(TableDataRefetch);
-    const [pagination, setPagination] = useState<any>({ page: 1, pageSize: 10, totalPages: 0, totlaElements: 0 })
+    const [pagination, setPagination] = useState<any>({ page: 1, pageSize: 10, totalPages: 0, totalElements: 0 })
     const { columns } = useHeader({ dataStoreData, programConfigData: program as unknown as ProgramConfig, tableColumns: [], programStage: "" });
 
     const handleOpenModal = (e: Record<string, any>, type: "edit" | "delete",) => {
@@ -34,7 +34,7 @@ export default function EnrollmentsPage() {
     };
 
     useEffect(() => {
-        setPagination((prev: any) => ({ ...prev, totalPages: tableData?.pagination?.totalPages, totlaElements: tableData?.pagination?.totlaElements }))
+        setPagination((prev: any) => ({ ...prev, totalPages: tableData?.pagination?.totalPages, totalElements: tableData?.pagination?.totalElements }))
     }, [tableData])
 
     useEffect(() => {
@@ -97,7 +97,7 @@ export default function EnrollmentsPage() {
                             showRowActions
                             filterState={filterState}
                             loading={loading}
-                            rightElements={<EnrollmentActionsButtons filetrState={filterState} selectedDataStoreKey={dataStoreData} programData={program as unknown as ProgramConfig} />}
+                            rightElements={<EnrollmentActionsButtons selectedDataStoreKey={dataStoreData} programData={program as unknown as ProgramConfig} />}
                             setFilterState={setFilterState}
                         />
                         {openEditModal && <ModalManager open={openEditModal} setOpen={setOpenEditModal} saveMode="UPDATE" />}

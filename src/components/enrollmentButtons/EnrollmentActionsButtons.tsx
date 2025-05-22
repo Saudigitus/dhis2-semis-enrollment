@@ -9,7 +9,7 @@ import { ModalSearchEnrollmentContent, DataExporter, DataImporter, CustomDropdow
 import ModalManager from '../modal/ModalManager';
 import { useConfig } from '@dhis2/app-runtime';
 
-function EnrollmentActionsButtons({ programData, selectedDataStoreKey, filetrState }: { filetrState: any, programData: ProgramConfig, selectedDataStoreKey: selectedDataStoreKey }) {
+function EnrollmentActionsButtons({ programData, selectedDataStoreKey }: { programData: ProgramConfig, selectedDataStoreKey: selectedDataStoreKey }) {
     const { urlParameters } = useUrlParams();
     const { baseUrl } = useConfig()
     const { school: orgUnit, academicYear, grade, class: section } = urlParameters();
