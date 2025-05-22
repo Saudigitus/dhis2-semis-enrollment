@@ -7,9 +7,11 @@ import { Form } from "react-final-form";
 import { ProgramConfig, selectedDataStoreKey } from 'dhis2-semis-types'
 import { ModalSearchEnrollmentContent, DataExporter, DataImporter, CustomDropdown as DropdownButton } from 'dhis2-semis-components';
 import ModalManager from '../modal/ModalManager';
+import { useConfig } from '@dhis2/app-runtime';
 
 function EnrollmentActionsButtons({ programData, selectedDataStoreKey, filetrState }: { filetrState: any, programData: ProgramConfig, selectedDataStoreKey: selectedDataStoreKey }) {
     const { urlParameters } = useUrlParams();
+    const { baseUrl } = useConfig()
     const { school: orgUnit, academicYear, grade, class: section } = urlParameters();
     const { sectionName } = useGetSectionTypeLabel();
     const [formInitialValues, setFormInitialValues] = useState({})
@@ -24,7 +26,7 @@ function EnrollmentActionsButtons({ programData, selectedDataStoreKey, filetrSta
     const enrollmentOptions: any = [
         {
             label: <DataImporter
-                baseURL='http://localhost:8080'
+                baseURL={baseUrl}
                 label={'Enroll new ' + sectionName}
                 module='enrollment'
                 onError={(e: any) => { console.log(e) }}
@@ -39,7 +41,7 @@ function EnrollmentActionsButtons({ programData, selectedDataStoreKey, filetrSta
         },
         {
             label: <DataImporter
-                baseURL='http://localhost:8080'
+                baseURL={baseUrl}
                 label={`Update existing ${sectionName}s`}
                 module='enrollment'
                 onError={(e: any) => { console.log(e) }}
@@ -55,7 +57,7 @@ function EnrollmentActionsButtons({ programData, selectedDataStoreKey, filetrSta
         {
             label: <DataExporter
                 Form={Form}
-                baseURL='http://localhost:8080'
+                baseURL={baseUrl}
                 eventFilters={filters}
                 fileName='teste'
                 label='Export Empty Template'
@@ -73,7 +75,7 @@ function EnrollmentActionsButtons({ programData, selectedDataStoreKey, filetrSta
         {
             label: <DataExporter
                 Form={Form}
-                baseURL='http://localhost:8080'
+                baseURL={baseUrl}
                 eventFilters={filters}
                 fileName='teste'
                 label='Export Existing Students'
