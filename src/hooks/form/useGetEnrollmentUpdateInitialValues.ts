@@ -1,20 +1,19 @@
 import { useState } from 'react';
 import { format } from 'date-fns';
-import { useDataStoreKey } from 'dhis2-semis-components';
-import { useGetSectionTypeLabel, useUrlParams, useGetEvents, useGetTei, attributes, dataValues } from 'dhis2-semis-functions';
+import useGetSelectedKeys from '../config/useGetSelectedKeys';
+import { useUrlParams, useGetEvents, useGetTei, attributes, dataValues } from 'dhis2-semis-functions';
 
 function useGetEnrollmentUpdateInitialValues() {
     const { getTei } = useGetTei()
     const { getEvents } = useGetEvents()
     const { urlParameters } = useUrlParams()
-    const { sectionName } = useGetSectionTypeLabel();
     const [error, setError] = useState<boolean>(false)
     const [loading, setLoading] = useState<boolean>(false)
     const [initialValues, setInitialValues] = useState<any>({})
     const [enrollmentEvents, setEnrollmentEvents] = useState<any>({})
-    const dataStoreData = useDataStoreKey({ sectionType: sectionName });
+    const { dataStoreData } = useGetSelectedKeys()
     const { academicYear, grade, class: section, schoolName, school } = urlParameters()
-    const { registration, 'socio-economics': socioEconomics, program: programId, } = useDataStoreKey({ sectionType: sectionName })
+    const { registration, 'socio-economics': socioEconomics, program: programId, } = dataStoreData
 
     const getInitialValues = (trackedEntity: string, enrollment: string) => {
         setLoading(true)

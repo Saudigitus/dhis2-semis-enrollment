@@ -1,13 +1,13 @@
+import classNames from 'classnames';
 import React, { useState } from 'react'
 import { Form } from 'react-final-form';
-import { ModalContentInterface } from 'src/types/modal/ModalProps';
-import { CustomForm, WithBorder, WithPadding } from 'dhis2-semis-components';
-import { Button, ButtonStrip, IconCheckmark24, IconCross24, NoticeBox } from '@dhis2/ui';
-import { useGetSectionTypeLabel, useUrlParams } from 'dhis2-semis-functions';
-import { ExpandLess, ExpandMore } from "@material-ui/icons";
 import styles from "./modal.module.css";
+import { ExpandLess, ExpandMore } from "@material-ui/icons";
 import { Collapse, ListItem, ListItemText } from '@material-ui/core';
-import classNames from 'classnames';
+import { ModalContentInterface } from '../../../types/modal/ModalProps';
+import { CustomForm, WithBorder, WithPadding } from 'dhis2-semis-components';
+import { useGetSectionTypeLabel, useUrlParams } from 'dhis2-semis-functions';
+import { Button, ButtonStrip, IconCheckmark24, IconCross24, NoticeBox } from '@dhis2/ui';
 
 const ModalContent = (props: ModalContentInterface) => {
     const { sectionName } = useGetSectionTypeLabel();

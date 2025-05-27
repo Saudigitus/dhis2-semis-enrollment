@@ -9,7 +9,6 @@ const WithHeaderBarLayout = () => {
         <HeaderBarLayout
             header={
                 <SemisHeader
-                    baseUrl={baseUrl}
                     academicYears={{
                         options: [
                             { label: '2024', value: '2024' },

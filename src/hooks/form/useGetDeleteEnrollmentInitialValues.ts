@@ -1,17 +1,15 @@
 import { useState } from 'react';
 import { format } from 'date-fns';
-import { useDataStoreKey, useProgramsKeys } from 'dhis2-semis-components';
-import { useGetSectionTypeLabel, attributes, dataValues, useGetEnrollment } from 'dhis2-semis-functions';
+import useGetSelectedKeys from '../config/useGetSelectedKeys';
+import { attributes, dataValues, useGetEnrollment } from 'dhis2-semis-functions';
 
 function useGetDeleteEnrollmentInitialValues() {
-    const programsValues = useProgramsKeys();
-    const { programStages } = programsValues[0];
+    const { dataStoreData, program } = useGetSelectedKeys()
+    const { programStages } = program || {}
     const { getEnrollment } = useGetEnrollment()
-    const { sectionName } = useGetSectionTypeLabel();
     const [loading, setLoading] = useState<boolean>(false)
     const [initialValues, setInitialValues] = useState<any>({})
-    const dataStoreData = useDataStoreKey({ sectionType: sectionName });
-    const { registration, 'socio-economics': socioEconomics, program: programId, } = useDataStoreKey({ sectionType: sectionName })
+    const { registration, 'socio-economics': socioEconomics, program: programId, } = dataStoreData
 
     const getInitialValues = async (trackedEntity: string, enrollment: string) => {
         setLoading(true)

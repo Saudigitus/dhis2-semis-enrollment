@@ -1,6 +1,6 @@
 import React from 'react'
 import { Form } from 'react-final-form';
-import { ModalContentInterface } from 'src/types/modal/ModalProps';
+import { ModalContentInterface } from '../../../types/modal/ModalProps';
 import { CustomForm, WithBorder, WithPadding } from 'dhis2-semis-components';
 
 function ModalContent(props: ModalContentInterface) {

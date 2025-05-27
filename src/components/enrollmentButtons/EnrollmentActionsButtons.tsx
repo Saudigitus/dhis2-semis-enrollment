@@ -1,21 +1,21 @@
 import React, { useState } from 'react'
-import { IconAddCircle24, Button, ButtonStrip, IconUserGroup16, IconSearch24 } from "@dhis2/ui";
+import { Form } from "react-final-form";
+import { useConfig } from '@dhis2/app-runtime';
 import Tooltip from '@material-ui/core/Tooltip';
 import styles from './enrollmentActionsButtons.module.css'
+import ModalManager from '../modal/saveEnrollment/ModalManager';
 import { useGetSectionTypeLabel, useUrlParams } from 'dhis2-semis-functions';
-import { Form } from "react-final-form";
-import { ProgramConfig, selectedDataStoreKey } from 'dhis2-semis-types'
+import { Modules, ProgramConfig, selectedDataStoreKey } from 'dhis2-semis-types'
+import { IconAddCircle24, Button, ButtonStrip, IconUserGroup16, IconSearch24 } from "@dhis2/ui";
 import { ModalSearchEnrollmentContent, DataExporter, DataImporter, CustomDropdown as DropdownButton } from 'dhis2-semis-components';
-import ModalManager from '../modal/ModalManager';
-import { useConfig } from '@dhis2/app-runtime';
 
 function EnrollmentActionsButtons({ programData, selectedDataStoreKey }: { programData: ProgramConfig, selectedDataStoreKey: selectedDataStoreKey }) {
-    const { urlParameters } = useUrlParams();
     const { baseUrl } = useConfig()
-    const { school: orgUnit, academicYear, grade, class: section } = urlParameters();
+    const { urlParameters } = useUrlParams();
     const { sectionName } = useGetSectionTypeLabel();
     const [formInitialValues, setFormInitialValues] = useState({})
     const [openSaveModal, setOpenSaveModal] = useState<boolean>(false)
+    const { school: orgUnit, academicYear, grade, class: section } = urlParameters();
     const [openSearchEnrollment, setOpenSearchEnrollment] = useState<boolean>(false);
     const filters = [
         academicYear !== null ? `${selectedDataStoreKey.registration.academicYear}:in:${academicYear}` : null,
@@ -28,7 +28,7 @@ function EnrollmentActionsButtons({ programData, selectedDataStoreKey }: { progr
             label: <DataImporter
                 baseURL={baseUrl}
                 label={'Enroll new ' + sectionName}
-                module='enrollment'
+                module={Modules.Enrollment}
                 onError={(e: any) => { console.log(e) }}
                 programConfig={programData}
                 sectionType={sectionName}
@@ -43,7 +43,7 @@ function EnrollmentActionsButtons({ programData, selectedDataStoreKey }: { progr
             label: <DataImporter
                 baseURL={baseUrl}
                 label={`Update existing ${sectionName}s`}
-                module='enrollment'
+                module={Modules.Enrollment}
                 onError={(e: any) => { console.log(e) }}
                 programConfig={programData}
                 sectionType={sectionName}
@@ -61,7 +61,7 @@ function EnrollmentActionsButtons({ programData, selectedDataStoreKey }: { progr
                 eventFilters={filters}
                 fileName='teste'
                 label='Export Empty Template'
-                module='enrollment'
+                module={Modules.Enrollment}
                 onError={(e: any) => console.log(e)}
                 programConfig={programData}
                 sectionType={sectionName}
@@ -79,7 +79,7 @@ function EnrollmentActionsButtons({ programData, selectedDataStoreKey }: { progr
                 eventFilters={filters}
                 fileName='teste'
                 label='Export Existing Students'
-                module='enrollment'
+                module={Modules.Enrollment}
                 onError={(e: any) => console.log(e)}
                 programConfig={programData}
                 sectionType={sectionName}
