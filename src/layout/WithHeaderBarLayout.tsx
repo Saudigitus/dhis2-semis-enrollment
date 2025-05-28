@@ -19,7 +19,7 @@ const WithHeaderBarLayout = () => {
                                 },
                                 {
                                     "label": "class",
-                                    "ulrParam": "section",
+                                    "ulrParam": "class",
                                     "dataElement": "RhABRLO2Fae"
                                 }
                             ]

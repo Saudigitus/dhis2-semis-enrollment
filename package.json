@@ -27,7 +27,7 @@
     "@types/react": "^18.3.18",
     "@types/react-dom": "^18.3.5",
     "copyfiles": "^2.4.1",
-    "dhis2-semis-components": "^0.6.4-alpha.42",
+    "dhis2-semis-components": "^0.6.4-alpha.43",
     "dhis2-semis-functions": "0.0.5-alpha.88",
     "eslint": "^8.57.1",
     "eslint-config-standard-with-typescript": "^36.1.1",
