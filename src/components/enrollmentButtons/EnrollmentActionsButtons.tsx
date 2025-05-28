@@ -1,7 +1,7 @@
 import React, { useState } from 'react'
 import { Form } from "react-final-form";
+import { Tooltip } from '@mui/material';
 import { useConfig } from '@dhis2/app-runtime';
-import Tooltip from '@material-ui/core/Tooltip';
 import styles from './enrollmentActionsButtons.module.css'
 import ModalManager from '../modal/saveEnrollment/ModalManager';
 import { useGetSectionTypeLabel, useUrlParams } from 'dhis2-semis-functions';

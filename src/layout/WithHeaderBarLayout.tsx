@@ -1,6 +1,6 @@
 import { Outlet } from "react-router-dom"
-import { HeaderBarLayout, SemisHeader } from "dhis2-semis-components"
 import { useConfig } from "@dhis2/app-runtime"
+import { HeaderBarLayout, SemisHeader } from "dhis2-semis-components"
 
 const WithHeaderBarLayout = () => {
     const { baseUrl } = useConfig()
@@ -9,6 +9,7 @@ const WithHeaderBarLayout = () => {
         <HeaderBarLayout
             header={
                 <SemisHeader
+                    baseUrl={baseUrl}
                     academicYears={{
                         options: [
                             { label: '2024', value: '2024' },

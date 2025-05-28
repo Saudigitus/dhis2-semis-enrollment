@@ -2,8 +2,8 @@ import classNames from 'classnames';
 import React, { useState } from 'react'
 import { Form } from 'react-final-form';
 import styles from "./modal.module.css";
-import { ExpandLess, ExpandMore } from "@material-ui/icons";
-import { Collapse, ListItem, ListItemText } from '@material-ui/core';
+import { ExpandLess, ExpandMore } from "@mui/icons-material";
+import { Collapse, ListItem, ListItemText } from '@mui/material';
 import { ModalContentInterface } from '../../../types/modal/ModalProps';
 import { CustomForm, WithBorder, WithPadding } from 'dhis2-semis-components';
 import { useGetSectionTypeLabel, useUrlParams } from 'dhis2-semis-functions';
