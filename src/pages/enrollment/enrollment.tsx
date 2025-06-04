@@ -6,8 +6,9 @@ import ModalManager from "../../components/modal/saveEnrollment/ModalManager";
 import { TableDataRefetch, Modules, ProgramConfig } from "dhis2-semis-types"
 import useGetSelectedProgram from '../../hooks/config/useGetSelectedKeys';
 import ModalManagerEnrollmentDelete from '../../components/modal/deleteEnrollment/ModalManager';
-import { useHeader, useTableData, useUrlParams, useViewPortWidth } from "dhis2-semis-functions";
+import { useBuildForm, useHeader, useTableData, useUrlParams, useViewPortWidth } from "dhis2-semis-functions";
 import EnrollmentActionsButtons from "../../components/enrollmentButtons/EnrollmentActionsButtons";
+import { formFields } from '../../utils/constants/form/enrollmentForm';
 
 export default function EnrollmentsPage() {
     const { program, dataStoreData } = useGetSelectedProgram()
@@ -20,7 +21,9 @@ export default function EnrollmentsPage() {
     const [filterState, setFilterState] = useState<{ dataElements: any, attributes: any }>({ attributes: [], dataElements: [] });
     const [refetch,] = useRecoilState(TableDataRefetch);
     const [pagination, setPagination] = useState<any>({ page: 1, pageSize: 10, totalPages: 0, totalElements: 0 })
-    const { columns } = useHeader({ dataStoreData, programConfigData: program as unknown as ProgramConfig, tableColumns: [], programStage: "" });
+    const { columns } = useHeader({ dataStoreData, programConfigData: program as unknown as ProgramConfig, programStage: "" });
+    const { formData } = useBuildForm({ dataStoreData, programData: program, module: Modules.Enrollment });
+    const enrollmentFormFields = formFields({ formFieldsData: formData, sectionName: sectionType! })
 
     const handleOpenModal = (e: Record<string, any>, type: "edit" | "delete",) => {
         add("trackedEntity", e?.row?.trackedEntity);
@@ -97,10 +100,10 @@ export default function EnrollmentsPage() {
                             showRowActions
                             filterState={filterState}
                             loading={loading}
-                            rightElements={<EnrollmentActionsButtons selectedDataStoreKey={dataStoreData} programData={program as unknown as ProgramConfig} />}
+                            rightElements={<EnrollmentActionsButtons />}
                             setFilterState={setFilterState}
                         />
-                        {openEditModal && <ModalManager open={openEditModal} setOpen={setOpenEditModal} saveMode="UPDATE" />}
+                        {openEditModal && <ModalManager formFields={enrollmentFormFields} open={openEditModal} setOpen={setOpenEditModal} saveMode="UPDATE" />}
                         {openDeleteModal && <ModalManagerEnrollmentDelete open={openDeleteModal} setOpen={setOpenDeleteModal} saveMode="UPDATE" />}
                     </>
             }

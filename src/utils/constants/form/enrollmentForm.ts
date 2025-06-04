@@ -1,5 +1,6 @@
 import { format } from "date-fns";
 import { VariablesTypes } from "dhis2-semis-types";
+import { capitalizeString } from "dhis2-semis-functions";
 
 const staticForm = () => {
   return {
@@ -50,6 +51,7 @@ function formFields({ formFieldsData, sectionName }: { formFieldsData: any[], se
 
   const [enrollmentDetails = [], studentsProfile = [], socioEconomicDetails = []] = formFieldsData;
 
+
   return [
     {
       name: "Enrollment Details",
@@ -62,8 +64,8 @@ function formFields({ formFieldsData, sectionName }: { formFieldsData: any[], se
       ]
     },
     {
-      name: `${sectionName} profile`,
-      description: `${sectionName} personal details`,
+      name: `${capitalizeString(sectionName)} profile`,
+      description: `${capitalizeString(sectionName)} personal details`,
       visible: true,
       fields: [
         ...studentsProfile

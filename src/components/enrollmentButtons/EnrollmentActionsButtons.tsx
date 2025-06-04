@@ -4,23 +4,31 @@ import { Tooltip } from '@mui/material';
 import { useConfig } from '@dhis2/app-runtime';
 import styles from './enrollmentActionsButtons.module.css'
 import ModalManager from '../modal/saveEnrollment/ModalManager';
-import { useGetSectionTypeLabel, useUrlParams } from 'dhis2-semis-functions';
+import { useBuildForm, useGetSectionTypeLabel, useUrlParams } from 'dhis2-semis-functions';
 import { Modules, ProgramConfig, selectedDataStoreKey } from 'dhis2-semis-types'
 import { IconAddCircle24, Button, ButtonStrip, IconUserGroup16, IconSearch24 } from "@dhis2/ui";
 import { ModalSearchEnrollmentContent, DataExporter, DataImporter, CustomDropdown as DropdownButton } from 'dhis2-semis-components';
+import { formFields } from '../../utils/constants/form/enrollmentForm';
+import useGetSelectedKeys from '../../hooks/config/useGetSelectedKeys';
 
-function EnrollmentActionsButtons({ programData, selectedDataStoreKey }: { programData: ProgramConfig, selectedDataStoreKey: selectedDataStoreKey }) {
+interface EnrollmentActionsButtonsProps {
+}
+
+function EnrollmentActionsButtons(props: EnrollmentActionsButtonsProps) {
     const { baseUrl } = useConfig()
     const { urlParameters } = useUrlParams();
     const { sectionName } = useGetSectionTypeLabel();
+    const { dataStoreData, program: programData } = useGetSelectedKeys()
     const [formInitialValues, setFormInitialValues] = useState({})
     const [openSaveModal, setOpenSaveModal] = useState<boolean>(false)
     const { school: orgUnit, academicYear, grade, class: section } = urlParameters();
     const [openSearchEnrollment, setOpenSearchEnrollment] = useState<boolean>(false);
+    const { formData } = useBuildForm({ dataStoreData, programData, module: Modules.Enrollment });
+
     const filters = [
-        academicYear !== null ? `${selectedDataStoreKey.registration.academicYear}:in:${academicYear}` : null,
-        grade !== null ? `${selectedDataStoreKey.registration.grade}:in:${grade}` : null,
-        section !== null ? `${selectedDataStoreKey.registration.section}:in:${section}` : null,
+        academicYear !== null ? `${dataStoreData.registration.academicYear}:in:${academicYear}` : null,
+        grade !== null ? `${dataStoreData.registration.grade}:in:${grade}` : null,
+        section !== null ? `${dataStoreData.registration.section}:in:${section}` : null,
     ].filter((filter): filter is string => filter !== null)
 
     const enrollmentOptions: any = [
@@ -30,9 +38,9 @@ function EnrollmentActionsButtons({ programData, selectedDataStoreKey }: { progr
                 label={'Enroll new ' + sectionName}
                 module={Modules.Enrollment}
                 onError={(e: any) => { console.log(e) }}
-                programConfig={programData}
+                programConfig={programData!}
                 sectionType={sectionName}
-                selectedSectionDataStore={selectedDataStoreKey}
+                selectedSectionDataStore={dataStoreData}
                 updating={false}
                 title={"Bulk Enrollment"}
             />,
@@ -45,9 +53,9 @@ function EnrollmentActionsButtons({ programData, selectedDataStoreKey }: { progr
                 label={`Update existing ${sectionName}s`}
                 module={Modules.Enrollment}
                 onError={(e: any) => { console.log(e) }}
-                programConfig={programData}
+                programConfig={programData!}
                 sectionType={sectionName}
-                selectedSectionDataStore={selectedDataStoreKey}
+                selectedSectionDataStore={dataStoreData}
                 updating={true}
                 title={"Bulk Enrollment Update"}
             />,
@@ -63,11 +71,11 @@ function EnrollmentActionsButtons({ programData, selectedDataStoreKey }: { progr
                 label='Export Empty Template'
                 module={Modules.Enrollment}
                 onError={(e: any) => console.log(e)}
-                programConfig={programData}
+                programConfig={programData!}
                 sectionType={sectionName}
-                selectedSectionDataStore={selectedDataStoreKey}
+                selectedSectionDataStore={dataStoreData}
                 empty={true}
-                stagesToExport={[selectedDataStoreKey.registration.programStage]}
+                stagesToExport={[dataStoreData.registration.programStage]}
             />,
             divider: false,
             disabled: false,
@@ -81,11 +89,11 @@ function EnrollmentActionsButtons({ programData, selectedDataStoreKey }: { progr
                 label='Export Existing Students'
                 module={Modules.Enrollment}
                 onError={(e: any) => console.log(e)}
-                programConfig={programData}
+                programConfig={programData!}
                 sectionType={sectionName}
-                selectedSectionDataStore={selectedDataStoreKey}
+                selectedSectionDataStore={dataStoreData}
                 empty={false}
-                stagesToExport={[selectedDataStoreKey.registration.programStage]}
+                stagesToExport={[dataStoreData.registration.programStage]}
             />,
             divider: false,
             disabled: false,
@@ -122,12 +130,12 @@ function EnrollmentActionsButtons({ programData, selectedDataStoreKey }: { progr
                 />
             </ButtonStrip>
 
-            {openSaveModal && <ModalManager open={openSaveModal} setOpen={setOpenSaveModal} saveMode='CREATE' initialValues={formInitialValues} />}
+            {openSaveModal && <ModalManager formFields={formFields({ formFieldsData: formData, sectionName: sectionName! })} open={openSaveModal} setOpen={setOpenSaveModal} saveMode='CREATE' initialValues={formInitialValues} />}
 
             {openSearchEnrollment &&
                 <ModalSearchEnrollmentContent
                     open={openSearchEnrollment}
-                    programConfig={programData}
+                    programConfig={programData!}
                     sectionName={sectionName}
                     setOpen={setOpenSearchEnrollment}
                     Form={Form}

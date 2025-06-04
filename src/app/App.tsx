@@ -4,6 +4,7 @@ import { Router } from '../components/routes'
 import { AppWrapper } from 'dhis2-semis-components'
 import { HashRouter } from 'react-router-dom'
 import { useConfig } from '@dhis2/app-runtime'
+import InitializeWrapper from '../components/wrapper/InitializeWrapper'
 
 const Enrollment = () => {
     const { baseUrl } = useConfig()
@@ -13,9 +14,11 @@ const Enrollment = () => {
             baseUrl={baseUrl}
             dataStoreKey='dataStore/semis/values'
         >
-            <HashRouter>
-                <Router />
-            </HashRouter>
+            <InitializeWrapper>
+                <HashRouter>
+                    <Router />
+                </HashRouter>
+            </InitializeWrapper>
         </AppWrapper>
     )
 }

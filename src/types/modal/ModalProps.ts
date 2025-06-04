@@ -9,6 +9,7 @@ interface ModalContentInterface {
 
 interface ModalManagerInterface {
     open: boolean;
+    formFields?: any;
     saveMode: "CREATE" | "UPDATE";
     setOpen: (arg: boolean) => void;
     initialValues?: Record<string, any>
