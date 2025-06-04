@@ -71,7 +71,6 @@ function ModalManager(props: ModalManagerInterface) {
     };
 
     function onSubmit(e: Record<string, any>): void {
-        console.log(e, "subm")
         const data = () => {
             if (saveMode === "CREATE") {
                 return enrollmentPostBody({
@@ -100,9 +99,6 @@ function ModalManager(props: ModalManagerInterface) {
                 });
             }
         };
-
-        console.log(saveMode, "subm saveMode")
-        console.log(data(), "submit")
 
         saveTei({
             data: data(),
