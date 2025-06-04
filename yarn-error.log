@@ -1,0 +1,101 @@
+Arguments: 
+  C:\nvm4w\nodejs\node.exe C:\Program Files (x86)\Yarn\bin\yarn.js
+
+PATH: 
+  C:\Program Files (x86)\Common Files\Oracle\Java\javapath;C:\Program Files\Common Files\Oracle\Java\javapath;C:\WINDOWS\system32;C:\WINDOWS;C:\WINDOWS\System32\Wbem;C:\WINDOWS\System32\WindowsPowerShell\v1.0\;C:\WINDOWS\System32\OpenSSH\;C:\Program Files\PuTTY\;C:\Program Files\Java\jdk-11.0.13\bin;C:\Program Files\Java\jdk1.8.0_202\bin;C:\ProgramData\ComposerSetup\bin;C:\Program Files\Microsoft VS Code\bin;C:\Program Files\Git\cmd;C:\Program Files (x86)\Yarn\bin\;8C:\Program Files\Java\jdk1.8.0_202\bin;C:\Program Files\dotnet\;C:\Users\axerinda\AppData\Roaming\nvm;C:\nvm4w\nodejs;C:\Users\axerinda\AppData\Roaming\npm;C:\Users\axerinda\AppData\Local\Microsoft\WindowsApps;C:\Users\axerinda\AppData\Local\Yarn\bin;C:\msys64\mingw64\bin;C:\Users\axerinda\AppData\Roaming\npm\node_modules\@angular\cli\bin;C:\Program Files\php-8.3;C:\Users\axerinda\AppData\Roaming\Composer\vendor\bin;C:\Users\axerinda\AppData\Roaming\nvm;C:\nvm4w\nodejs;c:\Users\axerinda\AppData\Roaming\Code\User\globalStorage\github.copilot-chat\debugCommand
+
+Yarn version: 
+  1.22.19
+
+Node version: 
+  20.9.0
+
+Platform: 
+  win32 x64
+
+Trace: 
+  Error: ENOENT: no such file or directory, copyfile 'C:\Users\axerinda\dhis2-semis-enrollment\.d2\shell\node_modules\.vite\deps_temp_c7b85945\package.json' -> 'C:\Users\axerinda\AppData\Local\Yarn\Cache\v6\npm-dhis2-semis-components-1.0.1-alpha.38-e4ffe674-6861-47ab-8494-1f74baf5c971-1749023487351\node_modules\dhis2-semis-components\.d2\shell\node_modules\.vite\deps_temp_c7b85945\package.json'
+
+npm manifest: 
+  {
+    "name": "dhis2-semis-enrollment",
+    "version": "1.0.1-alpha.38",
+    "description": "",
+    "license": "BSD-3-Clause",
+    "private": false,
+    "main": "dist/index.js",
+    "types": "dist/declarations/index.d.ts",
+    "exports": {
+      ".": {
+        "require": "./dist/index.js",
+        "import": "./dist/index.js",
+        "types": "./dist/declarations/index.d.ts"
+      }
+    },
+    "scripts": {
+      "build": "d2-app-scripts build",
+      "start": "d2-app-scripts start --proxy https://emis.dhis2.org/startracker",
+      "test": "d2-app-scripts test",
+      "deploy": "d2-app-scripts deploy",
+      "copy-files": "copyfiles -u 1 \"src/**/*.png\" \"src/**/*.svg\" \"src/**/*.css\" dist/",
+      "lib": "rimraf ./dist && npx tsc -b && yarn copy-files"
+    },
+    "devDependencies": {
+      "@dhis2/app-adapter": "12.6.0",
+      "@dhis2/app-runtime": "3.14.1",
+      "@dhis2/ui": "10.7.2",
+      "@emotion/react": "^11.14.0",
+      "@emotion/styled": "^11.14.0",
+      "@mui/icons-material": "7.1.0",
+      "@mui/material": "7.1.0",
+      "@babel/plugin-proposal-private-property-in-object": "^7.21.11",
+      "@dhis2/cli-app-scripts": "^12.3.0",
+      "@types/react": "18.3.1",
+      "@types/react-dom": "^18.3.1",
+      "copyfiles": "^2.4.1",
+      "dhis2-semis-components": "0.6.5-alpha.28",
+      "dhis2-semis-functions": "0.0.6-alpha.4",
+      "dhis2-semis-types": "1.3.14",
+      "eslint": "^8.57.1",
+      "eslint-config-standard-with-typescript": "^36.1.1",
+      "eslint-plugin-import": "^2.27.5",
+      "eslint-plugin-n": "^16.6.2",
+      "eslint-plugin-promise": "^6.6.0",
+      "eslint-plugin-react": "^7.32.2",
+      "rimraf": "^6.0.1",
+      "typescript": "^5.7.2"
+    },
+    "peerDependencies": {
+      "@dhis2/app-adapter": "12.6.0",
+      "@dhis2/app-runtime": "3.14.1",
+      "@dhis2/ui": "10.7.2",
+      "@emotion/react": "^11.14.0",
+      "@emotion/styled": "^11.14.0",
+      "@mui/icons-material": "7.1.0",
+      "@mui/material": "7.1.0",
+      "dhis2-semis-components": "*",
+      "dhis2-semis-functions": "*",
+      "dhis2-semis-types": "*",
+      "recoil": "^0.7.7"
+    },
+    "dependencies": {
+      "acorn": "^8.14.0",
+      "bootstrap": "^5.3.3",
+      "classnames": "^2.5.1",
+      "react-bootstrap": "^2.10.5",
+      "react-final-form": "^6.5.9",
+      "react-router-dom": "^6.29.0"
+    },
+    "resolutions": {
+      "strip-ansi": "6.0.1"
+    },
+    "files": [
+      "dist"
+    ]
+  }
+
+yarn manifest: 
+  No manifest
+
+Lockfile: 
+  No lockfile

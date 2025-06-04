@@ -2,31 +2,54 @@ import { format } from "date-fns";
 import { useRecoilState } from "recoil";
 import ModalContent from "./ModalContent";
 import React, { useEffect, useState } from "react";
-import { TableDataRefetch, Modules } from "dhis2-semis-types"
+import { Modules, TableDataRefetch } from "dhis2-semis-types"
 import { ModalManagerInterface } from "../../../types/modal/ModalProps";
-import { enrollmentPostBody, enrollmentUpdateBody } from "../../../utils/enrollment";
-import { formFields } from "../../../utils/constants/form/enrollmentForm";
-import { ModalComponent, useGetUsedProgramStages, } from "dhis2-semis-components";
 import useGetSelectedKeys from "../../../hooks/config/useGetSelectedKeys";
+import { ModalComponent, useGetUsedProgramStages, } from "dhis2-semis-components";
+import { enrollmentPostBody, enrollmentUpdateBody } from "../../../utils/enrollment";
 import useGetEnrollmentUpdateInitialValues from "../../../hooks/form/useGetEnrollmentUpdateInitialValues";
-import { useBuildForm, useGetAttributes, useGetPatternCode, useSaveTei, useUrlParams, useGetSectionTypeLabel } from "dhis2-semis-functions";
+import {
+    useGetAttributes, useGetPatternCode, useSaveTei, useUrlParams,
+    useGetSectionTypeLabel, RulesEngine, capitalizeString, useBuildForm
+} from "dhis2-semis-functions";
+
 
 function ModalManager(props: ModalManagerInterface) {
-    const { open, setOpen, saveMode, initialValues: initialValuesFromSearch } = props;
-    const { dataStoreData, program: programData } = useGetSelectedKeys()
     const { urlParameters, useQuery } = useUrlParams();
     const { school, schoolName } = urlParameters();
     const { saveTei, loading: saving } = useSaveTei();
     const { sectionName } = useGetSectionTypeLabel();
     const enrollment = useQuery().get("enrollment") as string
-    const { attributes = [] } = useGetAttributes({ programData: programData! });
     const [refetch, setRefetch] = useRecoilState(TableDataRefetch);
     const trackedEntity = useQuery().get("trackedEntity") as string
+    const { program: programData, dataStoreData } = useGetSelectedKeys()
+    const { attributes = [] } = useGetAttributes({ programData: programData! });
     const programStagesToSave = useGetUsedProgramStages({ sectionType: sectionName });
     const { returnPattern, loadingCodes, generatedVariables } = useGetPatternCode();
-    const { formData } = useBuildForm({ dataStoreData, programData, module: Modules.Enrollment });
+    const { formData: formVariablesFields } = useBuildForm({ dataStoreData, programData, module: Modules.Enrollment });
+    const { open, setOpen, saveMode, initialValues: initialValuesFromSearch, formFields = [] } = props;
     const [initialValues] = useState<object>({ registerschoolstaticform: schoolName, enrollment_date: format(new Date(), "yyyy-MM-dd"), ...initialValuesFromSearch });
     const { getInitialValues, initialValues: updateInitialValues, loading: initialValuesLoading, enrollmentEvents } = useGetEnrollmentUpdateInitialValues()
+    const allInitialValues = { ...initialValues, ...generatedVariables, ...updateInitialValues }
+    const [values, setValues] = useState<{ [key: string]: any }>({ orgUnit: school, ...allInitialValues });
+
+    const { runRulesEngine, updatedVariables } = RulesEngine({
+        values: values,
+        variables: formFields,
+        program: programData!.id,
+        type: "programStageSection",
+    })
+
+    useEffect(() => {
+        runRulesEngine()
+    }, [values])
+
+    useEffect(() => {
+        setValues(prev => ({
+            ...prev,
+            ...allInitialValues,
+        }));
+    }, [updateInitialValues, generatedVariables])
 
     useEffect(() => {
         if (saveMode == "CREATE" && !Object.keys(initialValuesFromSearch!).length)
@@ -38,7 +61,14 @@ function ModalManager(props: ModalManagerInterface) {
 
     const handleCloseModal = () => setOpen(false);
 
-    function onChange(e: any): void { }
+    const handleChange = (e: { field: any; value: string; name: string }) => {
+        const { name, value } = e;
+        setValues(prev => ({
+            ...allInitialValues,
+            ...prev,
+            [name]: value,
+        }));
+    };
 
     function onSubmit(e: Record<string, any>): void {
         const data = () => {
@@ -48,7 +78,7 @@ function ModalManager(props: ModalManagerInterface) {
                     orgUnitId: school!,
                     programStagesToSave,
                     programId: programData?.id!,
-                    formVariablesFields: formData,
+                    formVariablesFields: formVariablesFields,
                     enrollmentDate: e?.enrollment_date,
                     trackedEntityType: programData?.trackedEntityType?.id!,
                     trackedEntityId: initialValuesFromSearch!["trackedEntity"]
@@ -57,7 +87,7 @@ function ModalManager(props: ModalManagerInterface) {
 
             if (saveMode === "UPDATE") {
                 return enrollmentUpdateBody({
-                    formVariablesFields: formData,
+                    formVariablesFields: formVariablesFields,
                     enrollmentId: e?.enrollment,
                     enrollmentDate: e?.enrollment_date,
                     trackedEntityId: e?.trackedEntity,
@@ -85,15 +115,15 @@ function ModalManager(props: ModalManagerInterface) {
             open={open}
             handleClose={handleCloseModal}
             loading={loadingCodes || initialValuesLoading}
-            title={`Single ${sectionName} Enrollment ${saveMode == "UPDATE" ? "Update" : ""}`}
+            title={`Single ${capitalizeString(sectionName)} Enrollment ${saveMode == "UPDATE" ? "Update" : ""}`}
         >
             <ModalContent
                 loading={saving!}
-                onChange={onChange}
                 onSubmit={onSubmit}
+                onChange={handleChange}
                 onCancel={handleCloseModal}
-                formFields={formFields({ formFieldsData: formData, sectionName })}
-                initialValues={{ ...initialValues, ...generatedVariables, ...updateInitialValues }}
+                formFields={updatedVariables}
+                initialValues={allInitialValues}
             />
         </ModalComponent>
     );

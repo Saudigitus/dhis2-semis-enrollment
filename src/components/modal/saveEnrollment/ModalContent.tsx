@@ -15,10 +15,11 @@ function ModalContent(props: ModalContentInterface) {
                         loading={loading}
                         withButtons={true}
                         formFields={formFields}
+                        setFormValues={onChange}
+                        onInputChange={onChange}
                         initialValues={initialValues}
                         onCancel={() => { onCancel() }}
                         onFormSubtmit={(e) => { onSubmit(e) }}
-                        onInputChange={(e) => { onChange(e) }}
                     />
                 </WithPadding>
             </WithBorder>
