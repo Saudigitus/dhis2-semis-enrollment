@@ -5,16 +5,13 @@ import { useConfig } from '@dhis2/app-runtime';
 import styles from './enrollmentActionsButtons.module.css'
 import ModalManager from '../modal/saveEnrollment/ModalManager';
 import { useBuildForm, useGetSectionTypeLabel, useUrlParams } from 'dhis2-semis-functions';
-import { Modules, ProgramConfig, selectedDataStoreKey } from 'dhis2-semis-types'
+import { Modules } from 'dhis2-semis-types'
 import { IconAddCircle24, Button, ButtonStrip, IconUserGroup16, IconSearch24 } from "@dhis2/ui";
 import { ModalSearchEnrollmentContent, DataExporter, DataImporter, CustomDropdown as DropdownButton } from 'dhis2-semis-components';
 import { formFields } from '../../utils/constants/form/enrollmentForm';
 import useGetSelectedKeys from '../../hooks/config/useGetSelectedKeys';
 
-interface EnrollmentActionsButtonsProps {
-}
-
-function EnrollmentActionsButtons(props: EnrollmentActionsButtonsProps) {
+function EnrollmentActionsButtons() {
     const { baseUrl } = useConfig()
     const { urlParameters } = useUrlParams();
     const { sectionName } = useGetSectionTypeLabel();
