@@ -40,7 +40,7 @@ export const enrollmentPostBody = ({ formVariablesFields, programId, orgUnitId, 
         }
     }
 
-    programStagesToSave.forEach(programStageToSave => {
+    programStagesToSave?.filter((pStage) => Boolean(pStage)).forEach(programStageToSave => {
         form.events.push({
             orgUnit: orgUnitId,
             notes: [],
