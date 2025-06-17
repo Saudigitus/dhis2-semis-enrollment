@@ -11,9 +11,10 @@ interface enrollmentUpdateBodyInterface {
     enrollmentId: string,
     events: any[],
     formVariablesFields: any[],
+    updateInitialValues: Record<string, any>
 }
 
-export const enrollmentUpdateBody = ({ formVariablesFields, enrollmentId, enrollmentDate, trackedEntityId, trackedEntityType, orgUnitId, programId, formValues, events }: enrollmentUpdateBodyInterface): any => {
+export const enrollmentUpdateBody = ({ formVariablesFields, enrollmentId, enrollmentDate, trackedEntityId, trackedEntityType, orgUnitId, programId, formValues, events, updateInitialValues }: enrollmentUpdateBodyInterface): any => {
     const form: { attributes: any[], events: any[] } = {
         attributes: [],
         events: []
@@ -25,6 +26,11 @@ export const enrollmentUpdateBody = ({ formVariablesFields, enrollmentId, enroll
                 const value = formValues[attribute.id];
                 if (value !== null && value !== undefined) {
                     form.attributes.push({ attribute: attribute.id, value });
+                }
+                if(updateInitialValues[attribute.id] && !formValues[attribute.id]) {
+                    // If the value is not present in formValues but exists in updateInitialValues, we still want to send null
+                    // To do - create a reducer that will handle this case
+                    form.attributes.push({ attribute: attribute.id, value: null });
                 }
             })
         }

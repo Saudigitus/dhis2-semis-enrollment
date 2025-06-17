@@ -71,7 +71,7 @@ function ModalManager(props: ModalManagerInterface) {
     };
 
     function onSubmit(e: Record<string, any>): void {
-        const data = () => {
+        const data: any = () => {
             if (saveMode === "CREATE") {
                 return enrollmentPostBody({
                     values: e,
@@ -96,6 +96,7 @@ function ModalManager(props: ModalManagerInterface) {
                     programId: programData?.id!,
                     formValues: e,
                     events: enrollmentEvents?.events,
+                    updateInitialValues: updateInitialValues,
                 });
             }
         };
