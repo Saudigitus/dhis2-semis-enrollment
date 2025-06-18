@@ -122,12 +122,17 @@ function EnrollmentActionsButtons() {
                     </span>
                 </Tooltip>
 
-                < DropdownButton
-                    name={<span className={styles.work_buttons_text}>Bulk enrollment</span> as unknown as string}
-                    disabled={false}
-                    icon={<IconUserGroup16 />}
-                    options={enrollmentOptions}
-                />
+                <Tooltip title={(grade === null || section === null) ? "Please select class and grade" : ""}>
+                    <span>
+                        <DropdownButton
+                            name={<span className={styles.work_buttons_text}>Bulk enrollment</span> as unknown as string}
+                            disabled={false}
+                            icon={<IconUserGroup16 />}
+                            options={enrollmentOptions}
+                        />
+                    </span>
+                </Tooltip>
+
             </ButtonStrip>
 
             {openSaveModal && <ModalManager formFields={formFields({ formFieldsData: formData, sectionName: sectionName! })} open={openSaveModal} setOpen={setOpenSaveModal} saveMode='CREATE' initialValues={formInitialValues} />}
