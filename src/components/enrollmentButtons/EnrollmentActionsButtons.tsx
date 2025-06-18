@@ -4,7 +4,7 @@ import { Tooltip } from '@mui/material';
 import { useConfig } from '@dhis2/app-runtime';
 import styles from './enrollmentActionsButtons.module.css'
 import ModalManager from '../modal/saveEnrollment/ModalManager';
-import { useBuildForm, useGetSectionTypeLabel, useUrlParams } from 'dhis2-semis-functions';
+import { useBuildForm, useGetSectionTypeLabel, useUrlParams, useShowAlerts } from 'dhis2-semis-functions';
 import { Modules } from 'dhis2-semis-types'
 import { IconAddCircle24, Button, ButtonStrip, IconUserGroup16, IconSearch24 } from "@dhis2/ui";
 import { ModalSearchEnrollmentContent, DataExporter, DataImporter, CustomDropdown as DropdownButton } from 'dhis2-semis-components';
@@ -21,20 +21,25 @@ function EnrollmentActionsButtons() {
     const { school: orgUnit, academicYear, grade, class: section } = urlParameters();
     const [openSearchEnrollment, setOpenSearchEnrollment] = useState<boolean>(false);
     const { formData } = useBuildForm({ dataStoreData, programData, module: Modules.Enrollment });
-
+    const { hide, show } = useShowAlerts()
     const filters = [
         academicYear !== null ? `${dataStoreData.registration.academicYear}:in:${academicYear}` : null,
         grade !== null ? `${dataStoreData.registration.grade}:in:${grade}` : null,
         section !== null ? `${dataStoreData.registration.section}:in:${section}` : null,
     ].filter((filter): filter is string => filter !== null)
 
+    const showAlert = (error: any) => {
+        show({ message: `Unknown error: ${error}`, type: { critical: true } })
+        setTimeout(hide, 5000);
+    }
+
     const enrollmentOptions: any = [
         {
             label: <DataImporter
                 baseURL={baseUrl}
-                label={'Enroll new ' + sectionName}
+                label={'Enroll new ' + sectionName + '\'s'}
                 module={Modules.Enrollment}
-                onError={(e: any) => { console.log(e) }}
+                onError={(e: any) => { showAlert(e) }}
                 programConfig={programData!}
                 sectionType={sectionName}
                 selectedSectionDataStore={dataStoreData}
@@ -47,9 +52,9 @@ function EnrollmentActionsButtons() {
         {
             label: <DataImporter
                 baseURL={baseUrl}
-                label={`Update existing ${sectionName}s`}
+                label={`Update existing ${sectionName}'s`}
                 module={Modules.Enrollment}
-                onError={(e: any) => { console.log(e) }}
+                onError={(e: any) => { showAlert(e) }}
                 programConfig={programData!}
                 sectionType={sectionName}
                 selectedSectionDataStore={dataStoreData}
@@ -64,10 +69,9 @@ function EnrollmentActionsButtons() {
                 Form={Form}
                 baseURL={baseUrl}
                 eventFilters={filters}
-                fileName='teste'
                 label='Export Empty Template'
                 module={Modules.Enrollment}
-                onError={(e: any) => console.log(e)}
+                onError={(e: any) => { showAlert(e) }}
                 programConfig={programData!}
                 sectionType={sectionName}
                 selectedSectionDataStore={dataStoreData}
@@ -82,10 +86,9 @@ function EnrollmentActionsButtons() {
                 Form={Form}
                 baseURL={baseUrl}
                 eventFilters={filters}
-                fileName='teste'
-                label='Export Existing Students'
+                label={'Export Existing ' + sectionName + '\'s'}
                 module={Modules.Enrollment}
-                onError={(e: any) => console.log(e)}
+                onError={(e: any) => { showAlert(e) }}
                 programConfig={programData!}
                 sectionType={sectionName}
                 selectedSectionDataStore={dataStoreData}
