@@ -4,7 +4,7 @@ import { Tooltip } from '@mui/material';
 import { useConfig } from '@dhis2/app-runtime';
 import styles from './enrollmentActionsButtons.module.css'
 import ModalManager from '../modal/saveEnrollment/ModalManager';
-import { useBuildForm, useGetSectionTypeLabel, useUrlParams, useShowAlerts } from 'dhis2-semis-functions';
+import { useBuildForm, useGetSectionTypeLabel, useUrlParams, useShowAlerts, useCheckFilters } from 'dhis2-semis-functions';
 import { Modules } from 'dhis2-semis-types'
 import { IconAddCircle24, Button, ButtonStrip, IconUserGroup16, IconSearch24 } from "@dhis2/ui";
 import { ModalSearchEnrollmentContent, DataExporter, DataImporter, CustomDropdown as DropdownButton } from 'dhis2-semis-components';
@@ -27,6 +27,7 @@ function EnrollmentActionsButtons() {
         grade !== null ? `${dataStoreData.registration.grade}:in:${grade}` : null,
         section !== null ? `${dataStoreData.registration.section}:in:${section}` : null,
     ].filter((filter): filter is string => filter !== null)
+    const { areAllSelected } = useCheckFilters({ filters: dataStoreData.filters.dataElements as unknown as any })
 
     const showAlert = (error: any) => {
         show({ message: `Unknown error: ${error}`, type: { critical: true } })
@@ -126,7 +127,7 @@ function EnrollmentActionsButtons() {
                     <span>
                         <DropdownButton
                             name={<span className={styles.work_buttons_text}>Bulk enrollment</span> as unknown as string}
-                            disabled={!!(orgUnit == undefined || section == undefined || grade == undefined || academicYear == undefined)}
+                            disabled={!!(orgUnit == undefined || !areAllSelected())}
                             icon={<IconUserGroup16 />}
                             options={enrollmentOptions}
                         />
