@@ -24,8 +24,8 @@ const ModalManagerEnrollmentDelete = (props: ModalManagerInterface) => {
     const { formData } = useBuildForm({ dataStoreData, programData, module: Modules.Enrollment });
     const [initialValues] = useState<object>({ registerschoolstaticform: schoolName, enrollment_date: format(new Date(), "yyyy-MM-dd") });
     const { getInitialValues, initialValues: updateInitialValues, loading: initialValuesLoading } = useGetDeleteEnrollmentInitialValues()
-    const enrollment = useQuery().get("enrollment") as string
-    const trackedEntity = useQuery().get("trackedEntity") as string
+    const enrollment = useQuery.get("enrollment") as string
+    const trackedEntity = useQuery.get("trackedEntity") as string
 
 
     useEffect(() => {

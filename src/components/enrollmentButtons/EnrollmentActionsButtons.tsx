@@ -27,7 +27,7 @@ function EnrollmentActionsButtons() {
         grade !== null ? `${dataStoreData.registration.grade}:in:${grade}` : null,
         section !== null ? `${dataStoreData.registration.section}:in:${section}` : null,
     ].filter((filter): filter is string => filter !== null)
-    const { areAllSelected } = useCheckFilters({ filters: dataStoreData.filters.dataElements as unknown as any })
+    const { areAllSelected } = useCheckFilters({ filters: (dataStoreData.filters.dataElements ?? []) as unknown as any })
 
     const showAlert = (error: any) => {
         show({ message: `Unknown error: ${error}`, type: { critical: true } })

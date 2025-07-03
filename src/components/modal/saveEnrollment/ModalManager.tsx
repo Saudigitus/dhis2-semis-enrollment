@@ -19,9 +19,9 @@ function ModalManager(props: ModalManagerInterface) {
     const { school, schoolName } = urlParameters();
     const { saveTei, loading: saving } = useSaveTei();
     const { sectionName } = useGetSectionTypeLabel();
-    const enrollment = useQuery().get("enrollment") as string
+    const enrollment = useQuery.get("enrollment") as string
     const [refetch, setRefetch] = useRecoilState(TableDataRefetch);
-    const trackedEntity = useQuery().get("trackedEntity") as string
+    const trackedEntity = useQuery.get("trackedEntity") as string
     const { program: programData, dataStoreData } = useGetSelectedKeys()
     const { attributes = [] } = useGetAttributes({ programData: programData! });
     const programStagesToSave = useGetUsedProgramStages({ sectionType: sectionName });
