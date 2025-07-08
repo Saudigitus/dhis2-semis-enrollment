@@ -127,7 +127,7 @@ function EnrollmentActionsButtons() {
                     <span>
                         <DropdownButton
                             name={<span className={styles.work_buttons_text}>Bulk enrollment</span> as unknown as string}
-                            disabled={!!(orgUnit == undefined || !areAllSelected())}
+                            disabled={!!(orgUnit == undefined || !areAllSelected() || academicYear == undefined)}
                             icon={<IconUserGroup16 />}
                             options={enrollmentOptions}
                         />
