@@ -38,7 +38,7 @@ function EnrollmentActionsButtons() {
         {
             label: <DataImporter
                 baseURL={baseUrl}
-                label={'Enroll new ' + sectionName + '\'s'}
+                label={'Enroll new ' + sectionName + 's'}
                 module={Modules.Enrollment}
                 onError={(e: any) => { showAlert(e) }}
                 programConfig={programData!}
@@ -87,7 +87,7 @@ function EnrollmentActionsButtons() {
                 Form={Form}
                 baseURL={baseUrl}
                 eventFilters={filters}
-                label={'Export Existing ' + sectionName + '\'s'}
+                label={'Export Existing ' + sectionName + 's'}
                 module={Modules.Enrollment}
                 onError={(e: any) => { showAlert(e) }}
                 programConfig={programData!}
@@ -123,7 +123,7 @@ function EnrollmentActionsButtons() {
                     </span>
                 </Tooltip>
 
-                <Tooltip title={(grade === null || section === null) ? "Please select class and grade" : ""}>
+                <Tooltip title={!areAllSelected() ? "Please select all filters" : ""}>
                     <span>
                         <DropdownButton
                             name={<span className={styles.work_buttons_text}>Bulk enrollment</span> as unknown as string}
@@ -136,7 +136,13 @@ function EnrollmentActionsButtons() {
 
             </ButtonStrip>
 
-            {openSaveModal && <ModalManager formFields={formFields({ formFieldsData: formData, sectionName: sectionName! })} open={openSaveModal} setOpen={setOpenSaveModal} saveMode='CREATE' initialValues={formInitialValues} />}
+            {openSaveModal && <ModalManager
+                formFields={formFields({ formFieldsData: formData, sectionName: sectionName! })}
+                open={openSaveModal}
+                setOpen={setOpenSaveModal}
+                saveMode='CREATE'
+                initialValues={formInitialValues}
+            />}
 
             {openSearchEnrollment &&
                 <ModalSearchEnrollmentContent

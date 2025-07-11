@@ -52,10 +52,10 @@ function ModalManager(props: ModalManagerInterface) {
     }, [updateInitialValues, generatedVariables])
 
     useEffect(() => {
-        if (saveMode == "CREATE" && !Object.keys(initialValuesFromSearch!).length)
+        if (open && saveMode == "CREATE")
             void returnPattern(attributes);
 
-        if (saveMode == "UPDATE")
+        if (open && saveMode == "UPDATE")
             void getInitialValues(trackedEntity, enrollment);
     }, [open]);
 
