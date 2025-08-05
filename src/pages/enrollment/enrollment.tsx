@@ -1,7 +1,7 @@
 import { useRecoilState } from 'recoil';
 import React, { useEffect, useState } from "react";
 import { IconDelete24, IconEdit24 } from "@dhis2/ui";
-import { Table, InfoPage } from "dhis2-semis-components";
+import { Table, InfoPage, useSchoolCalendar } from "dhis2-semis-components";
 import ModalManager from "../../components/modal/saveEnrollment/ModalManager";
 import { TableDataRefetch, Modules, ProgramConfig } from "dhis2-semis-types"
 import useGetSelectedProgram from '../../hooks/config/useGetSelectedKeys';
@@ -11,9 +11,10 @@ import EnrollmentActionsButtons from "../../components/enrollmentButtons/Enrollm
 import { formFields } from '../../utils/constants/form/enrollmentForm';
 
 export default function EnrollmentsPage() {
-    const { program, dataStoreData } = useGetSelectedProgram()
     const { viewPortWidth } = useViewPortWidth()
     const { urlParameters, add, remove } = useUrlParams()
+    const { program, dataStoreData } = useGetSelectedProgram()
+    const { academicYear: academicYearId } = useSchoolCalendar()
     const { academicYear, grade, class: section, school, schoolName, sectionType } = urlParameters()
     const [openEditModal, setOpenEditModal] = useState<boolean>(false)
     const [openDeleteModal, setOpenDeleteModal] = useState<boolean>(false)
@@ -61,7 +62,7 @@ export default function EnrollmentsPage() {
             baseProgramStage: dataStoreData?.registration?.programStage as string,
             attributeFilters: filterState.attributes,
             dataElementFilters: [
-                academicYear !== null ? `${dataStoreData.registration.academicYear}:in:${academicYear}` : null,
+                academicYear !== null ? `${academicYearId}:in:${academicYear}` : null,
                 grade !== null ? `${dataStoreData.registration.grade}:in:${grade}` : null,
                 section !== null ? `${dataStoreData.registration.section}:in:${section}` : null,
             ].filter((filter): filter is string => filter !== null),
