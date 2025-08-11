@@ -54,20 +54,21 @@ export default function EnrollmentsPage() {
     ];
 
     useEffect(() => {
-        void getData({
-            page: pagination?.page,
-            pageSize: pagination?.pageSize,
-            program: program!.id as string,
-            orgUnit: school!,
-            baseProgramStage: dataStoreData?.registration?.programStage as string,
-            attributeFilters: filterState.attributes,
-            dataElementFilters: [
-                academicYear !== null ? `${academicYearId}:in:${academicYear}` : null,
-                grade !== null ? `${dataStoreData.registration.grade}:in:${grade}` : null,
-                section !== null ? `${dataStoreData.registration.section}:in:${section}` : null,
-            ].filter((filter): filter is string => filter !== null),
-            order: dataStoreData.defaults.defaultOrder
-        })
+        if (school && academicYear)
+            void getData({
+                page: pagination?.page,
+                pageSize: pagination?.pageSize,
+                program: program?.id as string,
+                orgUnit: school!,
+                baseProgramStage: dataStoreData?.registration?.programStage as string,
+                attributeFilters: filterState.attributes,
+                dataElementFilters: [
+                    academicYear !== null ? `${academicYearId}:in:${academicYear}` : null,
+                    grade !== null ? `${dataStoreData.registration.grade}:in:${grade}` : null,
+                    section !== null ? `${dataStoreData.registration.section}:in:${section}` : null,
+                ].filter((filter): filter is string => filter !== null),
+                order: dataStoreData.defaults.defaultOrder
+            })
     }, [sectionType, filterState, pagination.page, pagination?.pageSize, refetch, grade, section, school, academicYear])
 
     return (
