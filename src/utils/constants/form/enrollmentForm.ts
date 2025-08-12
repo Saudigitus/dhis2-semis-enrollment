@@ -51,7 +51,6 @@ function formFields({ formFieldsData, sectionName }: { formFieldsData: any[], se
 
   const [enrollmentDetails = [], studentsProfile = [], socioEconomicDetails = []] = formFieldsData;
 
-
   return [
     {
       name: "Enrollment Details",
@@ -74,7 +73,7 @@ function formFields({ formFieldsData, sectionName }: { formFieldsData: any[], se
     {
       name: "Socio-economic details",
       description: `Details about the ${sectionName} socio-economic status`,
-      visible: socioEconomicDetails.length,
+      visible: Boolean(socioEconomicDetails.length),
       fields: [
         ...socioEconomicDetails
       ]

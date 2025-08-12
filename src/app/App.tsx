@@ -12,12 +12,11 @@ const Enrollment = () => {
         // <AppWrapper
         //     baseUrl={baseUrl}
         //     dataStoreKey="dataStore/semis/values"
+        //     schoolCalendarKey='dataStore/semis/schoolCalendar'
         // >
         //     <HashRouter>
-
                 <Router />
         //     </HashRouter >
-
         // </AppWrapper>
     )
 }
