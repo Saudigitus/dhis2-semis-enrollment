@@ -20,7 +20,9 @@ export const enrollmentUpdateBody = ({ formVariablesFields, enrollmentId, enroll
     }
 
     for (const data of formVariablesFields) {
-        if (data[0].type === "attribute") {
+        if (!data || !data.length) continue;
+
+        if (data[0]?.type === "attribute") {
             data.forEach((attribute: { id: string }) => {
                 const value = formValues[attribute.id];
                 if (value !== null && value !== undefined) {
@@ -28,7 +30,7 @@ export const enrollmentUpdateBody = ({ formVariablesFields, enrollmentId, enroll
                 }
             })
         }
-        else if (data[0].type === "dataElement") {
+        else if (data[0]?.type === "dataElement") {
             for (const [key, value] of Object.entries(reducer(data, formValues))) {
                 const event = events?.find((event: any) => event.programStage === key)
                 if (event && Object.keys(event).length > 4)
