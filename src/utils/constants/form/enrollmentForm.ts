@@ -63,7 +63,7 @@ function formFields({ formFieldsData, sectionName }: { formFieldsData: any[], se
       ]
     },
     {
-      name: `${capitalizeString(sectionName)} profile`,
+      name: `${capitalizeString(sectionName)} Profile`,
       description: `${capitalizeString(sectionName)} personal details`,
       visible: true,
       fields: [
@@ -71,7 +71,7 @@ function formFields({ formFieldsData, sectionName }: { formFieldsData: any[], se
       ]
     },
     {
-      name: "Socio-economic details",
+      name: "Socio-economic Details",
       description: `Details about the ${sectionName} socio-economic status`,
       visible: Boolean(socioEconomicDetails.length),
       fields: [

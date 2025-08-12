@@ -15,7 +15,7 @@ function useGetDeleteEnrollmentInitialValues() {
         setLoading(true)
 
         if (Object.keys(dataStoreData)?.length) {
-            let socioEconomicData: any = {}
+            let socioEconomicData: any = []
 
             await getEnrollment(enrollment)
                 .then((resp: any) => {

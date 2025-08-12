@@ -1,5 +1,5 @@
 import classNames from 'classnames';
-import React, { useState } from 'react'
+import React, { useEffect, useState } from 'react'
 import { Form } from 'react-final-form';
 import styles from "./modal.module.css";
 import { ExpandLess, ExpandMore } from "@mui/icons-material";
@@ -15,6 +15,12 @@ const ModalContent = (props: ModalContentInterface) => {
     const [collapse, setCollapse] = useState<boolean>(false)
     const { schoolName } = urlParameters();
     const { formFields, onChange, onSubmit, onCancel, initialValues, loading } = props;
+
+    useEffect(() => {
+        if(!formFields[0]?.fields?.length){
+            setCollapse(true)
+        }
+    }, [formFields]);
 
     return (
         <WithPadding>
