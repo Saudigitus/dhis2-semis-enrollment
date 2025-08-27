@@ -40,6 +40,7 @@ function ModalManager(props: ModalManagerInterface) {
         type: "programStageSection",
     })
 
+    console.log(values, "assgn")
     useEffect(() => {
         runRulesEngine()
     }, [values])
@@ -123,7 +124,7 @@ function ModalManager(props: ModalManagerInterface) {
                 onChange={handleChange}
                 onCancel={handleCloseModal}
                 formFields={updatedVariables}
-                initialValues={allInitialValues}
+                initialValues={{...allInitialValues, ...values}}
             />
         </ModalComponent>
     );
