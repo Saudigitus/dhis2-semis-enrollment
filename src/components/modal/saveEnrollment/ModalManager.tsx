@@ -40,7 +40,6 @@ function ModalManager(props: ModalManagerInterface) {
         type: "programStageSection",
     })
 
-    console.log(values, "assgn")
     useEffect(() => {
         runRulesEngine()
     }, [values])
@@ -70,6 +69,8 @@ function ModalManager(props: ModalManagerInterface) {
             [name]: value,
         }));
     };
+
+   
 
     function onSubmit(e: Record<string, any>): void {
         const data = () => {
@@ -121,10 +122,11 @@ function ModalManager(props: ModalManagerInterface) {
             <ModalContent
                 loading={saving!}
                 onSubmit={onSubmit}
+                formValues={values}
                 onChange={handleChange}
                 onCancel={handleCloseModal}
                 formFields={updatedVariables}
-                initialValues={{...allInitialValues, ...values}}
+                initialValues={{ ...allInitialValues }}
             />
         </ModalComponent>
     );

@@ -7,7 +7,7 @@ import ModalManager from '../modal/saveEnrollment/ModalManager';
 import { useBuildForm, useGetSectionTypeLabel, useUrlParams, useShowAlerts, useCheckFilters } from 'dhis2-semis-functions';
 import { Modules } from 'dhis2-semis-types'
 import { IconAddCircle24, Button, ButtonStrip, IconUserGroup16, IconSearch24 } from "@dhis2/ui";
-import { ModalSearchEnrollmentContent, DataExporter, DataImporter, CustomDropdown as DropdownButton, useSchoolCalendarKey } from 'dhis2-semis-components';
+import { ModalSearchEnrollmentContent, DataExporter, DataImporter, CustomDropdown as DropdownButton, useSchoolCalendar } from 'dhis2-semis-components';
 import { formFields } from '../../utils/constants/form/enrollmentForm';
 import useGetSelectedKeys from '../../hooks/config/useGetSelectedKeys';
 
@@ -15,7 +15,7 @@ function EnrollmentActionsButtons() {
     const { baseUrl } = useConfig()
     const { urlParameters } = useUrlParams();
     const { sectionName } = useGetSectionTypeLabel();
-    const { academicYear: academicYearId } = useSchoolCalendarKey()
+    const { academicYear: academicYearId } = useSchoolCalendar()
     const { dataStoreData, program: programData } = useGetSelectedKeys()
     const [formInitialValues, setFormInitialValues] = useState({})
     const [openSaveModal, setOpenSaveModal] = useState<boolean>(false)
