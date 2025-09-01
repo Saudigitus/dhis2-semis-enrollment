@@ -4,7 +4,7 @@ import { ModalContentInterface } from '../../../types/modal/ModalProps';
 import { CustomForm, WithBorder, WithPadding } from 'dhis2-semis-components';
 
 function ModalContent(props: ModalContentInterface) {
-    const { formFields, onChange, onSubmit, onCancel, initialValues, loading } = props;
+    const { formFields, onChange, onSubmit, onCancel, initialValues, loading, formValues } = props;
 
     return (
         <WithPadding>
@@ -14,6 +14,7 @@ function ModalContent(props: ModalContentInterface) {
                         Form={Form}
                         loading={loading}
                         withButtons={true}
+                        formValues={formValues}
                         formFields={formFields}
                         setFormValues={onChange}
                         onInputChange={onChange}

@@ -120,11 +120,12 @@ function ModalManager(props: ModalManagerInterface) {
             <ModalContent
                 loading={saving!}
                 onSubmit={onSubmit}
+                formValues={values}
                 onChange={handleChange}
                 onCancel={handleCloseModal}
                 formFields={updatedVariables}
                 initialValues={allInitialValues}
-            />
+                />
         </ModalComponent>
     );
 }
