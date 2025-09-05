@@ -70,6 +70,8 @@ function ModalManager(props: ModalManagerInterface) {
         }));
     };
 
+   
+
     function onSubmit(e: Record<string, any>): void {
         const data = () => {
             if (saveMode === "CREATE") {
@@ -120,10 +122,11 @@ function ModalManager(props: ModalManagerInterface) {
             <ModalContent
                 loading={saving!}
                 onSubmit={onSubmit}
+                formValues={values}
                 onChange={handleChange}
                 onCancel={handleCloseModal}
                 formFields={updatedVariables}
-                initialValues={allInitialValues}
+                initialValues={{ ...allInitialValues }}
             />
         </ModalComponent>
     );

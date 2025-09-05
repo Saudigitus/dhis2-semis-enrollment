@@ -60,7 +60,7 @@ const ModalManagerEnrollmentDelete = (props: ModalManagerInterface) => {
             open={open}
             handleClose={handleCloseModal}
             loading={initialValuesLoading}
-            title="Enrollment deletion"
+            title="Enrollment Deletion"
         >
             <ModalContent
                 loading={loadingDelete}

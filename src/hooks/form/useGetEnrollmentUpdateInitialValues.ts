@@ -12,7 +12,7 @@ function useGetEnrollmentUpdateInitialValues() {
     const [initialValues, setInitialValues] = useState<any>({})
     const [enrollmentEvents, setEnrollmentEvents] = useState<any>({})
     const { dataStoreData } = useGetSelectedKeys()
-    const { academicYear, grade, class: section, schoolName, school } = urlParameters()
+    const { school } = urlParameters()
     const { registration, 'socio-economics': socioEconomics, program: programId, } = dataStoreData
 
     const getInitialValues = (trackedEntity: string, enrollment: string) => {
@@ -21,7 +21,7 @@ function useGetEnrollmentUpdateInitialValues() {
         if (Object.keys(dataStoreData)?.length) {
             getTei(programId, [trackedEntity])
                 .then(async (trackedEntityInstance: any) => {
-                    let socioEconomicData: any = {}
+                    let socioEconomicData: any = []
 
                     const registrationData: any = await getEvents({ program: programId, programStage: registration.programStage as string, trackedEntity, fields: "*", orgUnit: school as string })
 

@@ -1,4 +1,5 @@
 import { format } from "date-fns";
+import { capitalizeString } from "dhis2-semis-functions";
 import { VariablesTypes } from "dhis2-semis-types";
 
 const staticForm = () => {
@@ -53,18 +54,15 @@ function enrollmentDeletionFormField({ formFieldsData, sectionName }: { formFiel
 
   const updatedEnrollmentData = enrollmentDetails.map((item: any) => {
     return { ...item, disabled: true, required: false };
-    return item;
   });
 
   const updatedDataProfile = studentsProfile
-    .filter((item: any) => ["G0B8B0AH5Ek", "gz8w04YBSS0", "ZIDlK6BaAU2"].includes(item.id))
+    .filter((item: any) => item?.searchable || item?.unique || item?.required)
     .map((item: any) => ({ ...item, disabled: true, required: false }));
-
 
   return [
     {
-      name: `${sectionName} profile`,
-      // description: `${sectionName} personal details`,
+      name: `${capitalizeString(sectionName)} Profile`,
       visible: true,
       fields: [
         ...updatedDataProfile
@@ -72,7 +70,6 @@ function enrollmentDeletionFormField({ formFieldsData, sectionName }: { formFiel
     },
     {
       name: "Enrollment Details",
-      // description: "Details related to the enrollment process",
       visible: true,
       fields: [
         ...updatedEnrollmentData,

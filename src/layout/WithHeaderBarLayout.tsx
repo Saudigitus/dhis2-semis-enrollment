@@ -1,10 +1,11 @@
 import { Outlet } from "react-router-dom"
 import { useConfig } from "@dhis2/app-runtime"
 import useGetSelectedKeys from "../hooks/config/useGetSelectedKeys"
-import { HeaderBarLayout, SemisHeader } from "dhis2-semis-components"
+import { HeaderBarLayout, SemisHeader, useSchoolCalendar } from "dhis2-semis-components"
 
 const WithHeaderBarLayout = () => {
     const { baseUrl } = useConfig()
+    const schoolCalendar = useSchoolCalendar()
     const { program, dataStoreData } = useGetSelectedKeys()
 
     return (
@@ -13,6 +14,7 @@ const WithHeaderBarLayout = () => {
                 <SemisHeader
                     baseUrl={baseUrl}
                     program={program}
+                    schoolCalendar={schoolCalendar}
                     dataStoreValues={dataStoreData}
                 />
             }
