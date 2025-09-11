@@ -1,9 +1,9 @@
 import React from 'react'
 import './App.module.css'
 import { Router } from '../components/routes'
-import { AppWrapper } from 'dhis2-semis-components'
 import { useConfig } from '@dhis2/app-runtime'
 import { HashRouter } from 'react-router-dom'
+import { AppWrapper } from 'dhis2-semis-components'
 import InitializeWrapper from '../components/wrapper/InitializeWrapper'
 
 const Enrollment = () => {
@@ -19,8 +19,8 @@ const Enrollment = () => {
                 <HashRouter>
                     <Router />
                 </HashRouter >
-            </InitializeWrapper >
-        </AppWrapper >
+            </InitializeWrapper>
+        </AppWrapper>
     )
 }
 
