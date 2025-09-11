@@ -26,12 +26,12 @@ function ModalManager(props: ModalManagerInterface) {
     const { attributes = [] } = useGetAttributes({ programData: programData! });
     const programStagesToSave = useGetUsedProgramStages({ sectionType: sectionName });
     const { returnPattern, loadingCodes, generatedVariables } = useGetPatternCode();
-    const { formData: formVariablesFields } = useBuildForm({ dataStoreData, programData, module: Modules.Enrollment });
-    const { open, setOpen, saveMode, initialValues: initialValuesFromSearch, formFields = [] } = props;
+    const { open, setOpen, saveMode, initialValues: initialValuesFromSearch, formFields = [], formVariablesFields } = props;
     const [initialValues] = useState<object>({ registerschoolstaticform: schoolName, enrollment_date: format(new Date(), "yyyy-MM-dd"), ...initialValuesFromSearch });
     const { getInitialValues, initialValues: updateInitialValues, loading: initialValuesLoading, enrollmentEvents } = useGetEnrollmentUpdateInitialValues()
-    const allInitialValues = { ...initialValues, ...generatedVariables, ...updateInitialValues }
-    const [values, setValues] = useState<{ [key: string]: any }>({ orgUnit: school, ...allInitialValues });
+
+    const allInitialValues = { orgUnit: school, ...initialValues, ...generatedVariables, ...updateInitialValues }
+    const [values, setValues] = useState<{ [key: string]: any }>({ ...allInitialValues });
 
     const { runRulesEngine, updatedVariables } = RulesEngine({
         values: values,
@@ -41,16 +41,10 @@ function ModalManager(props: ModalManagerInterface) {
     })
 
     useEffect(() => {
-        runRulesEngine()
+        runRulesEngine({overrideVariables: formFields, overrideValues: values})
     }, [values])
 
-    useEffect(() => {
-        setValues(prev => ({
-            ...prev,
-            ...allInitialValues,
-        }));
-    }, [updateInitialValues, generatedVariables])
-
+    // console.log(updatedVariables, "updatedVariables")
     useEffect(() => {
         if (open && saveMode == "CREATE")
             void returnPattern(attributes);
@@ -62,12 +56,12 @@ function ModalManager(props: ModalManagerInterface) {
     const handleCloseModal = () => setOpen(false);
 
     const handleChange = (e: { field: any; value: string; name: string }) => {
-        const { name, value } = e;
-        setValues(prev => ({
-            ...allInitialValues,
-            ...prev,
-            [name]: value,
-        }));
+        // const { name, value } = e;
+        // setValues(prev => ({
+        //     ...allInitialValues,
+        //     ...prev,
+        //     [name]: value,
+        // }));
     };
 
     function onSubmit(e: Record<string, any>): void {
@@ -122,10 +116,11 @@ function ModalManager(props: ModalManagerInterface) {
                 onSubmit={onSubmit}
                 formValues={values}
                 onChange={handleChange}
+                setFormValues={setValues}
                 onCancel={handleCloseModal}
                 formFields={updatedVariables}
                 initialValues={allInitialValues}
-                />
+            />
         </ModalComponent>
     );
 }

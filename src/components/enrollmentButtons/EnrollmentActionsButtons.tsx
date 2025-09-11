@@ -138,11 +138,12 @@ function EnrollmentActionsButtons() {
             </ButtonStrip>
 
             {openSaveModal && <ModalManager
-                formFields={formFields({ formFieldsData: formData, sectionName: sectionName! })}
+                saveMode='CREATE'
                 open={openSaveModal}
                 setOpen={setOpenSaveModal}
-                saveMode='CREATE'
+                formVariablesFields={formData}
                 initialValues={formInitialValues}
+                formFields={formFields({ formFieldsData: formData, sectionName: sectionName! })}
             />}
 
             {openSearchEnrollment &&

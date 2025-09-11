@@ -106,8 +106,8 @@ export default function EnrollmentsPage() {
                             rightElements={<EnrollmentActionsButtons />}
                             setFilterState={setFilterState}
                         />
-                        {openEditModal && <ModalManager formFields={enrollmentFormFields} open={openEditModal} setOpen={setOpenEditModal} saveMode="UPDATE" />}
                         {openDeleteModal && <ModalManagerEnrollmentDelete open={openDeleteModal} setOpen={setOpenDeleteModal} saveMode="UPDATE" />}
+                        {openEditModal && <ModalManager formVariablesFields={formData} formFields={enrollmentFormFields} open={openEditModal} setOpen={setOpenEditModal} saveMode="UPDATE" />}
                     </>
             }
         </div>
