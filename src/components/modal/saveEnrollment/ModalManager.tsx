@@ -2,21 +2,18 @@ import { format } from "date-fns";
 import { useRecoilState } from "recoil";
 import ModalContent from "./ModalContent";
 import React, { useEffect, useState } from "react";
-import { Modules, TableDataRefetch } from "dhis2-semis-types"
+import { TableDataRefetch } from "dhis2-semis-types"
 import { ModalManagerInterface } from "../../../types/modal/ModalProps";
 import useGetSelectedKeys from "../../../hooks/config/useGetSelectedKeys";
 import { ModalComponent, useGetUsedProgramStages, } from "dhis2-semis-components";
 import { enrollmentPostBody, enrollmentUpdateBody } from "../../../utils/enrollment";
 import useGetEnrollmentUpdateInitialValues from "../../../hooks/form/useGetEnrollmentUpdateInitialValues";
-import {
-    useGetAttributes, useGetPatternCode, useSaveTei, useUrlParams,
-    useGetSectionTypeLabel, RulesEngine, capitalizeString, useBuildForm
-} from "dhis2-semis-functions";
+import { useGetAttributes, useGetPatternCode, useSaveTei, useUrlParams, useGetSectionTypeLabel, RulesEngine, capitalizeString } from "dhis2-semis-functions";
 
 
 function ModalManager(props: ModalManagerInterface) {
     const { urlParameters, useQuery } = useUrlParams();
-    const { school, schoolName } = urlParameters();
+    const { school, schoolName } = urlParameters;
     const { saveTei, loading: saving } = useSaveTei();
     const { sectionName } = useGetSectionTypeLabel();
     const enrollment = useQuery.get("enrollment") as string
@@ -41,10 +38,9 @@ function ModalManager(props: ModalManagerInterface) {
     })
 
     useEffect(() => {
-        runRulesEngine({overrideVariables: formFields, overrideValues: values})
+        runRulesEngine({ overrideVariables: formFields, overrideValues: values })
     }, [values])
 
-    // console.log(updatedVariables, "updatedVariables")
     useEffect(() => {
         if (open && saveMode == "CREATE")
             void returnPattern(attributes);
@@ -64,7 +60,7 @@ function ModalManager(props: ModalManagerInterface) {
         // }));
     };
 
-   
+
 
     function onSubmit(e: Record<string, any>): void {
         const data = () => {

@@ -12,7 +12,7 @@ function useGetEnrollmentUpdateInitialValues() {
     const [initialValues, setInitialValues] = useState<any>({})
     const [enrollmentEvents, setEnrollmentEvents] = useState<any>({})
     const { dataStoreData } = useGetSelectedKeys()
-    const { school } = urlParameters()
+    const { school } = urlParameters
     const { registration, 'socio-economics': socioEconomics, program: programId, } = dataStoreData
 
     const getInitialValues = (trackedEntity: string, enrollment: string) => {

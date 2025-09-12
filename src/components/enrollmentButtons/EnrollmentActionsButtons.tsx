@@ -19,7 +19,7 @@ function EnrollmentActionsButtons() {
     const { dataStoreData, program: programData } = useGetSelectedKeys()
     const [formInitialValues, setFormInitialValues] = useState({})
     const [openSaveModal, setOpenSaveModal] = useState<boolean>(false)
-    const { school: orgUnit, academicYear, grade, class: section } = urlParameters();
+    const { school: orgUnit, academicYear, grade, class: section } = urlParameters;
     const [openSearchEnrollment, setOpenSearchEnrollment] = useState<boolean>(false);
     const { formData } = useBuildForm({ dataStoreData, programData, module: Modules.Enrollment });
     const { hide, show } = useShowAlerts()

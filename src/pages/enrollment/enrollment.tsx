@@ -15,7 +15,7 @@ export default function EnrollmentsPage() {
     const { urlParameters, add, remove } = useUrlParams()
     const { program, dataStoreData } = useGetSelectedProgram()
     const schoolCalendar = useSchoolCalendarKey()
-    const { academicYear, grade, class: section, school, schoolName, sectionType } = urlParameters()
+    const { academicYear, grade, class: section, school, schoolName, sectionType } = urlParameters
     const [openEditModal, setOpenEditModal] = useState<boolean>(false)
     const [openDeleteModal, setOpenDeleteModal] = useState<boolean>(false)
     const { getData, tableData, loading } = useTableData({ module: Modules.Enrollment });

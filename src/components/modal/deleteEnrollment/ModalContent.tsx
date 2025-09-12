@@ -13,7 +13,7 @@ const ModalContent = (props: ModalContentInterface) => {
     const { sectionName } = useGetSectionTypeLabel();
     const { urlParameters } = useUrlParams();
     const [collapse, setCollapse] = useState<boolean>(false)
-    const { schoolName } = urlParameters();
+    const { schoolName } = urlParameters;
     const { formFields, onChange, onSubmit, onCancel, initialValues, loading } = props;
 
     useEffect(() => {
