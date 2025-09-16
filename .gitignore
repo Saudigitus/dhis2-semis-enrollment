@@ -10,3 +10,4 @@ yarn.lock
 dist
 tsconfig.tsbuildinfo
 src/components/wrapper
+src/app
