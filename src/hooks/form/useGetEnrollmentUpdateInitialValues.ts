@@ -19,7 +19,7 @@ function useGetEnrollmentUpdateInitialValues() {
         setLoading(true)
 
         if (Object.keys(dataStoreData)?.length) {
-            getTei(programId, [trackedEntity])
+            getTei(programId, [trackedEntity], school!)
                 .then(async (trackedEntityInstance: any) => {
                     let socioEconomicData: any = []
 
