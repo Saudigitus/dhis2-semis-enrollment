@@ -21,7 +21,7 @@ function EnrollmentActionsButtons() {
     const [openSaveModal, setOpenSaveModal] = useState<boolean>(false)
     const { school: orgUnit, academicYear, grade, class: section } = urlParameters;
     const [openSearchEnrollment, setOpenSearchEnrollment] = useState<boolean>(false);
-    const { formData } = useBuildForm({ dataStoreData, programData, module: Modules.Enrollment });
+    const { formData } = useBuildForm({ dataStoreData, programData, module: Modules.Enrollment, schoolCalendar });
     const { hide, show } = useShowAlerts()
     const filters = [
         academicYear !== null ? `${schoolCalendar?.academicYear}:in:${academicYear}` : null,
