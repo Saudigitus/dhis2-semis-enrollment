@@ -5,11 +5,12 @@ import { useConfig } from '@dhis2/app-runtime';
 import styles from './enrollmentActionsButtons.module.css'
 import ModalManager from '../modal/saveEnrollment/ModalManager';
 import { useBuildForm, useGetSectionTypeLabel, useUrlParams, useShowAlerts, useCheckFilters } from 'dhis2-semis-functions';
-import { Modules } from 'dhis2-semis-types'
+import { Modules, TableDataRefetch } from 'dhis2-semis-types'
 import { IconAddCircle24, Button, ButtonStrip, IconUserGroup16, IconSearch24 } from "@dhis2/ui";
 import { ModalSearchEnrollmentContent, DataExporter, DataImporter, CustomDropdown as DropdownButton, useSchoolCalendarKey } from 'dhis2-semis-components';
 import { formFields } from '../../utils/constants/form/enrollmentForm';
 import useGetSelectedKeys from '../../hooks/config/useGetSelectedKeys';
+import { useSetRecoilState } from 'recoil';
 
 function EnrollmentActionsButtons() {
     const { baseUrl } = useConfig()
@@ -19,16 +20,16 @@ function EnrollmentActionsButtons() {
     const { dataStoreData, program: programData } = useGetSelectedKeys()
     const [formInitialValues, setFormInitialValues] = useState({})
     const [openSaveModal, setOpenSaveModal] = useState<boolean>(false)
-    const { school: orgUnit, academicYear, grade, class: section } = urlParameters;
+    const { school: orgUnit, academicYear } = urlParameters;
     const [openSearchEnrollment, setOpenSearchEnrollment] = useState<boolean>(false);
     const { formData } = useBuildForm({ dataStoreData, programData, module: Modules.Enrollment, schoolCalendar });
     const { hide, show } = useShowAlerts()
+    const { areAllSelected, getFilters } = useCheckFilters({ filters: (dataStoreData.filters.dataElements ?? []) as unknown as any })
     const filters = [
         academicYear !== null ? `${schoolCalendar?.academicYear}:in:${academicYear}` : null,
-        grade !== null ? `${dataStoreData.registration.grade}:in:${grade}` : null,
-        section !== null ? `${dataStoreData.registration.section}:in:${section}` : null,
+        ...getFilters()
     ].filter((filter): filter is string => filter !== null)
-    const { areAllSelected } = useCheckFilters({ filters: (dataStoreData.filters.dataElements ?? []) as unknown as any })
+    const setRefetch = useSetRecoilState(TableDataRefetch);
 
     const showAlert = (error: any) => {
         show({ message: `Unknown error: ${error}`, type: { critical: true } })
@@ -47,6 +48,7 @@ function EnrollmentActionsButtons() {
                 selectedSectionDataStore={dataStoreData}
                 updating={false}
                 title={"Bulk Enrollment"}
+                onClose={() => setRefetch(prev => !prev)}
             />,
             divider: true,
             disabled: false,
@@ -62,6 +64,7 @@ function EnrollmentActionsButtons() {
                 selectedSectionDataStore={dataStoreData}
                 updating={true}
                 title={"Bulk Enrollment Update"}
+                onClose={() => setRefetch(prev => !prev)}
             />,
             divider: true,
             disabled: false,
