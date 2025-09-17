@@ -23,7 +23,7 @@ export default function EnrollmentsPage() {
     const [refetch,] = useRecoilState(TableDataRefetch);
     const [pagination, setPagination] = useState<any>({ page: 1, pageSize: 50, totalPages: 0, totalElements: 0 })
     const { columns } = useHeader({ dataStoreData, programConfigData: program as unknown as ProgramConfig, programStage: "" });
-    const { formData } = useBuildForm({ dataStoreData, programData: program, module: Modules.Enrollment });
+    const { formData } = useBuildForm({ dataStoreData, programData: program, module: Modules.Enrollment, schoolCalendar });
     const enrollmentFormFields = formFields({ formFieldsData: formData, sectionName: sectionType! })
     const { getFilters } = useCheckFilters({ filters: (dataStoreData?.filters?.dataElements ?? []) as unknown as any })
 
