@@ -24,10 +24,16 @@ function ModalManager(props: ModalManagerInterface) {
     const programStagesToSave = useGetUsedProgramStages({ sectionType: sectionName });
     const { returnPattern, loadingCodes, generatedVariables } = useGetPatternCode();
     const { open, setOpen, saveMode, initialValues: initialValuesFromSearch, formFields = [], formVariablesFields } = props;
-    const [initialValues] = useState<object>({ registerschoolstaticform: schoolName, enrollment_date: format(new Date(), "yyyy-MM-dd"), ...initialValuesFromSearch });
     const { getInitialValues, initialValues: updateInitialValues, loading: initialValuesLoading, enrollmentEvents } = useGetEnrollmentUpdateInitialValues()
 
-    const allInitialValues = { orgUnit: school, ...initialValues, ...generatedVariables, ...updateInitialValues }
+    const [allInitialValues, setInitialValues] = useState<object>({
+        orgUnit: school,
+        ...initialValuesFromSearch,
+        registerschoolstaticform: schoolName,
+        ...generatedVariables, ...updateInitialValues,
+        enrollment_date: format(new Date(), "yyyy-MM-dd"),
+    });
+
     const [values, setValues] = useState<{ [key: string]: any }>({ ...allInitialValues });
 
     const { runRulesEngine, updatedVariables } = RulesEngine({
@@ -48,6 +54,10 @@ function ModalManager(props: ModalManagerInterface) {
         if (open && saveMode == "UPDATE")
             void getInitialValues(trackedEntity, enrollment);
     }, [open]);
+
+    useEffect(() => {
+        return () => { setValues({}); setInitialValues({}) }
+    }, [open])
 
     const handleCloseModal = () => setOpen(false);
 
