@@ -5,11 +5,12 @@ import { useConfig } from '@dhis2/app-runtime';
 import styles from './enrollmentActionsButtons.module.css'
 import ModalManager from '../modal/saveEnrollment/ModalManager';
 import { useBuildForm, useGetSectionTypeLabel, useUrlParams, useShowAlerts, useCheckFilters } from 'dhis2-semis-functions';
-import { Modules } from 'dhis2-semis-types'
+import { Modules, TableDataRefetch } from 'dhis2-semis-types'
 import { IconAddCircle24, Button, ButtonStrip, IconUserGroup16, IconSearch24 } from "@dhis2/ui";
 import { ModalSearchEnrollmentContent, DataExporter, DataImporter, CustomDropdown as DropdownButton, useSchoolCalendarKey } from 'dhis2-semis-components';
 import { formFields } from '../../utils/constants/form/enrollmentForm';
 import useGetSelectedKeys from '../../hooks/config/useGetSelectedKeys';
+import { useSetRecoilState } from 'recoil';
 
 function EnrollmentActionsButtons() {
     const { baseUrl } = useConfig()
@@ -28,6 +29,7 @@ function EnrollmentActionsButtons() {
         academicYear !== null ? `${schoolCalendar?.academicYear}:in:${academicYear}` : null,
         ...getFilters()
     ].filter((filter): filter is string => filter !== null)
+    const setRefetch = useSetRecoilState(TableDataRefetch);
 
     const showAlert = (error: any) => {
         show({ message: `Unknown error: ${error}`, type: { critical: true } })
@@ -46,6 +48,7 @@ function EnrollmentActionsButtons() {
                 selectedSectionDataStore={dataStoreData}
                 updating={false}
                 title={"Bulk Enrollment"}
+                onClose={() => setRefetch(prev => !prev)}
             />,
             divider: true,
             disabled: false,
@@ -61,6 +64,7 @@ function EnrollmentActionsButtons() {
                 selectedSectionDataStore={dataStoreData}
                 updating={true}
                 title={"Bulk Enrollment Update"}
+                onClose={() => setRefetch(prev => !prev)}
             />,
             divider: true,
             disabled: false,
