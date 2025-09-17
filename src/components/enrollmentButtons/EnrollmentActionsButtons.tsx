@@ -19,16 +19,15 @@ function EnrollmentActionsButtons() {
     const { dataStoreData, program: programData } = useGetSelectedKeys()
     const [formInitialValues, setFormInitialValues] = useState({})
     const [openSaveModal, setOpenSaveModal] = useState<boolean>(false)
-    const { school: orgUnit, academicYear, grade, class: section } = urlParameters;
+    const { school: orgUnit, academicYear } = urlParameters;
     const [openSearchEnrollment, setOpenSearchEnrollment] = useState<boolean>(false);
     const { formData } = useBuildForm({ dataStoreData, programData, module: Modules.Enrollment });
     const { hide, show } = useShowAlerts()
+    const { areAllSelected, getFilters } = useCheckFilters({ filters: (dataStoreData.filters.dataElements ?? []) as unknown as any })
     const filters = [
         academicYear !== null ? `${schoolCalendar?.academicYear}:in:${academicYear}` : null,
-        grade !== null ? `${dataStoreData.registration.grade}:in:${grade}` : null,
-        section !== null ? `${dataStoreData.registration.section}:in:${section}` : null,
+        ...getFilters()
     ].filter((filter): filter is string => filter !== null)
-    const { areAllSelected } = useCheckFilters({ filters: (dataStoreData.filters.dataElements ?? []) as unknown as any })
 
     const showAlert = (error: any) => {
         show({ message: `Unknown error: ${error}`, type: { critical: true } })

@@ -6,7 +6,7 @@ import ModalManager from "../../components/modal/saveEnrollment/ModalManager";
 import { TableDataRefetch, Modules, ProgramConfig } from "dhis2-semis-types"
 import useGetSelectedProgram from '../../hooks/config/useGetSelectedKeys';
 import ModalManagerEnrollmentDelete from '../../components/modal/deleteEnrollment/ModalManager';
-import { useBuildForm, useHeader, useTableData, useUrlParams, useViewPortWidth } from "dhis2-semis-functions";
+import { useBuildForm, useCheckFilters, useHeader, useTableData, useUrlParams, useViewPortWidth } from "dhis2-semis-functions";
 import EnrollmentActionsButtons from "../../components/enrollmentButtons/EnrollmentActionsButtons";
 import { formFields } from '../../utils/constants/form/enrollmentForm';
 
@@ -25,6 +25,7 @@ export default function EnrollmentsPage() {
     const { columns } = useHeader({ dataStoreData, programConfigData: program as unknown as ProgramConfig, programStage: "" });
     const { formData } = useBuildForm({ dataStoreData, programData: program, module: Modules.Enrollment });
     const enrollmentFormFields = formFields({ formFieldsData: formData, sectionName: sectionType! })
+    const { getFilters } = useCheckFilters({ filters: (dataStoreData?.filters?.dataElements ?? []) as unknown as any })
 
     const handleOpenModal = (e: Record<string, any>, type: "edit" | "delete",) => {
         add("trackedEntity", e?.row?.trackedEntity);
@@ -64,8 +65,7 @@ export default function EnrollmentsPage() {
                 attributeFilters: filterState.attributes,
                 dataElementFilters: [
                     academicYear !== null ? `${schoolCalendar?.academicYear}:in:${academicYear}` : null,
-                    grade !== null ? `${dataStoreData.registration.grade}:in:${grade}` : null,
-                    section !== null ? `${dataStoreData.registration.section}:in:${section}` : null,
+                    ...getFilters() as unknown as any
                 ].filter((filter): filter is string => filter !== null),
                 order: dataStoreData.defaults.defaultOrder
             })
