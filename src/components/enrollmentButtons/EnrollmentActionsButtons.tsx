@@ -1,4 +1,4 @@
-import React, { useState } from 'react'
+import React, { useEffect, useState } from 'react'
 import { Form } from "react-final-form";
 import { Tooltip } from '@mui/material';
 import { useConfig } from '@dhis2/app-runtime';
@@ -30,6 +30,11 @@ function EnrollmentActionsButtons() {
         ...getFilters()
     ].filter((filter): filter is string => filter !== null)
     const setRefetch = useSetRecoilState(TableDataRefetch);
+
+    useEffect(() => {
+        return () => { setFormInitialValues({}) }
+    }, [openSaveModal])
+
 
     const showAlert = (error: any) => {
         show({ message: `Unknown error: ${error}`, type: { critical: true } })
