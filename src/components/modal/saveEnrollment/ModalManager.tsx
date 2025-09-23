@@ -26,13 +26,25 @@ function ModalManager(props: ModalManagerInterface) {
     const { open, setOpen, saveMode, initialValues: initialValuesFromSearch, formFields = [], formVariablesFields } = props;
     const { getInitialValues, initialValues: updateInitialValues, loading: initialValuesLoading, enrollmentEvents } = useGetEnrollmentUpdateInitialValues()
 
-    const [allInitialValues, setInitialValues] = useState<object>({
+    const [allInitialValues, setAllInitialValues] = useState<any>(() => ({
         orgUnit: school,
+        ...updateInitialValues,
+        ...generatedVariables,
         ...initialValuesFromSearch,
         registerschoolstaticform: schoolName,
-        ...generatedVariables, ...updateInitialValues,
         enrollment_date: format(new Date(), "yyyy-MM-dd"),
-    });
+    }));
+
+    // let allInitialValues = {
+    //     orgUnit: school,
+    //     ...updateInitialValues,
+    //     ...generatedVariables,
+    //     ...initialValuesFromSearch,
+    //     registerschoolstaticform: schoolName,
+    //     enrollment_date: format(new Date(), "yyyy-MM-dd"),
+    // }
+
+    console.log(initialValuesFromSearch)
 
     const [values, setValues] = useState<{ [key: string]: any }>({ ...allInitialValues });
 
@@ -42,6 +54,16 @@ function ModalManager(props: ModalManagerInterface) {
         program: programData!.id,
         type: "programStageSection",
     })
+
+    // useEffect(() => {
+    //     setAllInitialValues((values: any) => ({
+    //         ...values,
+    //         ...updateInitialValues,
+    //         ...generatedVariables,
+    //         ...initialValuesFromSearch,
+    //     }));
+    // }, [initialValuesFromSearch, generatedVariables, updateInitialValues]);
+
 
     useEffect(() => {
         runRulesEngine({ overrideVariables: formFields, overrideValues: values })
@@ -56,7 +78,7 @@ function ModalManager(props: ModalManagerInterface) {
     }, [open]);
 
     useEffect(() => {
-        return () => { setValues({}); setInitialValues({}) }
+        return () => { setValues({}); setAllInitialValues({}) }
     }, [open])
 
     const handleCloseModal = () => setOpen(false);
@@ -69,7 +91,6 @@ function ModalManager(props: ModalManagerInterface) {
         //     [name]: value,
         // }));
     };
-
 
 
     function onSubmit(e: Record<string, any>): void {
