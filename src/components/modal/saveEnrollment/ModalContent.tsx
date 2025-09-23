@@ -5,7 +5,7 @@ import { TestForm, WithBorder, WithPadding } from 'dhis2-semis-components';
 
 function ModalContent(props: ModalContentInterface) {
     const { formFields, onChange, onSubmit, onCancel, initialValues, loading, formValues = {}, setFormValues } = props;
-
+console.log(initialValues, "lalalalalalalal")
     return (
         <WithPadding>
             <WithBorder type='all'>

@@ -32,7 +32,7 @@ function EnrollmentActionsButtons() {
     const setRefetch = useSetRecoilState(TableDataRefetch);
 
     useEffect(() => {
-        return () => { setFormInitialValues({}) }
+        return () => { if (!openSaveModal) setFormInitialValues({}) }
     }, [openSaveModal])
 
 

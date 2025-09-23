@@ -1,10 +1,10 @@
 import { useState } from 'react';
 import { format } from 'date-fns';
 import useGetSelectedKeys from '../config/useGetSelectedKeys';
-import { useUrlParams, useGetEvents, useGetTei, attributes, dataValues } from 'dhis2-semis-functions';
+import { useUrlParams, useGetEvents, useGetTeis, attributes, dataValues } from 'dhis2-semis-functions';
 
 function useGetEnrollmentUpdateInitialValues() {
-    const { getTei } = useGetTei()
+    const { getTeis } = useGetTeis()
     const { getEvents } = useGetEvents()
     const { urlParameters } = useUrlParams()
     const [error, setError] = useState<boolean>(false)
@@ -19,21 +19,21 @@ function useGetEnrollmentUpdateInitialValues() {
         setLoading(true)
 
         if (Object.keys(dataStoreData)?.length) {
-            getTei(programId, [trackedEntity])
-                .then(async (trackedEntityInstance: any) => {
-                    let socioEconomicData: any = []
+            getTeis({ program: programId, trackedEntity: [trackedEntity] })
+                .then(async (responseTracker: any) => {
+                    const trackedEntityInstance = responseTracker?.[0]
 
                     const registrationData: any = await getEvents({ program: programId, programStage: registration.programStage as string, trackedEntity, fields: "*", orgUnit: school as string })
 
-                    if (socioEconomics) {
+                    let socioEconomicData
+                    if (socioEconomics)
                         socioEconomicData = await getEvents({ program: programId, programStage: socioEconomics?.programStage as string, trackedEntity, fields: "*", orgUnit: school as string })
-                    }
 
                     setInitialValues({
                         program: programId,
                         enrollment: enrollment,
                         trackedEntity: trackedEntity,
-                        ...attributes(trackedEntityInstance?.results?.instances[0]?.attributes ?? []),
+                        ...attributes(trackedEntityInstance?.attributes ?? []),
                         orgUnit: registrationData?.find((x: any) => x.enrollment === enrollment)?.orgUnit,
                         enrollmentDate: registrationData?.find((x: any) => x.enrollment === enrollment)?.occurredAt,
                         ...dataValues(registrationData?.find((x: any) => x.enrollment === enrollment)?.dataValues ?? []),
