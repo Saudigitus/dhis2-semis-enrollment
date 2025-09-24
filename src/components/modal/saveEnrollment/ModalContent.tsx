@@ -1,18 +1,21 @@
 import React from 'react'
 import { Form } from 'react-final-form';
+import { useConfig } from '@dhis2/app-runtime';
 import { ModalContentInterface } from '../../../types/modal/ModalProps';
-import { TestForm, WithBorder, WithPadding } from 'dhis2-semis-components';
+import { WithBorder, WithPadding, CustomForm } from 'dhis2-semis-components';
 
 function ModalContent(props: ModalContentInterface) {
+    const { baseUrl } = useConfig()
     const { formFields, onChange, onSubmit, onCancel, initialValues, loading, formValues = {}, setFormValues } = props;
 
     return (
         <WithPadding>
             <WithBorder type='all'>
                 <WithPadding>
-                    <TestForm
+                    <CustomForm
                         Form={Form}
                         loading={loading}
+                        baseUrl={baseUrl}
                         withButtons={true}
                         formValues={formValues}
                         formFields={formFields}
