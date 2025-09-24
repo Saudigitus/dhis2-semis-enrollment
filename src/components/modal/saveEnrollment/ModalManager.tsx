@@ -23,28 +23,14 @@ function ModalManager(props: ModalManagerInterface) {
     const { attributes = [] } = useGetAttributes({ programData: programData! });
     const programStagesToSave = useGetUsedProgramStages({ sectionType: sectionName });
     const { returnPattern, loadingCodes, generatedVariables } = useGetPatternCode();
-    const { open, setOpen, saveMode, initialValues: initialValuesFromSearch, formFields = [], formVariablesFields } = props;
+    const { open, setOpen, saveMode, initialValues: initialValuesFromSearch, formFields = [], formVariablesFields, setFormInitialValues } = props;
     const { getInitialValues, initialValues: updateInitialValues, loading: initialValuesLoading, enrollmentEvents } = useGetEnrollmentUpdateInitialValues()
 
-    const [allInitialValues, setAllInitialValues] = useState<any>(() => ({
+    let allInitialValues = {
         orgUnit: school,
-        ...updateInitialValues,
-        ...generatedVariables,
-        ...initialValuesFromSearch,
         registerschoolstaticform: schoolName,
         enrollment_date: format(new Date(), "yyyy-MM-dd"),
-    }));
-
-    // let allInitialValues = {
-    //     orgUnit: school,
-    //     ...updateInitialValues,
-    //     ...generatedVariables,
-    //     ...initialValuesFromSearch,
-    //     registerschoolstaticform: schoolName,
-    //     enrollment_date: format(new Date(), "yyyy-MM-dd"),
-    // }
-
-    console.log(initialValuesFromSearch)
+    }
 
     const [values, setValues] = useState<{ [key: string]: any }>({ ...allInitialValues });
 
@@ -54,15 +40,6 @@ function ModalManager(props: ModalManagerInterface) {
         program: programData!.id,
         type: "programStageSection",
     })
-
-    // useEffect(() => {
-    //     setAllInitialValues((values: any) => ({
-    //         ...values,
-    //         ...updateInitialValues,
-    //         ...generatedVariables,
-    //         ...initialValuesFromSearch,
-    //     }));
-    // }, [initialValuesFromSearch, generatedVariables, updateInitialValues]);
 
 
     useEffect(() => {
@@ -78,7 +55,11 @@ function ModalManager(props: ModalManagerInterface) {
     }, [open]);
 
     useEffect(() => {
-        return () => { setValues({}); setAllInitialValues({}) }
+        return () => {
+            if (!open)
+                setValues({});
+            setFormInitialValues && setFormInitialValues({})
+        }
     }, [open])
 
     const handleCloseModal = () => setOpen(false);
@@ -148,7 +129,12 @@ function ModalManager(props: ModalManagerInterface) {
                 setFormValues={setValues}
                 onCancel={handleCloseModal}
                 formFields={updatedVariables}
-                initialValues={{ ...allInitialValues }}
+                initialValues={{
+                    ...allInitialValues,
+                    ...generatedVariables,
+                    ...updateInitialValues,
+                    ...initialValuesFromSearch,
+                }}
             />
         </ModalComponent>
     );

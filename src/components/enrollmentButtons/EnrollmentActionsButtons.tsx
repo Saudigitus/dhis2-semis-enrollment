@@ -31,10 +31,6 @@ function EnrollmentActionsButtons() {
     ].filter((filter): filter is string => filter !== null)
     const setRefetch = useSetRecoilState(TableDataRefetch);
 
-    useEffect(() => {
-        return () => { if (!openSaveModal) setFormInitialValues({}) }
-    }, [openSaveModal])
-
 
     const showAlert = (error: any) => {
         show({ message: `Unknown error: ${error}`, type: { critical: true } })
@@ -151,6 +147,7 @@ function EnrollmentActionsButtons() {
                 setOpen={setOpenSaveModal}
                 formVariablesFields={formData}
                 initialValues={formInitialValues}
+                setFormInitialValues={setFormInitialValues}
                 formFields={formFields({ formFieldsData: formData, sectionName: sectionName! })}
             />}
 
