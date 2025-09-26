@@ -4,6 +4,7 @@ interface ModalContentInterface {
     onCancel: () => void
     onSubmit: (arg: any) => void
     onChange: (arg: any) => void
+    trackedEntity?: string,
     formValues?: Record<string, any>
     initialValues?: Record<string, any>
     setFormValues?: (arg: any) => void
