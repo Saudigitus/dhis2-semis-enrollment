@@ -16,7 +16,7 @@ function ModalContent(props: ModalContentInterface) {
                         Form={Form}
                         loading={loading}
                         trackedEntity={trackedEntity}
-                        baseUrl={"http://localhost:8080"}
+                        baseUrl={baseUrl}
                         // baseUrl={baseUrl}
                         withButtons={true}
                         formValues={formValues}
