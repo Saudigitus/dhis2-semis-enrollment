@@ -129,6 +129,7 @@ function ModalManager(props: ModalManagerInterface) {
                 setFormValues={setValues}
                 onCancel={handleCloseModal}
                 formFields={updatedVariables}
+                trackedEntity={trackedEntity}
                 initialValues={{
                     ...allInitialValues,
                     ...generatedVariables,
