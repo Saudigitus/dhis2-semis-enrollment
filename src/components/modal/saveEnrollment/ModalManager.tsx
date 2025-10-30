@@ -23,7 +23,7 @@ function ModalManager(props: ModalManagerInterface) {
     const { attributes = [] } = useGetAttributes({ programData: programData! });
     const programStagesToSave = useGetUsedProgramStages({ sectionType: sectionName });
     const { returnPattern, loadingCodes, generatedVariables } = useGetPatternCode();
-    const { open, setOpen, saveMode, initialValues: initialValuesFromSearch, formFields = [], formVariablesFields, setFormInitialValues } = props;
+    const { open, setOpen, saveMode, initialValues: initialValuesFromSearch, formFields = [], formVariablesFields, setFormInitialValues, i18n } = props;
     const { getInitialValues, initialValues: updateInitialValues, loading: initialValuesLoading, enrollmentEvents } = useGetEnrollmentUpdateInitialValues()
 
     let allInitialValues = {
@@ -107,8 +107,8 @@ function ModalManager(props: ModalManagerInterface) {
         saveTei({
             data: data(),
             messages: {
-                error: `Could not ${saveMode.toLowerCase()} enrollment.`,
-                sucess: `Enrollment ${saveMode.toLowerCase()}d sucessfully.`,
+                error: `${i18n.t("Could not conclude the opertation.")}`,
+                sucess: `${i18n.t("Operation concluded successfully")}`,
             },
             handleComplete: () => { handleCloseModal(); setRefetch(!refetch) },
         });
@@ -119,7 +119,10 @@ function ModalManager(props: ModalManagerInterface) {
             open={open}
             handleClose={handleCloseModal}
             loading={loadingCodes || initialValuesLoading}
-            title={`Single ${capitalizeString(sectionName)} Enrollment ${saveMode == "UPDATE" ? "Update" : ""}`}
+            title={i18n.t('Single {{section}} Enrollment {{mode}}', {
+                section: i18n.t(capitalizeString(sectionName)),
+                mode: saveMode === 'UPDATE' ? i18n.t('Update') : ''
+            })}
         >
             <ModalContent
                 loading={saving!}

@@ -1,3 +1,5 @@
+import { D2I18n } from "dhis2-semis-types"
+
 interface ModalContentInterface {
     formFields: any
     loading: boolean
@@ -18,6 +20,7 @@ interface ModalManagerInterface {
     setOpen: (arg: boolean) => void;
     initialValues?: Record<string, any>
     setFormInitialValues?: (arg: Record<string, any>) => void;
+    i18n: D2I18n
 }
 
 export type { ModalContentInterface, ModalManagerInterface }
