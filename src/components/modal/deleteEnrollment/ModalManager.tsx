@@ -47,7 +47,7 @@ const ModalManagerEnrollmentDelete = (props: ModalManagerInterface) => {
                         setRefetch(!refetch)
                         setOpen(false)
                     })
-                    .catch((error) => {
+                    .catch(() => {
                         setLoadingDelete(false)
                         setRefetch(!refetch)
                         setOpen(false)

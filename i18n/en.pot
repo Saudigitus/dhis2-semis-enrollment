@@ -5,17 +5,20 @@ msgstr ""
 "Content-Type: text/plain; charset=utf-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=(n != 1)\n"
-"POT-Creation-Date: 2025-10-30T09:05:27.589Z\n"
-"PO-Revision-Date: 2025-10-30T09:05:27.589Z\n"
+"POT-Creation-Date: 2025-10-30T13:06:36.981Z\n"
+"PO-Revision-Date: 2025-10-30T13:06:36.981Z\n"
 
 msgid "Unknown error"
 msgstr "Unknown error"
 
+msgid "Enroll new {{section}}"
+msgstr "Enroll new {{section}}"
+
 msgid "Bulk Enrollment"
 msgstr "Bulk Enrollment"
 
-msgid "Update existing"
-msgstr "Update existing"
+msgid "Update existing {{section}}"
+msgstr "Update existing {{section}}"
 
 msgid "Bulk Enrollment Update"
 msgstr "Bulk Enrollment Update"
@@ -23,11 +26,14 @@ msgstr "Bulk Enrollment Update"
 msgid "Export Empty Template"
 msgstr "Export Empty Template"
 
-msgid "Export Existing "
-msgstr "Export Existing "
+msgid "Export Existing {{section}}"
+msgstr "Export Existing {{section}}"
 
 msgid "Please select an organisation unit before"
 msgstr "Please select an organisation unit before"
+
+msgid "Enroll {{section}}"
+msgstr "Enroll {{section}}"
 
 msgid "Please select all filters"
 msgstr "Please select all filters"

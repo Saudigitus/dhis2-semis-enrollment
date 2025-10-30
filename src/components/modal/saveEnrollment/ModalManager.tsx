@@ -120,7 +120,7 @@ function ModalManager(props: ModalManagerInterface) {
             handleClose={handleCloseModal}
             loading={loadingCodes || initialValuesLoading}
             title={i18n.t('Single {{section}} Enrollment {{mode}}', {
-                section: i18n.t(capitalizeString(sectionName)),
+                section: i18n.t(sectionName),
                 mode: saveMode === 'UPDATE' ? i18n.t('Update') : ''
             })}
         >

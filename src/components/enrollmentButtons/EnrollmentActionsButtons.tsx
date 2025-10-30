@@ -41,7 +41,9 @@ function EnrollmentActionsButtons({ i18n }: { i18n: D2I18n }) {
         {
             label: <DataImporter
                 baseURL={baseUrl}
-                label={'Enroll new ' + sectionName + 's'}
+                label={i18n.t('Enroll new {{section}}', {
+                    section: `${i18n.t(sectionName)}s`,
+                })}
                 module={Modules.Enrollment}
                 onError={(e: any) => { showAlert(e) }}
                 programConfig={programData!}
@@ -57,7 +59,9 @@ function EnrollmentActionsButtons({ i18n }: { i18n: D2I18n }) {
         {
             label: <DataImporter
                 baseURL={baseUrl}
-                label={`${i18n.t("Update existing")} ${sectionName}'s`}
+                label={i18n.t('Update existing {{section}}', {
+                    section: `${i18n.t(sectionName)}s`,
+                })}
                 module={Modules.Enrollment}
                 onError={(e: any) => { showAlert(e) }}
                 programConfig={programData!}
@@ -92,7 +96,9 @@ function EnrollmentActionsButtons({ i18n }: { i18n: D2I18n }) {
                 Form={Form}
                 baseURL={baseUrl}
                 eventFilters={filters}
-                label={i18n.t('Export Existing ') + sectionName + 's'}
+                label={i18n.t('Export Existing {{section}}', {
+                    section: `${i18n.t(sectionName)}s`,
+                })}
                 module={Modules.Enrollment}
                 onError={(e: any) => { showAlert(e) }}
                 programConfig={programData!}
@@ -114,7 +120,13 @@ function EnrollmentActionsButtons({ i18n }: { i18n: D2I18n }) {
                         <Button onClick={() => {
                             setOpenSearchEnrollment(true);
                         }} icon={<IconSearch24 />}>
-                            <span className={styles.work_buttons_text}>Search {sectionName?.toLowerCase()}</span>
+                            <span className={styles.work_buttons_text}>
+                                {
+                                    i18n.t('Pesquisar por {{section}}', {
+                                        section: `${i18n.t(sectionName)}s`,
+                                    })
+                                }
+                            </span>
                         </Button>
                     </span>
                 </Tooltip>
@@ -123,7 +135,13 @@ function EnrollmentActionsButtons({ i18n }: { i18n: D2I18n }) {
                 >
                     <span>
                         <Button icon={<IconAddCircle24 />}>
-                            <span className={styles.work_buttons_text}>Enroll {sectionName.toLocaleLowerCase()}</span>
+                            <span className={styles.work_buttons_text}>
+                                {
+                                    i18n.t('Enroll {{section}}', {
+                                        section: `${i18n.t(sectionName)}`,
+                                    })
+                                }
+                            </span>
                         </Button>
                     </span>
                 </Tooltip>
