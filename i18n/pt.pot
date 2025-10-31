@@ -7,84 +7,83 @@ msgstr ""
 "Plural-Forms: nplurals=2; plural=(n > 1)\n"
 "POT-Creation-Date: 2025-10-30T13:06:36.981Z\n"
 "PO-Revision-Date: 2025-10-30T13:06:36.981Z\n"
-
 msgid "Unknown error"
-msgstr "Erreur inconnue"
+msgstr "Erro desconhecido"
 
 msgid "Enroll new {{section}}"
-msgstr "Inscrire un nouveau {{section}}"
+msgstr "Inscrever novo {{section}}"
 
 msgid "Bulk Enrollment"
-msgstr "Inscription en masse"
+msgstr "Inscrição em massa"
 
 msgid "Update existing {{section}}"
-msgstr "Mettre à jour le {{section}} existant"
+msgstr "Atualizar {{section}} existente"
 
 msgid "Bulk Enrollment Update"
-msgstr "Mise à jour des inscriptions en masse"
+msgstr "Atualização de inscrições em massa"
 
 msgid "Export Empty Template"
-msgstr "Exporter le modèle vide"
+msgstr "Exportar modelo vazio"
 
 msgid "Export Existing {{section}}"
-msgstr "Exporter le {{section}} existant"
+msgstr "Exportar {{section}} existente"
 
 msgid "Please select an organisation unit before"
-msgstr "Veuillez sélectionner une unité organisationnelle avant"
+msgstr "Por favor, selecione uma unidade organizacional antes"
 
 msgid "Enroll {{section}}"
-msgstr "Inscrire {{section}}"
+msgstr "Inscrever {{section}}"
 
 msgid "Please select all filters"
-msgstr "Veuillez sélectionner tous les filtres"
+msgstr "Por favor, selecione todos os filtros"
 
 msgid "Bulk enrollment"
-msgstr "Inscription en masse"
+msgstr "Inscrição em massa"
 
 msgid "Enrollment Deletion"
-msgstr "Suppression d’inscription"
+msgstr "Eliminação de inscrição"
 
 msgid "Could not conclude the opertation."
-msgstr "Impossible de terminer l’opération."
+msgstr "Não foi possível concluir a operação."
 
 msgid "Operation concluded successfully"
-msgstr "Opération terminée avec succès"
+msgstr "Operação concluída com sucesso"
 
 msgid "Single {{section}} Enrollment {{mode}}"
-msgstr "Inscription unique de {{section}} {{mode}}"
+msgstr "Inscrição única de {{section}} {{mode}}"
 
 msgid "Update"
-msgstr "Mettre à jour"
+msgstr "Atualizar"
 
 msgid "Edition"
-msgstr "Édition"
+msgstr "Edição"
 
 msgid "Delete"
-msgstr "Supprimer"
+msgstr "Eliminar"
 
 msgid "SEMIS-Enrollment"
-msgstr "Inscription-SEMIS"
+msgstr "SEMIS-Inscrição"
 
 msgid "Follow the instructions to proceed"
-msgstr "Suivez les instructions pour continuer"
+msgstr "Siga as instruções para continuar"
 
 msgid "Select the Organization unit you want to view data"
-msgstr "Sélectionnez l’unité organisationnelle dont vous souhaitez voir les données"
+msgstr "Selecione a unidade organizacional cuja informação deseja visualizar"
 
 msgid "Use global filters(Class, Grade and Academic Year)"
-msgstr "Utilisez les filtres globaux (Classe, Niveau et Année académique)"
+msgstr "Use os filtros globais (Turma, Nível e Ano letivo)"
 
 msgid "Enrollments"
-msgstr "Inscriptions"
+msgstr "Inscrições"
 
 msgid "Staff"
-msgstr "Personnel"
+msgstr "Funcionário"
 
 msgid "Student"
-msgstr "Étudiant"
+msgstr "Estudante"
 
 msgid "student"
-msgstr "étudiant"
+msgstr "estudante"
 
 msgid "staff"
-msgstr "personnel"
+msgstr "funcionário"
