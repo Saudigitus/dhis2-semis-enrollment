@@ -122,7 +122,7 @@ function EnrollmentActionsButtons({ i18n }: { i18n: D2I18n }) {
                         }} icon={<IconSearch24 />}>
                             <span className={styles.work_buttons_text}>
                                 {
-                                    i18n.t('Pesquisar por {{section}}', {
+                                    i18n.t('Search by {{section}}', {
                                         section: `${i18n.t(sectionName)}s`,
                                     })
                                 }
