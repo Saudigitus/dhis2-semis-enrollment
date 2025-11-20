@@ -115,7 +115,7 @@ function EnrollmentActionsButtons({ i18n }: { i18n: D2I18n }) {
     return (
         <div className={styles.container}>
             <ButtonStrip className={styles.work_buttons}>
-                <Tooltip title={orgUnit === null ? i18n.t("Please select an organisation unit before") : ""}>
+                {dataStoreData?.defaults?.allowSearching && <Tooltip title={orgUnit === null ? i18n.t("Please select an organisation unit before") : ""}>
                     <span>
                         <Button onClick={() => {
                             setOpenSearchEnrollment(true);
@@ -129,7 +129,7 @@ function EnrollmentActionsButtons({ i18n }: { i18n: D2I18n }) {
                             </span>
                         </Button>
                     </span>
-                </Tooltip>
+                </Tooltip>}
                 <Tooltip title={orgUnit === null ? i18n.t("Please select an organisation unit before") : ""}
                     onClick={() => setOpenSaveModal(true)}
                 >

@@ -5,8 +5,8 @@ msgstr ""
 "Content-Type: text/plain; charset=utf-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=(n != 1)\n"
-"POT-Creation-Date: 2025-10-30T13:06:36.981Z\n"
-"PO-Revision-Date: 2025-10-30T13:06:36.981Z\n"
+"POT-Creation-Date: 2025-11-14T14:12:51.391Z\n"
+"PO-Revision-Date: 2025-11-14T14:12:51.391Z\n"
 
 msgid "Unknown error"
 msgstr "Unknown error"
@@ -31,6 +31,9 @@ msgstr "Export Existing {{section}}"
 
 msgid "Please select an organisation unit before"
 msgstr "Please select an organisation unit before"
+
+msgid "Search by {{section}}"
+msgstr "Search by {{section}}"
 
 msgid "Enroll {{section}}"
 msgstr "Enroll {{section}}"

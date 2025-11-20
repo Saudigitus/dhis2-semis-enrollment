@@ -1,19 +1,19 @@
 {
     "Unknown error": "Erreur inconnue",
-    "Enroll new {{section}}": "Inscrire de nouveaux {{section}}",
+    "Enroll new {{section}}": "Inscrire un nouveau {{section}}",
     "Bulk Enrollment": "Inscription en masse",
-    "Update existing {{section}}": "Mettre à jour les {{section}} existants",
+    "Update existing {{section}}": "Mettre à jour le {{section}} existant",
     "Bulk Enrollment Update": "Mise à jour des inscriptions en masse",
     "Export Empty Template": "Exporter le modèle vide",
     "Export Existing {{section}}": "Exporter le {{section}} existant",
     "Please select an organisation unit before": "Veuillez sélectionner une unité organisationnelle avant",
     "Enroll {{section}}": "Inscrire {{section}}",
     "Please select all filters": "Veuillez sélectionner tous les filtres",
-    "Bulk enrollment": "Opérations en masse",
+    "Bulk enrollment": "Inscription en masse",
     "Enrollment Deletion": "Suppression d’inscription",
     "Could not conclude the opertation.": "Impossible de terminer l’opération.",
     "Operation concluded successfully": "Opération terminée avec succès",
-    "Single {{section}} Enrollment {{mode}}": "{{mode}} d’inscription de {{section}}",
+    "Single {{section}} Enrollment {{mode}}": "Inscription unique de {{section}} {{mode}}",
     "Update": "Mettre à jour",
     "Edition": "Édition",
     "Delete": "Supprimer",
@@ -23,7 +23,7 @@
     "Use global filters(Class, Grade and Academic Year)": "Utilisez les filtres globaux (Classe, Niveau et Année académique)",
     "Enrollments": "Inscriptions",
     "Staff": "Personnel",
-    "staff": "personnel",
     "Student": "Étudiant",
-    "student": "étudiant"
+    "student": "étudiant",
+    "staff": "personnel"
 }
