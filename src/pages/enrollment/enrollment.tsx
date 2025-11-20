@@ -3,14 +3,14 @@ import React, { useEffect, useState } from "react";
 import { IconDelete24, IconEdit24 } from "@dhis2/ui";
 import { Table, InfoPage, useSchoolCalendarKey } from "dhis2-semis-components";
 import ModalManager from "../../components/modal/saveEnrollment/ModalManager";
-import { TableDataRefetch, Modules, ProgramConfig } from "dhis2-semis-types"
+import { TableDataRefetch, Modules, ProgramConfig, D2I18n } from "dhis2-semis-types"
 import useGetSelectedProgram from '../../hooks/config/useGetSelectedKeys';
 import ModalManagerEnrollmentDelete from '../../components/modal/deleteEnrollment/ModalManager';
 import { useBuildForm, useCheckFilters, useHeader, useTableData, useUrlParams, useViewPortWidth } from "dhis2-semis-functions";
 import EnrollmentActionsButtons from "../../components/enrollmentButtons/EnrollmentActionsButtons";
 import { formFields } from '../../utils/constants/form/enrollmentForm';
 
-export default function EnrollmentsPage() {
+export default function EnrollmentsPage({ i18n }: { i18n: D2I18n }) {
     const { viewPortWidth } = useViewPortWidth()
     const { urlParameters, add, remove } = useUrlParams()
     const { program, dataStoreData } = useGetSelectedProgram()
@@ -50,8 +50,8 @@ export default function EnrollmentsPage() {
     }, [openDeleteModal, openEditModal])
 
     const rowsActions = [
-        { icon: <IconEdit24 />, color: '#277314', label: `Edition`, disabled: false, disableOnInactive: true, loading: false, onClick: (e: any) => handleOpenModal(e, "edit") },
-        { icon: <IconDelete24 />, color: '#d64d4d', label: `Delete`, disabled: false, disableOnInactive: false, loading: false, onClick: (e: any) => { handleOpenModal(e, "delete") } },
+        { icon: <IconEdit24 />, color: '#277314', label: `${i18n.t("Edition")}`, disabled: false, disableOnInactive: true, loading: false, onClick: (e: any) => handleOpenModal(e, "edit") },
+        { icon: <IconDelete24 />, color: '#d64d4d', label: `${i18n.t("Delete")}`, disabled: false, disableOnInactive: false, loading: false, onClick: (e: any) => { handleOpenModal(e, "delete") } },
     ];
 
     useEffect(() => {
@@ -76,13 +76,13 @@ export default function EnrollmentsPage() {
             {
                 !(Boolean(schoolName) && Boolean(school)) ?
                     <InfoPage
-                        title="SEMIS-Enrollment"
+                        title={i18n.t("SEMIS-Enrollment")}
                         sections={[
                             {
-                                sectionTitle: "Follow the instructions to proceed:",
+                                sectionTitle: `${i18n.t("Follow the instructions to proceed")}:`,
                                 instructions: [
-                                    "Select the Organization unit you want to view data",
-                                    "Use global filters(Class, Grade and Academic Year)"
+                                    `${i18n.t("Select the Organization unit you want to view data")}`,
+                                    `${i18n.t("Use global filters(Class, Grade and Academic Year)")}`
                                 ]
                             }
                         ]}
@@ -95,7 +95,7 @@ export default function EnrollmentsPage() {
                             pagination={pagination}
                             setPagination={setPagination}
                             paginate={!loading}
-                            title="Enrollments"
+                            title={i18n.t("Enrollments")}
                             viewPortWidth={viewPortWidth}
                             columns={columns}
                             rowAction={rowsActions}
@@ -103,11 +103,11 @@ export default function EnrollmentsPage() {
                             showRowActions
                             filterState={filterState}
                             loading={loading}
-                            rightElements={<EnrollmentActionsButtons />}
+                            rightElements={<EnrollmentActionsButtons i18n={i18n} />}
                             setFilterState={setFilterState}
                         />
-                        {openDeleteModal && <ModalManagerEnrollmentDelete open={openDeleteModal} setOpen={setOpenDeleteModal} saveMode="UPDATE" />}
-                        {openEditModal && <ModalManager formVariablesFields={formData} formFields={enrollmentFormFields} open={openEditModal} setOpen={setOpenEditModal} saveMode="UPDATE" />}
+                        {openDeleteModal && <ModalManagerEnrollmentDelete i18n={i18n} open={openDeleteModal} setOpen={setOpenDeleteModal} saveMode="UPDATE" />}
+                        {openEditModal && <ModalManager i18n={i18n} formVariablesFields={formData} formFields={enrollmentFormFields} open={openEditModal} setOpen={setOpenEditModal} saveMode="UPDATE" />}
                     </>
             }
         </div>

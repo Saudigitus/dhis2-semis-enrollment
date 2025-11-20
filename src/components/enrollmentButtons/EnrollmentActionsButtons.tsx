@@ -5,14 +5,14 @@ import { useConfig } from '@dhis2/app-runtime';
 import styles from './enrollmentActionsButtons.module.css'
 import ModalManager from '../modal/saveEnrollment/ModalManager';
 import { useBuildForm, useGetSectionTypeLabel, useUrlParams, useShowAlerts, useCheckFilters } from 'dhis2-semis-functions';
-import { Modules, TableDataRefetch } from 'dhis2-semis-types'
+import { D2I18n, Modules, TableDataRefetch } from 'dhis2-semis-types'
 import { IconAddCircle24, Button, ButtonStrip, IconUserGroup16, IconSearch24 } from "@dhis2/ui";
 import { ModalSearchEnrollmentContent, DataExporter, DataImporter, CustomDropdown as DropdownButton, useSchoolCalendarKey } from 'dhis2-semis-components';
 import { formFields } from '../../utils/constants/form/enrollmentForm';
 import useGetSelectedKeys from '../../hooks/config/useGetSelectedKeys';
 import { useSetRecoilState } from 'recoil';
 
-function EnrollmentActionsButtons() {
+function EnrollmentActionsButtons({ i18n }: { i18n: D2I18n }) {
     const { baseUrl } = useConfig()
     const { urlParameters } = useUrlParams();
     const { sectionName } = useGetSectionTypeLabel();
@@ -33,7 +33,7 @@ function EnrollmentActionsButtons() {
 
 
     const showAlert = (error: any) => {
-        show({ message: `Unknown error: ${error}`, type: { critical: true } })
+        show({ message: `${i18n.t("Unknown error")}: ${error}`, type: { critical: true } })
         setTimeout(hide, 5000);
     }
 
@@ -41,14 +41,16 @@ function EnrollmentActionsButtons() {
         {
             label: <DataImporter
                 baseURL={baseUrl}
-                label={'Enroll new ' + sectionName + 's'}
+                label={i18n.t('Enroll new {{section}}', {
+                    section: `${i18n.t(sectionName)}s`,
+                })}
                 module={Modules.Enrollment}
                 onError={(e: any) => { showAlert(e) }}
                 programConfig={programData!}
                 sectionType={sectionName}
                 selectedSectionDataStore={dataStoreData}
                 updating={false}
-                title={"Bulk Enrollment"}
+                title={i18n.t("Bulk Enrollment")}
                 onClose={() => setRefetch(prev => !prev)}
             />,
             divider: true,
@@ -57,14 +59,16 @@ function EnrollmentActionsButtons() {
         {
             label: <DataImporter
                 baseURL={baseUrl}
-                label={`Update existing ${sectionName}'s`}
+                label={i18n.t('Update existing {{section}}', {
+                    section: `${i18n.t(sectionName)}s`,
+                })}
                 module={Modules.Enrollment}
                 onError={(e: any) => { showAlert(e) }}
                 programConfig={programData!}
                 sectionType={sectionName}
                 selectedSectionDataStore={dataStoreData}
                 updating={true}
-                title={"Bulk Enrollment Update"}
+                title={i18n.t("Bulk Enrollment Update")}
                 onClose={() => setRefetch(prev => !prev)}
             />,
             divider: true,
@@ -75,7 +79,7 @@ function EnrollmentActionsButtons() {
                 Form={Form}
                 baseURL={baseUrl}
                 eventFilters={filters}
-                label='Export Empty Template'
+                label={i18n.t('Export Empty Template')}
                 module={Modules.Enrollment}
                 onError={(e: any) => { showAlert(e) }}
                 programConfig={programData!}
@@ -92,7 +96,9 @@ function EnrollmentActionsButtons() {
                 Form={Form}
                 baseURL={baseUrl}
                 eventFilters={filters}
-                label={'Export Existing ' + sectionName + 's'}
+                label={i18n.t('Export Existing {{section}}', {
+                    section: `${i18n.t(sectionName)}s`,
+                })}
                 module={Modules.Enrollment}
                 onError={(e: any) => { showAlert(e) }}
                 programConfig={programData!}
@@ -109,29 +115,41 @@ function EnrollmentActionsButtons() {
     return (
         <div className={styles.container}>
             <ButtonStrip className={styles.work_buttons}>
-                <Tooltip title={orgUnit === null ? "Please select an organisation unit before" : ""}>
+                {dataStoreData?.defaults?.allowSearching && <Tooltip title={orgUnit === null ? i18n.t("Please select an organisation unit before") : ""}>
                     <span>
                         <Button onClick={() => {
                             setOpenSearchEnrollment(true);
                         }} icon={<IconSearch24 />}>
-                            <span className={styles.work_buttons_text}>Search {sectionName?.toLowerCase()}</span>
+                            <span className={styles.work_buttons_text}>
+                                {
+                                    i18n.t('Search by {{section}}', {
+                                        section: `${i18n.t(sectionName)}s`,
+                                    })
+                                }
+                            </span>
                         </Button>
                     </span>
-                </Tooltip>
-                <Tooltip title={orgUnit === null ? "Please select an organisation unit before" : ""}
+                </Tooltip>}
+                <Tooltip title={orgUnit === null ? i18n.t("Please select an organisation unit before") : ""}
                     onClick={() => setOpenSaveModal(true)}
                 >
                     <span>
                         <Button icon={<IconAddCircle24 />}>
-                            <span className={styles.work_buttons_text}>Enroll {sectionName.toLocaleLowerCase()}</span>
+                            <span className={styles.work_buttons_text}>
+                                {
+                                    i18n.t('Enroll {{section}}', {
+                                        section: `${i18n.t(sectionName)}`,
+                                    })
+                                }
+                            </span>
                         </Button>
                     </span>
                 </Tooltip>
 
-                <Tooltip title={!areAllSelected() ? "Please select all filters" : ""}>
+                <Tooltip title={!areAllSelected() ? i18n.t("Please select all filters") : ""}>
                     <span>
                         <DropdownButton
-                            name={<span className={styles.work_buttons_text}>Bulk enrollment</span> as unknown as string}
+                            name={<span className={styles.work_buttons_text}>{i18n.t("Bulk enrollment")}</span> as unknown as string}
                             disabled={!!(orgUnit == undefined || !areAllSelected() || academicYear == undefined)}
                             icon={<IconUserGroup16 />}
                             options={enrollmentOptions}
@@ -142,6 +160,7 @@ function EnrollmentActionsButtons() {
             </ButtonStrip>
 
             {openSaveModal && <ModalManager
+                i18n={i18n}
                 saveMode='CREATE'
                 open={openSaveModal}
                 setOpen={setOpenSaveModal}

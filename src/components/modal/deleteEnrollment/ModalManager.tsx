@@ -19,7 +19,7 @@ const ModalManagerEnrollmentDelete = (props: ModalManagerInterface) => {
     const [refetch, setRefetch] = useRecoilState(TableDataRefetch);
     const { dataStoreData, program: programData } = useGetSelectedKeys()
     const { deleteTEI } = useDeleteTEI()
-    const { open, setOpen } = props;
+    const { open, setOpen, i18n } = props;
     const { schoolName } = urlParameters;
     const { formData } = useBuildForm({ dataStoreData, programData, module: Modules.Enrollment });
     const [initialValues] = useState<object>({ registerschoolstaticform: schoolName, enrollment_date: format(new Date(), "yyyy-MM-dd") });
@@ -47,7 +47,7 @@ const ModalManagerEnrollmentDelete = (props: ModalManagerInterface) => {
                         setRefetch(!refetch)
                         setOpen(false)
                     })
-                    .catch((error) => {
+                    .catch(() => {
                         setLoadingDelete(false)
                         setRefetch(!refetch)
                         setOpen(false)
@@ -60,7 +60,7 @@ const ModalManagerEnrollmentDelete = (props: ModalManagerInterface) => {
             open={open}
             handleClose={handleCloseModal}
             loading={initialValuesLoading}
-            title="Enrollment Deletion"
+            title={i18n.t("Enrollment Deletion")}
         >
             <ModalContent
                 loading={loadingDelete}
