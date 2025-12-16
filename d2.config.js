@@ -7,4 +7,5 @@ const config = {
     },
 }
 
+//Teste
 module.exports = config
