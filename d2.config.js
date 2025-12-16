@@ -7,5 +7,5 @@ const config = {
     },
 }
 
-//Teste sdfssdfds fdfdf dsd sddsd
+//Teste sdfssdfds fdfdf dsd sddsd sdfsdf
 module.exports = config
