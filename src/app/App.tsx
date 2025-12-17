@@ -10,7 +10,7 @@ import { D2I18n } from 'dhis2-semis-types'
 const Enrollment = ({ i18n }: { i18n: D2I18n }) => {
     const { baseUrl } = useConfig()
     // const translate = i18n ? i18n : translation
-           
+            
     return (
         // <AppWrapper
         //     baseUrl={baseUrl}
