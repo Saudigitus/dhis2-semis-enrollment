@@ -22,7 +22,7 @@ function ModalManager(props: ModalManagerInterface) {
     const { program: programData, dataStoreData } = useGetSelectedKeys()
     const { attributes = [] } = useGetAttributes({ programData: programData! });
     const programStagesToSave = useGetUsedProgramStages({ sectionType: sectionName });
-    const { returnPattern, loadingCodes, generatedVariables } = useGetPatternCode();
+    const { errorLoading, returnPattern, loadingCodes, generatedVariables } = useGetPatternCode();
     const { open, setOpen, saveMode, initialValues: initialValuesFromSearch, formFields = [], formVariablesFields, setFormInitialValues, i18n } = props;
     const { getInitialValues, initialValues: updateInitialValues, loading: initialValuesLoading, enrollmentEvents } = useGetEnrollmentUpdateInitialValues()
 
@@ -48,7 +48,7 @@ function ModalManager(props: ModalManagerInterface) {
 
     useEffect(() => {
         if (open && saveMode == "CREATE")
-            void returnPattern(attributes);
+            void returnPattern(attributes, school);
 
         if (open && saveMode == "UPDATE")
             void getInitialValues(trackedEntity, enrollment);
@@ -112,6 +112,11 @@ function ModalManager(props: ModalManagerInterface) {
             },
             handleComplete: () => { handleCloseModal(); setRefetch(!refetch) },
         });
+    }
+
+    if (errorLoading) {
+        handleCloseModal();
+        return;
     }
 
     return (
