@@ -19,7 +19,7 @@ function useGetEnrollmentUpdateInitialValues() {
         setLoading(true)
 
         if (Object.keys(dataStoreData)?.length) {
-            getTeis({ program: programId, trackedEntity: [trackedEntity] })
+            getTeis({ program: programId, trackedEntities: [trackedEntity] })
                 .then(async (responseTracker: any) => {
                     const trackedEntityInstance = responseTracker?.[0]
 
