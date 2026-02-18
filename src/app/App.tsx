@@ -7,8 +7,9 @@ import { AppWrapper } from 'dhis2-semis-components'
 import { D2I18n } from 'dhis2-semis-types'
 // import translation from '../locales/index'
 
-const Enrollment = ({ i18n }: { i18n: D2I18n }) => {
-    const { baseUrl } = useConfig()
+const Enrollment = ({ i18n, baseUrl }: { i18n: D2I18n, baseUrl: string }) => {
+    const { baseUrl: localBaseUrl } = useConfig()
+    const useBaseUrl = baseUrl || localBaseUrl
     // const translate = i18n ? i18n : translation
 
     return (
@@ -18,7 +19,7 @@ const Enrollment = ({ i18n }: { i18n: D2I18n }) => {
         //     schoolCalendarKey='dataStore/semis/schoolCalendar'
         // >
         //     <HashRouter>
-                <Router i18n={i18n as unknown as any} />
+        <Router i18n={i18n as unknown as any} baseUrl={useBaseUrl} />
         //     </HashRouter >
         // </AppWrapper>
     )
