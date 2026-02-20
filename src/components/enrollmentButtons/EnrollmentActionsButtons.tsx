@@ -1,7 +1,6 @@
 import React, { useEffect, useState } from 'react'
 import { Form } from "react-final-form";
 import { Tooltip } from '@mui/material';
-import { useConfig } from '@dhis2/app-runtime';
 import styles from './enrollmentActionsButtons.module.css'
 import ModalManager from '../modal/saveEnrollment/ModalManager';
 import { useBuildForm, useGetSectionTypeLabel, useUrlParams, useShowAlerts, useCheckFilters } from 'dhis2-semis-functions';
@@ -12,8 +11,7 @@ import { formFields } from '../../utils/constants/form/enrollmentForm';
 import useGetSelectedKeys from '../../hooks/config/useGetSelectedKeys';
 import { useSetRecoilState } from 'recoil';
 
-function EnrollmentActionsButtons({ i18n }: { i18n: D2I18n }) {
-    const { baseUrl } = useConfig()
+function EnrollmentActionsButtons({ i18n, baseUrl }: { i18n: D2I18n, baseUrl: string }) {
     const { urlParameters } = useUrlParams();
     const { sectionName } = useGetSectionTypeLabel();
     const schoolCalendar = useSchoolCalendarKey()

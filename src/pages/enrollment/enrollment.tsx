@@ -10,7 +10,7 @@ import { useBuildForm, useCheckFilters, useHeader, useTableData, useUrlParams, u
 import EnrollmentActionsButtons from "../../components/enrollmentButtons/EnrollmentActionsButtons";
 import { formFields } from '../../utils/constants/form/enrollmentForm';
 
-export default function EnrollmentsPage({ i18n }: { i18n: D2I18n }) {
+export default function EnrollmentsPage({ i18n, baseUrl }: { i18n: D2I18n, baseUrl: string }) {
     const { viewPortWidth } = useViewPortWidth()
     const { urlParameters, add, remove } = useUrlParams()
     const { program, dataStoreData } = useGetSelectedProgram()
@@ -103,7 +103,7 @@ export default function EnrollmentsPage({ i18n }: { i18n: D2I18n }) {
                             showRowActions
                             filterState={filterState}
                             loading={loading}
-                            rightElements={<EnrollmentActionsButtons i18n={i18n} />}
+                            rightElements={<EnrollmentActionsButtons i18n={i18n} baseUrl={baseUrl} />}
                             setFilterState={setFilterState}
                         />
                         {openDeleteModal && <ModalManagerEnrollmentDelete i18n={i18n} open={openDeleteModal} setOpen={setOpenDeleteModal} saveMode="UPDATE" />}
