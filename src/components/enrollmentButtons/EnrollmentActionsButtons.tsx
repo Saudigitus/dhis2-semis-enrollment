@@ -113,9 +113,9 @@ function EnrollmentActionsButtons({ i18n, baseUrl }: { i18n: D2I18n, baseUrl: st
     return (
         <div className={styles.container}>
             <ButtonStrip className={styles.work_buttons}>
-                {dataStoreData?.defaults?.allowSearching && <Tooltip title={orgUnit === null ? i18n.t("Please select an organisation unit before") : ""}>
+                {dataStoreData?.defaults?.allowSearching && <Tooltip data-test="search-enrollment-tooltip" title={orgUnit === null ? i18n.t("Please select an organisation unit before") : ""}>
                     <span>
-                        <Button onClick={() => {
+                        <Button data-test="search-enrollment" onClick={() => {
                             setOpenSearchEnrollment(true);
                         }} icon={<IconSearch24 />}>
                             <span className={styles.work_buttons_text}>
@@ -128,11 +128,11 @@ function EnrollmentActionsButtons({ i18n, baseUrl }: { i18n: D2I18n, baseUrl: st
                         </Button>
                     </span>
                 </Tooltip>}
-                <Tooltip title={orgUnit === null ? i18n.t("Please select an organisation unit before") : ""}
+                <Tooltip data-test="enroll-section-tooltip" title={orgUnit === null ? i18n.t("Please select an organisation unit before") : ""}
                     onClick={() => setOpenSaveModal(true)}
                 >
                     <span>
-                        <Button icon={<IconAddCircle24 />}>
+                        <Button data-test="enroll-section" icon={<IconAddCircle24 />}>
                             <span className={styles.work_buttons_text}>
                                 {
                                     i18n.t('Enroll {{section}}', {
@@ -144,13 +144,14 @@ function EnrollmentActionsButtons({ i18n, baseUrl }: { i18n: D2I18n, baseUrl: st
                     </span>
                 </Tooltip>
 
-                <Tooltip title={!areAllSelected() ? i18n.t("Please select all filters") : ""}>
+                <Tooltip data-test="bulk-enrollment-tooltip" title={!areAllSelected() ? i18n.t("Please select all filters") : ""}>
                     <span>
                         <DropdownButton
                             name={<span className={styles.work_buttons_text}>{i18n.t("Bulk enrollment")}</span> as unknown as string}
                             disabled={!!(orgUnit == undefined || !areAllSelected() || academicYear == undefined)}
                             icon={<IconUserGroup16 />}
                             options={enrollmentOptions}
+                            dataTest='bulk-enrollment'
                         />
                     </span>
                 </Tooltip>
