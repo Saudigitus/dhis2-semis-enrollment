@@ -106,7 +106,6 @@ export default function EnrollmentsPage({ i18n, baseUrl }: { i18n: D2I18n, baseU
                 transferConfig: {
                     transferProgramStage: dataStoreData?.transfer?.programStage,
                     destinySchoolDataElement: dataStoreData?.transfer?.destinySchool,
-                    originSchoolDataElement: dataStoreData?.transfer?.originSchool
                 }
             })
     }, [sectionType, filterState, pagination.page, pagination?.pageSize, refetch, grade, section, school, academicYear])
