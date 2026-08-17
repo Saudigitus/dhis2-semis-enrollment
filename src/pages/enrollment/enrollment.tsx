@@ -100,7 +100,7 @@ export default function EnrollmentsPage({ i18n, baseUrl }: { i18n: D2I18n, baseU
                             paginate={!loading}
                             title={i18n.t("Enrollments")}
                             onRowClick={(e) => {
-                                navigate(`/semis/profile/${e?.trackedEntity}${location?.search}`)
+                                navigate(`/semis/profile/${e?.trackedEntity}${location?.search}&module=${location?.pathname?.split("/")[2]}`)
                             }}
                             viewPortWidth={viewPortWidth}
                             columns={columns}
