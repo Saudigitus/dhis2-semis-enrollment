@@ -9,7 +9,7 @@ import ModalManagerEnrollmentDelete from '../../components/modal/deleteEnrollmen
 import { useBuildForm, useCheckFilters, useHeader, useTableData, useUrlParams, useViewPortWidth } from "dhis2-semis-functions";
 import EnrollmentActionsButtons from "../../components/enrollmentButtons/EnrollmentActionsButtons";
 import { formFields } from '../../utils/constants/form/enrollmentForm';
-import { useNavigate } from 'react-router-dom';
+import { useLocation, useNavigate } from 'react-router-dom';
 
 export default function EnrollmentsPage({ i18n, baseUrl }: { i18n: D2I18n, baseUrl: string }) {
     const { viewPortWidth } = useViewPortWidth()
@@ -28,6 +28,7 @@ export default function EnrollmentsPage({ i18n, baseUrl }: { i18n: D2I18n, baseU
     const enrollmentFormFields = formFields({ formFieldsData: formData, sectionName: sectionType! })
     const { getFilters } = useCheckFilters({ filters: (dataStoreData?.filters?.dataElements ?? []) as unknown as any })
     const navigate = useNavigate()
+    const location = useLocation()
 
     const handleOpenModal = (e: Record<string, any>, type: "edit" | "delete",) => {
         add("trackedEntity", e?.row?.trackedEntity);
@@ -99,7 +100,7 @@ export default function EnrollmentsPage({ i18n, baseUrl }: { i18n: D2I18n, baseU
                             paginate={!loading}
                             title={i18n.t("Enrollments")}
                             onRowClick={(e) => {
-                                navigate(`/semis/profile/${e?.trackedEntity}?sectionType=${sectionType}`)
+                                navigate(`/semis/profile/${e?.trackedEntity}${location?.search}`)
                             }}
                             viewPortWidth={viewPortWidth}
                             columns={columns}
