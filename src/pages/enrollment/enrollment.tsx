@@ -53,8 +53,8 @@ export default function EnrollmentsPage({ i18n, baseUrl }: { i18n: D2I18n, baseU
     }, [openDeleteModal, openEditModal])
 
     const rowsActions = [
-        { icon: <IconEdit24 />, color: '#277314', label: `${i18n.t("Edition")}`, disabled: false, disableOnInactive: true, loading: false, onClick: (e: any) => handleOpenModal(e, "edit") },
-        { icon: <IconDelete24 />, color: '#d64d4d', label: `${i18n.t("Delete")}`, disabled: false, disableOnInactive: false, loading: false, onClick: (e: any) => { handleOpenModal(e, "delete") } },
+        { icon: <IconEdit24 />, color: '#277314', ariaLabel: `${i18n.t("edit-enrollment")}`, label: `${i18n.t("Edit")}`, button: false, disabled: false, disableOnInactive: true, loading: false, onClick: (e: any) => handleOpenModal(e, "edit") },
+        { icon: <IconDelete24 />, color: '#d64d4d', ariaLabel: `${i18n.t("delete-enrollment")}`, label: `${i18n.t("Delete")}`, button: true, disabled: false, disableOnInactive: false, loading: false, onClick: (e: any) => { handleOpenModal(e, "delete") } },
     ];
 
     useEffect(() => {
