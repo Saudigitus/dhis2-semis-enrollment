@@ -56,7 +56,7 @@ msgstr "Inscription unique de {{section}} {{mode}}"
 msgid "Update"
 msgstr "Mettre à jour"
 
-msgid "Edition"
+msgid "Edit"
 msgstr "Édition"
 
 msgid "Delete"

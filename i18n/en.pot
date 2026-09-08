@@ -59,8 +59,8 @@ msgstr "Single {{section}} Enrollment {{mode}}"
 msgid "Update"
 msgstr "Update"
 
-msgid "Edition"
-msgstr "Edition"
+msgid "Edit"
+msgstr "Edit"
 
 msgid "Delete"
 msgstr "Delete"

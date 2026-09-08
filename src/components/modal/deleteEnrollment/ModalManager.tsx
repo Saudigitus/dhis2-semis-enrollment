@@ -8,9 +8,10 @@ import { ModalManagerInterface } from '../../../types/modal/ModalProps'
 import useGetSelectedKeys from '../../../hooks/config/useGetSelectedKeys';
 import { enrollmentDeletionFormField } from '../../../utils/constants/form/enrollmentDeletionForm';
 import useGetDeleteEnrollmentInitialValues from '../../../hooks/form/useGetDeleteEnrollmentInitialValues';
-import { useBuildForm, useDeleteEnrollment, useGetSectionTypeLabel, useUrlParams, useGetTotalEnrollments, useDeleteTEI } from 'dhis2-semis-functions';
+import { useBuildForm, useDeleteEnrollment, useGetSectionTypeLabel, useUrlParams, useGetTotalEnrollments, useDeleteTEI, useShowAlerts } from 'dhis2-semis-functions';
 
 const ModalManagerEnrollmentDelete = (props: ModalManagerInterface) => {
+    const { show, hide } = useShowAlerts()
     const [loadingDelete, setLoadingDelete] = useState(false)
     const { urlParameters, useQuery } = useUrlParams();
     const { deleteEnrollment } = useDeleteEnrollment();
@@ -40,17 +41,22 @@ const ModalManagerEnrollmentDelete = (props: ModalManagerInterface) => {
             .then(async (totalEnrollment: any) => {
                 const enrollments: any[] = totalEnrollment?.results?.enrollments;
 
-                const deleteAction = enrollments.length > 1 ? deleteEnrollment(enrollment) : deleteTEI(trackedEntity);
+                const deleteAction = enrollments.length > 1 ? deleteEnrollment(enrollment + 5) : deleteTEI(trackedEntity + 5);
+
                 await deleteAction
                     .then(() => {
                         setLoadingDelete(false)
+                        show({ message: i18n.t("Enrollment deleted successfully"), type: { success: true } })
                         setRefetch(!refetch)
                         setOpen(false)
                     })
                     .catch(() => {
                         setLoadingDelete(false)
-                        setRefetch(!refetch)
                         setOpen(false)
+                        show({ message: i18n.t("Error occured when deleting enrollment"), type: { critical: true } })
+                        setTimeout(() => {
+                            hide()
+                        }, 4500);
                     })
             })
     }
