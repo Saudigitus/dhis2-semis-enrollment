@@ -165,7 +165,7 @@ function EnrollmentActionsButtons({ i18n, baseUrl }: { i18n: D2I18n, baseUrl: st
                 formVariablesFields={formData}
                 initialValues={formInitialValues}
                 setFormInitialValues={setFormInitialValues}
-                formFields={formFields({ formFieldsData: formData, sectionName: sectionName! })}
+                formFields={formFields({ formFieldsData: formData, programData, dataStoreData })}
             />}
 
             {openSearchEnrollment &&
