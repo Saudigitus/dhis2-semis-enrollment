@@ -1,6 +1,6 @@
 import { format } from "date-fns";
 import { VariablesTypes } from "dhis2-semis-types";
-import { capitalizeString } from "dhis2-semis-functions";
+import { groupEnrollmentFields } from './groupEnrollmentFields';
 
 const staticForm = () => {
   return {
@@ -47,38 +47,29 @@ const staticForm = () => {
   }
 }
 
-function formFields({ formFieldsData, sectionName }: { formFieldsData: any[], sectionName: string }) {
-
+function formFields({ formFieldsData, programData, dataStoreData }: { formFieldsData: any[], sectionName?: string, programData?: any, dataStoreData?: any }) {
   const [enrollmentDetails = [], studentsProfile = [], socioEconomicDetails = []] = formFieldsData;
-
-  return [
-    {
-      name: "Enrollment Details",
-      description: "Details related to the enrollment process",
-      visible: true,
-      fields: [
-        staticForm().registeringSchool,
-        ...enrollmentDetails,
-        staticForm().enrollmentDate
-      ]
-    },
-    {
-      name: `${capitalizeString(sectionName)} Profile`,
-      description: `${capitalizeString(sectionName)} personal details`,
-      visible: true,
-      fields: [
-        ...studentsProfile
-      ]
-    },
-    {
-      name: "Socio-economic Details",
-      description: `Details about the ${sectionName} socio-economic status`,
-      visible: Boolean(socioEconomicDetails.length),
-      fields: [
-        ...socioEconomicDetails
-      ]
-    }
-  ];
+  const registration = programData?.programStages?.find((stage: any) => stage.id === dataStoreData?.registration?.programStage);
+  const socioEconomics = programData?.programStages?.find((stage: any) => stage.id === dataStoreData?.['socio-economics']?.programStage);
+  const enrollmentGroups = groupEnrollmentFields(
+    [staticForm().registeringSchool, ...enrollmentDetails, staticForm().enrollmentDate],
+    registration?.programStageSections,
+    { name: "Enrollment Details", description: "Details related to the enrollment process" },
+    false,
+  );
+  const attributeGroups = groupEnrollmentFields(
+    studentsProfile,
+    programData?.programSections,
+    { name: "Student Profile", description: "Student personal details" },
+    false,
+  );
+  const socioEconomicGroups = groupEnrollmentFields(
+    socioEconomicDetails,
+    socioEconomics?.programStageSections,
+    { name: "Socio-economic Details", description: "Socio-economic details" },
+    false,
+  );
+  return [...enrollmentGroups, ...attributeGroups, ...socioEconomicGroups];
 }
 
 export { formFields, staticForm };

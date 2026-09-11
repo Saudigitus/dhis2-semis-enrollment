@@ -45,6 +45,10 @@ function ModalManager(props: ModalManagerInterface) {
         variables: formFields,
         program: programData!.id,
         type: "programStageSection",
+        context: {
+            event: { programStage: dataStoreData?.registration?.programStage, orgUnit: school },
+            events: (enrollmentEvents?.events ?? []).filter((event: any) => typeof event.programStage === 'string'),
+        },
     })
 
 
