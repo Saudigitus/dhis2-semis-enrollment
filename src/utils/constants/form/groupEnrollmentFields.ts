@@ -6,8 +6,7 @@ export function groupEnrollmentFields(
     description: string;
   },
 ) {
-  // Não existem sections no DHIS2:
-  // usa a section definida localmente.
+
   if (!sections?.length) {
     return [
       {
@@ -53,8 +52,6 @@ export function groupEnrollmentFields(
       };
     });
 
-  // Campos que não estão associados explicitamente
-  // a nenhuma section do DHIS2.
   const remainingFields = fields.filter(
     field => !used.has(field.id),
   );
@@ -63,9 +60,6 @@ export function groupEnrollmentFields(
     return groups;
   }
 
-  // Como o DHIS2 já forneceu sections, elas têm prioridade.
-  // Os campos estáticos são adicionados à primeira section
-  // definida pelo DHIS2.
   groups[0] = {
     ...groups[0],
     fields: [
