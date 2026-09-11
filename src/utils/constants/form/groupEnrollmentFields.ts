@@ -1,33 +1,79 @@
-interface Section {
-  id: string;
-  displayName?: string;
-  description?: string;
-  sortOrder?: number;
-  dataElements?: { id: string }[];
-  trackedEntityAttributes?: { id: string }[];
-}
+export function groupEnrollmentFields(
+  fields: any[],
+  sections: any[] | undefined,
+  fallback: {
+    name: string;
+    description: string;
+  },
+) {
+  // Não existem sections no DHIS2:
+  // usa a section definida localmente.
+  if (!sections?.length) {
+    return [
+      {
+        id: `static-${fallback.name}`,
+        name: fallback.name,
+        description: fallback.description,
+        visible: fields.length > 0,
+        fields,
+      },
+    ];
+  }
 
-/** Apply DHIS2 section order without changing the flat fields used for saving. */
-export function groupEnrollmentFields(fields: any[], sections: Section[] | undefined, fallback: { name: string; description: string }, unassignedFirst = true) {
-  if (!sections?.length) return [{ ...fallback, visible: fields.length > 0, fields }];
   const byId = new Map(fields.map(field => [field.id, field]));
   const used = new Set<string>();
-  const groups = [...sections].sort((a, b) => (a.sortOrder ?? 0) - (b.sortOrder ?? 0)).map(section => {
-    const references = [...(section.dataElements ?? []), ...(section.trackedEntityAttributes ?? [])]
-      .map(reference => ({
-        id: reference.id ?? reference.dataElement?.id ?? reference.trackedEntityAttribute?.id,
-      }))
-      .filter(reference => reference.id);
-    const sectionFields = references.flatMap(({ id }) => {
-      if (!byId.has(id) || used.has(id)) return [];
-      used.add(id);
-      return [byId.get(id)];
+
+  const groups = [...sections]
+    .sort(
+      (a, b) =>
+        (a.sortOrder ?? 0) - (b.sortOrder ?? 0),
+    )
+    .map(section => {
+      const references = [
+        ...(section.dataElements ?? []),
+        ...(section.trackedEntityAttributes ?? []),
+      ];
+
+      const sectionFields = references.flatMap(({ id }) => {
+        if (!id || !byId.has(id) || used.has(id)) {
+          return [];
+        }
+
+        used.add(id);
+
+        return [byId.get(id)];
+      });
+
+      return {
+        id: section.id,
+        name: section.displayName ?? '',
+        description: section.description ?? '',
+        visible: sectionFields.length > 0,
+        fields: sectionFields,
+      };
     });
-    return { id: section.id, name: section.displayName ?? '', description: section.description ?? '',
-      visible: sectionFields.length > 0, fields: sectionFields };
-  });
-  // Preserve static fields and fields omitted from metadata sections.
-  const remaining = fields.filter(field => !used.has(field.id));
-  const unassigned = remaining.length ? [{ ...fallback, visible: true, fields: remaining }] : [];
-  return unassignedFirst ? [...unassigned, ...groups] : [...groups, ...unassigned];
+
+  // Campos que não estão associados explicitamente
+  // a nenhuma section do DHIS2.
+  const remainingFields = fields.filter(
+    field => !used.has(field.id),
+  );
+
+  if (!remainingFields.length) {
+    return groups;
+  }
+
+  // Como o DHIS2 já forneceu sections, elas têm prioridade.
+  // Os campos estáticos são adicionados à primeira section
+  // definida pelo DHIS2.
+  groups[0] = {
+    ...groups[0],
+    fields: [
+      ...remainingFields,
+      ...groups[0].fields,
+    ],
+    visible: true,
+  };
+
+  return groups;
 }

@@ -51,23 +51,22 @@ function formFields({ formFieldsData, programData, dataStoreData }: { formFields
   const [enrollmentDetails = [], studentsProfile = [], socioEconomicDetails = []] = formFieldsData;
   const registration = programData?.programStages?.find((stage: any) => stage.id === dataStoreData?.registration?.programStage);
   const socioEconomics = programData?.programStages?.find((stage: any) => stage.id === dataStoreData?.['socio-economics']?.programStage);
+
   const enrollmentGroups = groupEnrollmentFields(
     [staticForm().registeringSchool, ...enrollmentDetails, staticForm().enrollmentDate],
     registration?.programStageSections,
     { name: "Enrollment Details", description: "Details related to the enrollment process" },
-    false,
   );
+
   const attributeGroups = groupEnrollmentFields(
     studentsProfile,
     programData?.programSections,
     { name: "Student Profile", description: "Student personal details" },
-    false,
   );
   const socioEconomicGroups = groupEnrollmentFields(
     socioEconomicDetails,
     socioEconomics?.programStageSections,
     { name: "Socio-economic Details", description: "Socio-economic details" },
-    false,
   );
   return [...enrollmentGroups, ...attributeGroups, ...socioEconomicGroups];
 }
