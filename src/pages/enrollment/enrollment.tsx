@@ -105,7 +105,6 @@ export default function EnrollmentsPage({ i18n, baseUrl }: { i18n: D2I18n, baseU
                             viewPortWidth={viewPortWidth}
                             columns={columns}
                             rowAction={rowsActions}
-                            defaultFilterNumber={3}
                             showRowActions
                             filterState={filterState}
                             loading={loading}
