@@ -112,6 +112,7 @@ function ModalManager(props: ModalManagerInterface) {
                     programId: programData?.id!,
                     formValues: e,
                     events: enrollmentEvents?.events,
+                    initialValues: updateInitialValues,
                 });
             }
         };
