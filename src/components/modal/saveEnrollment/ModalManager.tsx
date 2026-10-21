@@ -27,15 +27,17 @@ function ModalManager(props: ModalManagerInterface) {
     const { open, setOpen, saveMode, initialValues: initialValuesFromSearch, formFields = [], formVariablesFields, setFormInitialValues, i18n } = props;
     const { getInitialValues, initialValues: updateInitialValues, loading: initialValuesLoading, enrollmentEvents } = useGetEnrollmentUpdateInitialValues()
 
+    const topBarValues = saveMode == "CREATE" ? {
+        [dataStoreData?.registration?.grade]: grade,
+        [dataStoreData?.registration?.section]: section,
+        [dataStoreData?.registration?.academicYear || schoolAcademicYearId]: academicYear,
+    } : {}
+
     let allInitialValues = {
         orgUnit: school,
         registerschoolstaticform: schoolName,
         enrollment_date: format(new Date(), "yyyy-MM-dd"),
-        ...(saveMode == "CREATE" ? {
-            [dataStoreData?.registration?.grade]: grade,
-            [dataStoreData?.registration?.section]: section,
-            [dataStoreData?.registration?.academicYear || schoolAcademicYearId]: academicYear,
-        } : {})
+        ...topBarValues
     }
 
     const [values, setValues] = useState<{ [key: string]: any }>({ ...allInitialValues });
@@ -153,6 +155,9 @@ function ModalManager(props: ModalManagerInterface) {
                     ...generatedVariables,
                     ...updateInitialValues,
                     ...initialValuesFromSearch,
+                    // A learner found by search keeps the year, grade and section chosen in the top bar,
+                    // not those of the last registration (SEMIS-226).
+                    ...Object.fromEntries(Object.entries(topBarValues).filter(([, value]) => Boolean(value))),
                 }}
             />
         </ModalComponent>
