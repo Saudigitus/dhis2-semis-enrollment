@@ -11,9 +11,10 @@ interface enrollmentUpdateBodyInterface {
     enrollmentId: string,
     events: any[],
     formVariablesFields: any[],
+    initialValues?: Record<string, any>,
 }
 
-export const enrollmentUpdateBody = ({ formVariablesFields, enrollmentId, enrollmentDate, trackedEntityId, trackedEntityType, orgUnitId, programId, formValues, events }: enrollmentUpdateBodyInterface): any => {
+export const enrollmentUpdateBody = ({ formVariablesFields, enrollmentId, enrollmentDate, trackedEntityId, trackedEntityType, orgUnitId, programId, formValues, events, initialValues }: enrollmentUpdateBodyInterface): any => {
     const form: { attributes: any[], events: any[] } = {
         attributes: [],
         events: []
@@ -27,6 +28,9 @@ export const enrollmentUpdateBody = ({ formVariablesFields, enrollmentId, enroll
                 const value = formValues[attribute.id];
                 if (value !== null && value !== undefined) {
                     form.attributes.push({ attribute: attribute.id, value });
+                } else if (hasValue(initialValues?.[attribute.id])) {
+                    // A profile field emptied by the user is sent without value so the server removes it (SEMIS-191).
+                    form.attributes.push({ attribute: attribute.id, value: null });
                 }
             })
         }
@@ -91,3 +95,5 @@ const returnEventDataValues = (dataValues: Record<string, any>[]) => {
         ...(value !== null && value !== undefined ? { value } : {})
     }));
 };
+
+const hasValue = (value: any) => value !== null && value !== undefined && value !== '';
