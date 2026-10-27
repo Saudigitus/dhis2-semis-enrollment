@@ -1,4 +1,5 @@
-import { CustomAttributeProps } from "./AttributeColumns"
+import { CustomAttributeProps } from "dhis2-semis-types"
+
 
 interface GroupedSearchableAttributesTypes {
     id: string

@@ -1,38 +1,120 @@
-import { InfoPage, Table } from "dhis2-semis-components";
-import React from "react";
-import { headerColumns, rowsData } from "../../utils/constants/table/tableConstants";
-import { RowActionsType } from "dhis2-semis-components/dist/declarations/types/table/TableRowActionsProps";
-import { IconCheckmarkCircle24, IconDelete24, IconEdit24 } from "@dhis2/ui";
+import { useRecoilValue } from 'recoil';
+import React, { useEffect, useState } from "react";
+import { IconDelete24, IconEdit24 } from "@dhis2/ui";
+import { Table, InfoPage, useSchoolCalendarKey } from "dhis2-semis-components";
+import ModalManager from "../../components/modal/saveEnrollment/ModalManager";
+import { TableDataRefetch, Modules, ProgramConfig, D2I18n } from "dhis2-semis-types"
+import useGetSelectedProgram from '../../hooks/config/useGetSelectedKeys';
+import ModalManagerEnrollmentDelete from '../../components/modal/deleteEnrollment/ModalManager';
+import { useBuildForm, useCheckFilters, useHeader, useTableData, useUrlParams, useViewPortWidth } from "dhis2-semis-functions";
+import EnrollmentActionsButtons from "../../components/enrollmentButtons/EnrollmentActionsButtons";
+import { formFields } from '../../utils/constants/form/enrollmentForm';
+import { useLocation, useNavigate } from 'react-router-dom';
 
-export default function EnrollmentsPage() {
-    
-    const rowsActions: RowActionsType[] = [
-        { icon: <IconEdit24 />, color: '#277314', label: `Edition`, disabled: true, loading: false, onClick: () => { alert("Edition") } },
-        { icon: <IconDelete24 />, color: '#d64d4d', label: `Delete`, disabled: false, loading: false, onClick: () => { alert("Delete") } },
-        { icon: <IconCheckmarkCircle24 />, color: '#147cd7', disabled: false, loading: false, label: 'Complete', onClick: () => { alert("Complete") } }
+export default function EnrollmentsPage({ i18n, baseUrl }: { i18n: D2I18n, baseUrl: string }) {
+    const { viewPortWidth } = useViewPortWidth()
+    const { urlParameters, add, remove } = useUrlParams()
+    const { program, dataStoreData } = useGetSelectedProgram()
+    const schoolCalendar = useSchoolCalendarKey()
+    const { academicYear, grade, class: section, school, schoolName, sectionType } = urlParameters
+    const [openEditModal, setOpenEditModal] = useState<boolean>(false)
+    const [openDeleteModal, setOpenDeleteModal] = useState<boolean>(false)
+    const { getData, tableData, loading } = useTableData({ module: Modules.Enrollment });
+    const [filterState, setFilterState] = useState<{ dataElements: any, attributes: any }>({ attributes: [], dataElements: [] });
+    const refetch = useRecoilValue(TableDataRefetch);
+    const [pagination, setPagination] = useState<any>({ page: 1, pageSize: 50, totalPages: 0, totalElements: 0 })
+    const { columns } = useHeader({ dataStoreData, programConfigData: program as unknown as ProgramConfig, programStage: "" });
+    const { formData } = useBuildForm({ dataStoreData, programData: program, module: Modules.Enrollment, schoolCalendar });
+    const enrollmentFormFields = formFields({ formFieldsData: formData, programData: program, dataStoreData })
+    const { getFilters } = useCheckFilters({ filters: (dataStoreData?.filters?.dataElements ?? []) as unknown as any })
+    const navigate = useNavigate()
+    const location = useLocation()
+
+    const handleOpenModal = (e: Record<string, any>, type: "edit" | "delete",) => {
+        add("trackedEntity", e?.row?.trackedEntity);
+        add("enrollment", e?.row?.enrollmentId);
+
+        if (type === "delete") {
+            setOpenDeleteModal(true)
+        } else {
+            setOpenEditModal(true)
+        }
+    };
+
+    useEffect(() => {
+        setPagination((prev: any) => ({ ...prev, totalPages: tableData?.pagination?.totalPages, totalElements: tableData?.pagination?.totalElements }))
+    }, [tableData])
+
+    useEffect(() => {
+        if (!openDeleteModal && !openEditModal) {
+            remove("trackedEntity")
+            remove("enrollment")
+        }
+    }, [openDeleteModal, openEditModal])
+
+    const rowsActions = [
+        { icon: <IconEdit24 />, color: '#277314', ariaLabel: `${i18n.t("edit-enrollment")}`, label: `${i18n.t("Edit")}`, button: false, disabled: false, disableOnInactive: true, loading: false, onClick: (e: any) => handleOpenModal(e, "edit") },
+        { icon: <IconDelete24 />, color: '#d64d4d', ariaLabel: `${i18n.t("delete-enrollment")}`, label: `${i18n.t("Delete")}`, button: true, disabled: false, disableOnInactive: false, loading: false, onClick: (e: any) => { handleOpenModal(e, "delete") } },
     ];
 
+    useEffect(() => {
+        if (school && academicYear)
+            void getData({
+                page: pagination?.page,
+                pageSize: pagination?.pageSize,
+                program: program?.id as string,
+                orgUnit: school!,
+                baseProgramStage: dataStoreData?.registration?.programStage as string,
+                attributeFilters: filterState.attributes,
+                dataElementFilters: [
+                    academicYear !== null ? `${schoolCalendar?.academicYear}:in:${academicYear}` : null,
+                    ...getFilters() as unknown as any
+                ].filter((filter): filter is string => filter !== null),
+                order: dataStoreData.defaults.defaultOrder
+            })
+    }, [sectionType, filterState, pagination.page, pagination?.pageSize, refetch, grade, section, school, academicYear])
+
     return (
-        <div style={{ height: "80vh" }} >
-            <Table
-                viewPortWidth={1040}
-                columns={headerColumns}
-                totalElements={4}
-                loading={false}
-                createSortHandler={() => { }}
-                order={"asc"}
-                orderBy={"fistid1"}
-                tableData={rowsData}
-                sortable={true}
-                isInactive={false}
-                isOwnershipOu={false}
-                showEnrollments={false}
-                showRowActions={true}
-                rowAction={rowsActions}
-                defaultFilterNumber={3}
-                filterState={{ attributes: [], dataElements: [] }}
-                setFilterState={() => { }}
-            />
+        <div style={{ height: "85vh" }}>
+            {
+                !(Boolean(schoolName) && Boolean(school)) ?
+                    <InfoPage
+                        title={i18n.t("SEMIS-Enrollment")}
+                        sections={[
+                            {
+                                sectionTitle: `${i18n.t("Follow the instructions to proceed")}:`,
+                                instructions: [
+                                    `${i18n.t("Select the Organization unit you want to view data")}`,
+                                    `${i18n.t("Use global filters(Class, Grade and Academic Year)")}`
+                                ]
+                            }
+                        ]}
+                    />
+                    :
+                    <>
+                        <Table
+                            tableData={tableData.data}
+                            programConfig={program!}
+                            pagination={pagination}
+                            setPagination={setPagination}
+                            paginate={!loading}
+                            title={i18n.t("Enrollments")}
+                            onRowClick={(e) => {
+                                navigate(`/semis/profile/${e?.trackedEntity}${location?.search}&module=${location?.pathname?.split("/")[2]}`)
+                            }}
+                            viewPortWidth={viewPortWidth}
+                            columns={columns}
+                            rowAction={rowsActions}
+                            showRowActions
+                            filterState={filterState}
+                            loading={loading}
+                            rightElements={<EnrollmentActionsButtons i18n={i18n} baseUrl={baseUrl} />}
+                            setFilterState={setFilterState}
+                        />
+                        {openDeleteModal && <ModalManagerEnrollmentDelete i18n={i18n} open={openDeleteModal} setOpen={setOpenDeleteModal} saveMode="UPDATE" />}
+                        {openEditModal && <ModalManager i18n={i18n} formVariablesFields={formData} formFields={enrollmentFormFields} open={openEditModal} setOpen={setOpenEditModal} saveMode="UPDATE" />}
+                    </>
+            }
         </div>
     )
 }

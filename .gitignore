@@ -1,5 +1,12 @@
 # DHIS2 Platform
 node_modules
 .d2
-src/locales
 build
+.codegpt
+.yalc
+package-lock.json
+yarn.lock
+dist
+tsconfig.tsbuildinfo
+src/components/wrapper
+src/app
